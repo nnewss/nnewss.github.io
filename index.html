@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="ru" class="scroll-smooth dark"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хроника — Современный новостной портал</title>
+    
+    <!-- Фавикон (автоматически проверяется и обновляется скриптом из папки images/logo/) -->
+    <link id="dynamic-favicon" rel="icon" href="images/logo/logo.png">
+    <link rel="shortcut icon" href="images/logo/favicon.ico">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Merriweather:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Merriweather', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#172554',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .article-content p { margin-bottom: 1.25rem; line-height: 1.8; }
+        .article-content h3 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; }
+        .article-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; font-style: italic; margin: 1.5rem 0; opacity: 0.9; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Стандартизация масштабирования и позиционирования фото 16:9 */
+        .news-framed-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(var(--img-scale, 1));
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .group:hover .news-framed-img {
+            transform: scale(calc(var(--img-scale, 1) * 1.04));
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-2{bottom:0.5rem}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.left-2{left:0.5rem}.left-3\.5{left:0.875rem}.right-2{right:0.5rem}.right-5{right:1.25rem}.top-0{top:0px}.top-1\/2{top:50%}.left-3{left:0.75rem}.right-3{right:0.75rem}.top-3{top:0.75rem}.left-4{left:1rem}.top-4{top:1rem}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[70\]{z-index:70}.z-20{z-index:20}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:0.75rem}.ml-auto{margin-left:auto}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-16{margin-top:4rem}.mt-3{margin-top:0.75rem}.mb-2\.5{margin-bottom:0.625rem}.mt-5{margin-top:1.25rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-full{height:100%}.max-h-\[42vh\]{max-height:42vh}.max-h-\[82vh\]{max-height:82vh}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-2{width:0.5rem}.w-2\.5{width:0.625rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-\[95\%\]{width:95%}.w-full{width:100%}.w-16{width:4rem}.min-w-0{min-width:0px}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-rows-3{grid-template-rows:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-3xl{border-radius:1.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/30{border-color:rgb(245 158 11 / 0.3)}.border-brand-500\/60{border-color:rgb(59 130 246 / 0.6)}.border-brand-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-brand-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-brand-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-100\/60{background-color:rgb(241 245 249 / 0.6)}.bg-slate-100\/70{background-color:rgb(241 245 249 / 0.7)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-200\/70{background-color:rgb(226 232 240 / 0.7)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/95{background-color:rgb(15 23 42 / 0.95)}.bg-slate-950\/75{background-color:rgb(2 6 23 / 0.75)}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/85{background-color:rgb(255 255 255 / 0.85)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-rose-600\/95{background-color:rgb(225 29 72 / 0.95)}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-brand-50\/60{background-color:rgb(239 246 255 / 0.6)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-6{padding:1.5rem}.p-5{padding:1.25rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-1{padding-right:0.25rem}.pr-4{padding-right:1rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.font-sans{font-family:Inter, sans-serif}.font-serif{font-family:Merriweather, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-brand-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-brand-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand-600{accent-color:#2563eb}.opacity-0{opacity:0}.opacity-40{opacity:0.4}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-brand-500\/20{--tw-shadow-color:rgb(59 130 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-600\/20{--tw-shadow-color:rgb(5 150 105 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-600:hover{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-brand-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:ring-brand-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-brand-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-75{opacity:0.75}.dark\:block:is(.dark *){display:block}.dark\:hidden:is(.dark *){display:none}.dark\:border-emerald-500\/30:is(.dark *){border-color:rgb(16 185 129 / 0.3)}.dark\:border-rose-500\/30:is(.dark *){border-color:rgb(244 63 94 / 0.3)}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:border-slate-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.dark\:border-slate-800\/70:is(.dark *){border-color:rgb(30 41 59 / 0.7)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.dark\:border-slate-800\/80:is(.dark *){border-color:rgb(30 41 59 / 0.8)}.dark\:bg-brand-500\/10:is(.dark *){background-color:rgb(59 130 246 / 0.1)}.dark\:bg-brand-500\/15:is(.dark *){background-color:rgb(59 130 246 / 0.15)}.dark\:bg-emerald-500\/15:is(.dark *){background-color:rgb(16 185 129 / 0.15)}.dark\:bg-rose-500\/15:is(.dark *){background-color:rgb(244 63 94 / 0.15)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800\/60:is(.dark *){background-color:rgb(30 41 59 / 0.6)}.dark\:bg-slate-800\/70:is(.dark *){background-color:rgb(30 41 59 / 0.7)}.dark\:bg-slate-800\/95:is(.dark *){background-color:rgb(30 41 59 / 0.95)}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/85:is(.dark *){background-color:rgb(15 23 42 / 0.85)}.dark\:bg-slate-900\/90:is(.dark *){background-color:rgb(15 23 42 / 0.9)}.dark\:bg-slate-950:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.dark\:bg-white:is(.dark *){--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/95:is(.dark *){background-color:rgb(15 23 42 / 0.95)}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.dark\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.dark\:text-emerald-600:is(.dark *){--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.dark\:text-slate-700:is(.dark *){--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.dark\:hover\:border-slate-700:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:hover\:bg-brand-500\/25:hover:is(.dark *){background-color:rgb(59 130 246 / 0.25)}.dark\:hover\:bg-emerald-500\/25:hover:is(.dark *){background-color:rgb(16 185 129 / 0.25)}.dark\:hover\:bg-rose-500\/25:hover:is(.dark *){background-color:rgb(244 63 94 / 0.25)}.dark\:hover\:bg-slate-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-rose-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.dark\:hover\:text-slate-200:hover:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:focus\:bg-slate-900:focus:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.group:hover .dark\:group-hover\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:col-span-3{grid-column:span 3 / span 3}.sm\:inline{display:inline}.sm\:h-20{height:5rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:gap-3{gap:0.75rem}.sm\:p-10{padding:2.5rem}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:block{display:block}.md\:hidden{display:none}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:p-10{padding:2.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-3xl{font-size:1.875rem;line-height:2.25rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-2{bottom:0.5rem}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.left-2{left:0.5rem}.left-3{left:0.75rem}.left-3\.5{left:0.875rem}.left-4{left:1rem}.right-2{right:0.5rem}.right-3{right:0.75rem}.right-5{right:1.25rem}.top-0{top:0px}.top-1\/2{top:50%}.top-3{top:0.75rem}.top-4{top:1rem}.z-10{z-index:10}.z-20{z-index:20}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[70\]{z-index:70}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-2\.5{margin-bottom:0.625rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:0.75rem}.ml-auto{margin-left:auto}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-16{margin-top:4rem}.mt-3{margin-top:0.75rem}.mt-5{margin-top:1.25rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-full{height:100%}.max-h-\[42vh\]{max-height:42vh}.max-h-\[82vh\]{max-height:82vh}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-2{width:0.5rem}.w-2\.5{width:0.625rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-\[95\%\]{width:95%}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-rows-3{grid-template-rows:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/30{border-color:rgb(245 158 11 / 0.3)}.border-brand-500\/60{border-color:rgb(59 130 246 / 0.6)}.border-brand-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-brand-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-brand-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-rose-600\/95{background-color:rgb(225 29 72 / 0.95)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-100\/60{background-color:rgb(241 245 249 / 0.6)}.bg-slate-100\/70{background-color:rgb(241 245 249 / 0.7)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-200\/70{background-color:rgb(226 232 240 / 0.7)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/95{background-color:rgb(15 23 42 / 0.95)}.bg-slate-950\/75{background-color:rgb(2 6 23 / 0.75)}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/85{background-color:rgb(255 255 255 / 0.85)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.bg-brand-50\/60{background-color:rgb(239 246 255 / 0.6)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-1{padding-right:0.25rem}.pr-4{padding-right:1rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.font-sans{font-family:Inter, sans-serif}.font-serif{font-family:Merriweather, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-brand-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-brand-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand-600{accent-color:#2563eb}.opacity-0{opacity:0}.opacity-40{opacity:0.4}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-brand-500\/20{--tw-shadow-color:rgb(59 130 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-600\/20{--tw-shadow-color:rgb(5 150 105 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-600:hover{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-brand-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:ring-brand-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-brand-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-75{opacity:0.75}.dark\:block:is(.dark *){display:block}.dark\:hidden:is(.dark *){display:none}.dark\:border-emerald-500\/30:is(.dark *){border-color:rgb(16 185 129 / 0.3)}.dark\:border-rose-500\/30:is(.dark *){border-color:rgb(244 63 94 / 0.3)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:border-slate-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.dark\:border-slate-800\/70:is(.dark *){border-color:rgb(30 41 59 / 0.7)}.dark\:border-slate-800\/80:is(.dark *){border-color:rgb(30 41 59 / 0.8)}.dark\:bg-brand-500\/10:is(.dark *){background-color:rgb(59 130 246 / 0.1)}.dark\:bg-brand-500\/15:is(.dark *){background-color:rgb(59 130 246 / 0.15)}.dark\:bg-emerald-500\/15:is(.dark *){background-color:rgb(16 185 129 / 0.15)}.dark\:bg-rose-500\/15:is(.dark *){background-color:rgb(244 63 94 / 0.15)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800\/60:is(.dark *){background-color:rgb(30 41 59 / 0.6)}.dark\:bg-slate-800\/70:is(.dark *){background-color:rgb(30 41 59 / 0.7)}.dark\:bg-slate-800\/95:is(.dark *){background-color:rgb(30 41 59 / 0.95)}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/85:is(.dark *){background-color:rgb(15 23 42 / 0.85)}.dark\:bg-slate-900\/90:is(.dark *){background-color:rgb(15 23 42 / 0.9)}.dark\:bg-slate-900\/95:is(.dark *){background-color:rgb(15 23 42 / 0.95)}.dark\:bg-slate-950:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.dark\:bg-white:is(.dark *){--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.dark\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.dark\:text-emerald-600:is(.dark *){--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.dark\:text-slate-700:is(.dark *){--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.dark\:hover\:border-slate-700:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:hover\:bg-brand-500\/25:hover:is(.dark *){background-color:rgb(59 130 246 / 0.25)}.dark\:hover\:bg-emerald-500\/25:hover:is(.dark *){background-color:rgb(16 185 129 / 0.25)}.dark\:hover\:bg-rose-500\/25:hover:is(.dark *){background-color:rgb(244 63 94 / 0.25)}.dark\:hover\:bg-rose-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:hover\:text-slate-200:hover:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:focus\:bg-slate-900:focus:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.group:hover .dark\:group-hover\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:col-span-3{grid-column:span 3 / span 3}.sm\:inline{display:inline}.sm\:h-20{height:5rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:gap-3{gap:0.75rem}.sm\:p-10{padding:2.5rem}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:block{display:block}.md\:hidden{display:none}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:p-10{padding:2.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-3xl{font-size:1.875rem;line-height:2.25rem}}</style><style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-2{bottom:0.5rem}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.left-2{left:0.5rem}.left-3{left:0.75rem}.left-3\.5{left:0.875rem}.left-4{left:1rem}.right-2{right:0.5rem}.right-3{right:0.75rem}.right-5{right:1.25rem}.top-0{top:0px}.top-1\/2{top:50%}.top-3{top:0.75rem}.top-4{top:1rem}.z-10{z-index:10}.z-20{z-index:20}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[70\]{z-index:70}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-2\.5{margin-bottom:0.625rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:0.75rem}.ml-auto{margin-left:auto}.mt-1{margin-top:0.25rem}.mt-1\.5{margin-top:0.375rem}.mt-16{margin-top:4rem}.mt-3{margin-top:0.75rem}.mt-5{margin-top:1.25rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-full{height:100%}.max-h-\[42vh\]{max-height:42vh}.max-h-\[82vh\]{max-height:82vh}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-16{width:4rem}.w-2{width:0.5rem}.w-2\.5{width:0.625rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-\[95\%\]{width:95%}.w-full{width:100%}.min-w-0{min-width:0px}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-rows-3{grid-template-rows:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/30{border-color:rgb(245 158 11 / 0.3)}.border-brand-500\/60{border-color:rgb(59 130 246 / 0.6)}.border-brand-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-brand-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-rose-600\/95{background-color:rgb(225 29 72 / 0.95)}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-100\/60{background-color:rgb(241 245 249 / 0.6)}.bg-slate-100\/70{background-color:rgb(241 245 249 / 0.7)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-200\/70{background-color:rgb(226 232 240 / 0.7)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/75{background-color:rgb(15 23 42 / 0.75)}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/95{background-color:rgb(15 23 42 / 0.95)}.bg-slate-950\/75{background-color:rgb(2 6 23 / 0.75)}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/85{background-color:rgb(255 255 255 / 0.85)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.px-1{padding-left:0.25rem;padding-right:0.25rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-1{padding-right:0.25rem}.pr-4{padding-right:1rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.font-sans{font-family:Inter, sans-serif}.font-serif{font-family:Merriweather, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-normal{font-weight:400}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.leading-none{line-height:1}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-brand-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-brand-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand-600{accent-color:#2563eb}.opacity-0{opacity:0}.opacity-40{opacity:0.4}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-brand-500\/20{--tw-shadow-color:rgb(59 130 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-600\/20{--tw-shadow-color:rgb(5 150 105 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-brand-100:hover{--tw-bg-opacity:1;background-color:rgb(219 234 254 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-600:hover{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-brand-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:ring-brand-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-brand-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-75{opacity:0.75}.dark\:block:is(.dark *){display:block}.dark\:hidden:is(.dark *){display:none}.dark\:border-emerald-500\/30:is(.dark *){border-color:rgb(16 185 129 / 0.3)}.dark\:border-rose-500\/30:is(.dark *){border-color:rgb(244 63 94 / 0.3)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:border-slate-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.dark\:border-slate-800\/70:is(.dark *){border-color:rgb(30 41 59 / 0.7)}.dark\:border-slate-800\/80:is(.dark *){border-color:rgb(30 41 59 / 0.8)}.dark\:bg-brand-500\/10:is(.dark *){background-color:rgb(59 130 246 / 0.1)}.dark\:bg-brand-500\/15:is(.dark *){background-color:rgb(59 130 246 / 0.15)}.dark\:bg-emerald-500\/15:is(.dark *){background-color:rgb(16 185 129 / 0.15)}.dark\:bg-rose-500\/15:is(.dark *){background-color:rgb(244 63 94 / 0.15)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800\/60:is(.dark *){background-color:rgb(30 41 59 / 0.6)}.dark\:bg-slate-800\/70:is(.dark *){background-color:rgb(30 41 59 / 0.7)}.dark\:bg-slate-800\/95:is(.dark *){background-color:rgb(30 41 59 / 0.95)}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/85:is(.dark *){background-color:rgb(15 23 42 / 0.85)}.dark\:bg-slate-900\/90:is(.dark *){background-color:rgb(15 23 42 / 0.9)}.dark\:bg-slate-900\/95:is(.dark *){background-color:rgb(15 23 42 / 0.95)}.dark\:bg-slate-950:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.dark\:bg-white:is(.dark *){--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.dark\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.dark\:text-emerald-600:is(.dark *){--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.dark\:text-slate-700:is(.dark *){--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.dark\:hover\:border-slate-700:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:hover\:bg-brand-500\/25:hover:is(.dark *){background-color:rgb(59 130 246 / 0.25)}.dark\:hover\:bg-emerald-500\/25:hover:is(.dark *){background-color:rgb(16 185 129 / 0.25)}.dark\:hover\:bg-rose-500\/25:hover:is(.dark *){background-color:rgb(244 63 94 / 0.25)}.dark\:hover\:bg-rose-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:hover\:text-slate-200:hover:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:focus\:bg-slate-900:focus:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.group:hover .dark\:group-hover\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:col-span-3{grid-column:span 3 / span 3}.sm\:inline{display:inline}.sm\:h-20{height:5rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:gap-3{gap:0.75rem}.sm\:p-10{padding:2.5rem}.sm\:p-6{padding:1.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:block{display:block}.md\:hidden{display:none}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:p-10{padding:2.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-3xl{font-size:1.875rem;line-height:2.25rem}}</style></head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col" style="">
+
+    <div id="toast" class="fixed bottom-5 right-5 z-[100] transform transition-all duration-300 pointer-events-none bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 font-medium text-sm translate-y-20 opacity-0">
+        <svg class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        <span id="toast-message">Все новости очищены!</span>
+    </div>
+
+    <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20 gap-4">
+                <a href="#" onclick="resetFilters(); return false;" class="flex items-center gap-3 group shrink-0">
+                    <!-- Логотип из папки images/logo/ (если найден, показывается картинка; иначе буква Х) -->
+                    <img id="header-logo-img" src="images/logo/logo.png" alt="Логотип" class="w-10 h-10 rounded-xl object-contain">
+                    <div id="header-logo-fallback" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-brand-500/20 group-hover:bg-brand-700 transition hidden">Х</div>
+                    <div>
+                        <span class="text-xl sm:text-2xl font-extrabold tracking-tight block leading-none">ХРОНИКА</span>
+                        <span id="current-date-display" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block mt-1">Суббота, 31 октября 2026 г.</span>
+                    </div>
+                </a>
+
+                <div class="relative flex-1 max-w-md hidden md:block">
+                    <input type="text" id="search-input-desktop" placeholder="Поиск новостей по заголовку или теме..." class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-brand-500 focus:bg-white dark:focus:bg-slate-900 text-sm outline-none transition">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <button id="admin-create-btn" onclick="openGeneratorModal('manage')" title="Режим автора активен: открыть студию управления новостями" class="items-center gap-1.5 px-3 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-emerald-50 text-emerald-700 hover:bg-emerald-100 dark:bg-emerald-500/15 dark:text-emerald-400 dark:hover:bg-emerald-500/25 border border-emerald-300 dark:border-emerald-500/30 transition hidden">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>⚙️ Управление новостями</span>
+                    </button>
+
+                    <button onclick="toggleTheme()" aria-label="Переключить тему" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                        <svg id="theme-icon-sun" class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                        </svg>
+                        <svg id="theme-icon-moon" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="pb-3 md:hidden">
+                <div class="relative">
+                    <input type="text" id="search-input-mobile" placeholder="Поиск новостей..." class="w-full pl-10 pr-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-transparent focus:border-brand-500 text-sm outline-none transition">
+                    <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <nav id="category-nav" class="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-t border-slate-100 dark:border-slate-800/70"><button onclick="selectCategory('Все')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm">Все</button><button onclick="selectCategory('Технологии')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Технологии</button><button onclick="selectCategory('Наука')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Наука</button><button onclick="selectCategory('Кино и Медиа')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Кино и Медиа</button><button onclick="selectCategory('Игры')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Игры</button><button onclick="selectCategory('Бизнес')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Бизнес</button><button onclick="selectCategory('Общество')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Общество</button></nav>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <!-- Секция главной новости (показывается ТОЛЬКО если у какой-то статьи вручную включена галочка) -->
+        <section id="featured-section" class="mb-10 hidden"></section>
+
+        <div class="flex items-center justify-between mb-6">
+            <h2 id="feed-title" class="text-xl sm:text-2xl font-bold tracking-tight">Последние публикации</h2>
+            <span id="articles-count" class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 bg-slate-200/70 dark:bg-slate-800 px-3 py-1 rounded-full">0 материалов</span>
+        </div>
+
+        <section id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
+
+        <div id="empty-state" class="text-center py-16 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 my-6">
+            <div class="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
+                <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h3 class="text-lg font-bold mb-1">По вашему запросу ничего не найдено</h3>
+            <p class="text-slate-500 dark:text-slate-400 text-sm max-w-md mx-auto mb-5">Попробуйте изменить ключевые слова в поиске или переключиться на другую рубрику.</p>
+            <button onclick="resetFilters()" class="px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-sm font-semibold transition">Сбросить фильтры</button>
+        </div>
+    </main>
+
+    <div id="admin-floating-bar" class="fixed bottom-4 left-1/2 -translate-x-1/2 z-30 w-[95%] max-w-3xl bg-slate-900/95 dark:bg-slate-800/95 text-white backdrop-blur-md px-4 py-3 rounded-2xl shadow-2xl border border-slate-700 items-center justify-between gap-3 flex-wrap hidden">
+        <div class="flex items-center gap-2.5 text-xs sm:text-sm">
+            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+            <span class="font-semibold">Режим редактора:</span>
+            <span id="admin-bar-status" class="text-slate-300 hidden sm:inline">изменения применяются сразу — не забудьте скачать index.html</span>
+        </div>
+        <div class="flex items-center gap-2 ml-auto">
+            <button onclick="openGeneratorModal('create')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition">+ Добавить статью</button>
+            <button onclick="openGeneratorModal('manage')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-white transition">Список / Удаление</button>
+            <button onclick="downloadUpdatedHtml()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1 shadow">
+                <span>⬇ Скачать index.html</span>
+            </button>
+        </div>
+    </div>
+
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+            <div onclick="handleSecretFooterClick()" class="flex items-center gap-3 select-none cursor-default" title="Хроника">
+                <img id="footer-logo-img" src="images/logo/logo.png" alt="Логотип" class="w-7 h-7 rounded-lg object-contain">
+                <div id="footer-logo-fallback" class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm hidden">Х</div>
+                <span>© <span id="footer-year">2026</span> «Хроника». Информационный портал.</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <button id="admin-logout-btn" onclick="lockAdmin()" class="text-xs text-rose-500 hover:underline hidden">Выйти из режима админа</button>
+                <a href="#top" class="hover:text-slate-900 dark:hover:text-white transition">Наверх ↑</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ВХОД ДЛЯ РЕДАКТОРА (ПАРОЛЬ) -->
+    <div id="pin-modal" class="fixed inset-0 z-[70] overflow-y-auto bg-slate-950/80 backdrop-blur-sm transition-opacity hidden">
+        <div class="min-h-screen px-4 flex items-center justify-center">
+            <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 text-center">
+                <div class="w-12 h-12 rounded-2xl bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-400 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-bold mb-4">Вход для редактора</h3>
+                <form onsubmit="verifyAdminPin(event)" class="space-y-3">
+                    <input type="password" id="admin-pin-input" placeholder="Введите пароль" maxlength="64" class="w-full text-center tracking-wider text-base font-bold px-4 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 outline-none focus:border-brand-500">
+                    <p id="pin-error" class="text-xs text-rose-500 font-medium hidden">Неверный пароль. Попробуйте снова.</p>
+                    <div class="flex gap-2 pt-2">
+                        <button type="button" onclick="closePinModal()" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">Отмена</button>
+                        <button type="submit" class="flex-1 px-4 py-2.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-700 text-white transition">Разблокировать</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЧТЕНИЕ СТАТЬИ (СТРОГО ГОРИЗОНТАЛЬНОЕ ФОТО 16:9) -->
+    <div id="article-modal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm transition-opacity hidden">
+        <div class="min-h-screen px-2 py-6 sm:px-6 sm:py-12 flex items-center justify-center">
+            <article class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden relative">
+                <div class="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 py-3.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
+                    <span id="modal-category" class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">Технологии</span>
+                    <div class="flex items-center gap-2">
+                        <button onclick="shareCurrentArticle()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                            </svg>
+                            <span>Поделиться</span>
+                        </button>
+                        <button onclick="closeArticleModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition" aria-label="Закрыть">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
+                    <img id="modal-image" src="https://placehold.co/800x450/1e293b/ffffff?text=News" alt="Заголовок вашей новой статьи" class="news-framed-img" style="object-position: 50% 50%; transform-origin: 50% 50%; --img-scale: 2.5;">
+                </div>
+                <div class="p-6 sm:p-10">
+                    <div class="flex items-center gap-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-3">
+                        <span id="modal-date">31 октября 2026</span>
+                        <span>•</span>
+                        <span id="modal-readtime">Чтение: 1 мин</span>
+                    </div>
+                    <h1 id="modal-title" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6">Заголовок вашей новой статьи</h1>
+                    <div id="modal-body" class="article-content font-serif text-base sm:text-lg text-slate-800 dark:text-slate-200 border-t border-slate-100 dark:border-slate-800 pt-6">
+                    <p>Первый абзац вашей новости.</p>
+                    <p>Второй абзац вашей новости.</p>
+                </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+    <!-- СТУДИЯ УПРАВЛЕНИЯ НОВОСТЯМИ -->
+    <div id="generator-modal" class="fixed inset-0 z-40 overflow-y-auto bg-slate-950/75 backdrop-blur-sm transition-opacity hidden">
+        <div class="min-h-screen px-3 py-6 sm:py-10 flex items-center justify-center">
+            <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+                <div class="flex items-center justify-between px-6 py-4 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center gap-2.5">
+                        <span class="px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">Admin</span>
+                        <div>
+                            <h3 class="text-lg font-bold leading-tight">Студия управления новостями</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">Добавление, редактирование и удаление материалов</p>
+                        </div>
+                    </div>
+                    <button onclick="closeGeneratorModal()" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="flex border-b border-slate-200 dark:border-slate-800 bg-slate-100/60 dark:bg-slate-900 px-6 pt-2 gap-2">
+                    <button id="tab-btn-create" onclick="switchAdminTab('create')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition">
+                        ✍️ <span id="form-tab-label">Добавить / Редактировать новость</span>
+                    </button>
+                    <button id="tab-btn-manage" onclick="switchAdminTab('manage')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition flex items-center gap-2">
+                        <span>🗑️ Управление и удаление</span>
+                        <span id="manage-count-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">0</span>
+                    </button>
+                </div>
+
+                <div class="p-6 space-y-6 max-h-[82vh] overflow-y-auto">
+
+                    <div id="admin-tab-create" class="space-y-4 hidden">
+                        <input type="hidden" id="gen-edit-id" value="">
+
+                        <div id="edit-mode-banner" class="items-center justify-between px-4 py-2.5 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-700 dark:text-amber-300 text-xs sm:text-sm font-medium hidden">
+                            <span>✏️ Вы редактируете существующую новость. Нажмите «💾 Сохранить изменения», чтобы применить правки.</span>
+                            <button type="button" onclick="resetGeneratorForm()" class="underline font-bold ml-3 shrink-0">Отменить</button>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div class="sm:col-span-3">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Заголовок новости *</label>
+                                <input type="text" id="gen-title" placeholder="Например: Квантовый прорыв: представлен новый чип..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Рубрика</label>
+                                <select id="gen-category" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                                    <option value="Технологии">Технологии</option>
+                                    <option value="Наука">Наука</option>
+                                    <option value="Кино и Медиа">Кино и Медиа</option>
+                                    <option value="Игры">Игры</option>
+                                    <option value="Бизнес">Бизнес</option>
+                                    <option value="Общество">Общество</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Дата публикации</label>
+                                <input type="text" id="gen-date" placeholder="31 октября 2026" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Время чтения <span class="normal-case text-[10px] text-brand-500 font-medium">(авто)</span></label>
+                                <input type="text" id="gen-readtime" value="1 мин" placeholder="Например: 4 мин" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                            </div>
+
+                            <!-- ПОЛЕ КАРТИНКИ + РЕДАКТОР ВИДИМОЙ ЗОНЫ 16:9 -->
+                            <div class="sm:col-span-3">
+                                <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Фото новости (горизонтальный стандарт 16:9)</label>
+                                    <div class="flex items-center gap-1.5 text-[11px]">
+                                        <button type="button" onclick="document.getElementById('gen-image-file').click()" class="px-2.5 py-0.5 rounded bg-brand-50 text-brand-600 hover:bg-brand-100 dark:bg-brand-500/15 dark:text-brand-400 dark:hover:bg-brand-500/25 font-semibold transition">📁 Выбрать файл</button>
+                                        <button type="button" onclick="setImageTemplate('images/news/photo-1.jpg')" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 hover:bg-brand-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">Шаблон: images/news/</button>
+                                        <button type="button" onclick="setImageTemplate('https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&amp;fit=crop&amp;w=1000&amp;q=80')" class="px-2 py-0.5 rounded bg-slate-200 dark:bg-slate-800 hover:bg-brand-100 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition">Шаблон: URL</button>
+                                    </div>
+                                </div>
+
+                                <div id="image-drop-zone" class="relative rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-100/70 dark:bg-slate-800/70 p-3 transition-all">
+                                    <input type="file" id="gen-image-file" accept="image/*" class="hidden" onchange="handleImageFileSelect(event)">
+                                    <div class="flex items-center gap-2">
+                                        <input type="text" id="gen-image" oninput="handleManualImageInput()" placeholder="Перетащите фото сюда, введите имя файла (photo.jpg) или URL..." class="w-full px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500">
+                                    </div>
+                                    <div class="mt-1.5 flex items-center justify-between px-1 text-[11px] text-slate-500 dark:text-slate-400">
+                                        <span>💡 Перетащите файл сюда — путь <code class="font-mono text-brand-600 dark:text-brand-400">images/news/имя_файла</code> пропишется сам, и откроется выбор горизонтальной зоны!</span>
+                                    </div>
+
+                                    <!-- ИНТЕРАКТИВНЫЙ РЕДАКТОР ВИДИМОЙ ГОРИЗОНТАЛЬНОЙ ЗОНЫ (16:9) -->
+                                    <div id="image-crop-editor" class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 hidden">
+                                        <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-brand-600 text-white">Формат 16:9</span>
+                                                <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Выбор видимой зоны фотографии</span>
+                                            </div>
+                                            <button type="button" onclick="resetCropPosition()" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold">↺ Сбросить по центру</button>
+                                        </div>
+
+                                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                                            <!-- 16:9 Окно предпросмотра с перетаскиванием мышкой -->
+                                            <div class="md:col-span-7">
+                                                <div id="crop-viewport" class="aspect-video w-full rounded-xl overflow-hidden relative bg-slate-900 border-2 border-brand-500/60 shadow-md cursor-move select-none group">
+                                                    <img id="crop-preview-img" src="blob:null/c7f3767c-1de9-4dd2-9f8b-b34cbccb2af4" alt="Предпросмотр 16:9" draggable="false" class="w-full h-full object-cover pointer-events-none" style="object-position: 50% 50%; transform-origin: 50% 50%; transform: scale(1);">
+                                                    
+                                                    <!-- Сетка третей для удобного кадрирования -->
+                                                    <div class="absolute inset-0 pointer-events-none grid grid-cols-3 grid-rows-3 opacity-40 group-hover:opacity-75 transition-opacity">
+                                                        <div class="border-r border-b border-white/40"></div>
+                                                        <div class="border-r border-b border-white/40"></div>
+                                                        <div class="border-b border-white/40"></div>
+                                                        <div class="border-r border-b border-white/40"></div>
+                                                        <div class="border-r border-b border-white/40"></div>
+                                                        <div class="border-b border-white/40"></div>
+                                                        <div class="border-r border-white/40"></div>
+                                                        <div class="border-r border-white/40"></div>
+                                                        <div></div>
+                                                    </div>
+
+                                                    <div class="absolute bottom-2 left-2 right-2 flex items-center justify-between pointer-events-none">
+                                                        <span class="px-2.5 py-1 rounded-lg text-[11px] font-semibold bg-slate-900/80 text-white backdrop-blur-sm">✋ Зажмите и двигайте фото мышкой</span>
+                                                        <span id="crop-coords-badge" class="px-2 py-1 rounded-lg text-[11px] font-mono bg-slate-900/80 text-emerald-400 backdrop-blur-sm">50% / 50% (100%)</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Ползунки точной настройки зоны -->
+                                            <div class="md:col-span-5 space-y-3 bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                                                <div>
+                                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                                        <span class="text-slate-600 dark:text-slate-300">По вертикали (Вверх ↕ Вниз)</span>
+                                                        <span id="crop-y-label" class="font-mono text-brand-600 dark:text-brand-400">50%</span>
+                                                    </div>
+                                                    <input type="range" id="crop-pos-y" min="0" max="100" value="50" oninput="updateCropFromSliders()" class="w-full accent-brand-600 cursor-pointer">
+                                                </div>
+
+                                                <div>
+                                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                                        <span class="text-slate-600 dark:text-slate-300">По горизонтали (Влево ↔ Вправо)</span>
+                                                        <span id="crop-x-label" class="font-mono text-brand-600 dark:text-brand-400">50%</span>
+                                                    </div>
+                                                    <input type="range" id="crop-pos-x" min="0" max="100" value="50" oninput="updateCropFromSliders()" class="w-full accent-brand-600 cursor-pointer">
+                                                </div>
+
+                                                <div>
+                                                    <div class="flex justify-between text-xs font-medium mb-1">
+                                                        <span class="text-slate-600 dark:text-slate-300">Масштаб (Приближение)</span>
+                                                        <span id="crop-scale-label" class="font-mono text-brand-600 dark:text-brand-400">100%</span>
+                                                    </div>
+                                                    <input type="range" id="crop-scale" min="100" max="250" value="100" oninput="updateCropFromSliders()" class="w-full accent-brand-600 cursor-pointer">
+                                                </div>
+
+                                                <p class="text-[11px] text-slate-400 leading-snug pt-1">
+                                                    То, что вы видите в рамке 16:9 слева — именно так фото будет выглядеть в карточке и внутри статьи.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sm:col-span-3">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Краткое описание (для карточки на главной) *</label>
+                                <textarea id="gen-summary" rows="2" placeholder="Одно-два предложения, которые заинтригуют читателя..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
+                            </div>
+                            <div class="sm:col-span-3">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Полный текст статьи (разделяйте абзацы пустой строкой) *</label>
+                                <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Первый абзац вашей статьи...
+
+Второй абзац статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
+                            </div>
+                            <div class="sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-1">
+                                <div class="flex items-center gap-2.5">
+                                    <input type="checkbox" id="gen-featured" class="w-4 h-4 text-brand-600 rounded focus:ring-brand-500">
+                                    <label for="gen-featured" class="text-sm font-medium select-none cursor-pointer">Сделать главной новостью (в большом баннере сверху)</label>
+                                </div>
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <button type="button" onclick="previewGeneratedArticle()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition">👁 Примерить</button>
+                                    <button type="button" onclick="resetGeneratorForm()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">Очистить</button>
+                                    <button type="button" id="save-article-btn" onclick="saveArticleToFeed()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-brand-600 hover:bg-brand-700 text-white shadow-md shadow-brand-500/20 transition">+ Добавить статью в ленту сайта</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-tab-manage" class="space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-slate-800">
+                            <div>
+                                <h4 class="text-sm font-bold">Все опубликованные новости на сайте</h4>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">Нажмите «Изменить» для редактирования или «Удалить», чтобы убрать новость</p>
+                            </div>
+                            <button type="button" onclick="deleteAllArticles()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/15 dark:text-rose-400 dark:hover:bg-rose-500/25 border border-rose-200 dark:border-rose-500/30 transition">🗑️ Удалить все новости</button>
+                        </div>
+                        <div id="admin-articles-list" class="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1"><div class="text-center py-10 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-slate-500 text-sm">В ленте нет новостей. Перейдите во вкладку «Добавить новость», чтобы создать первую статью!</div></div>
+                    </div>
+
+                    <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Сохранить навсегда для GitHub Pages:</span>
+                                <span class="text-[11px] text-slate-400">Кнопка ниже скачивает готовый index.html со всеми изменениями</span>
+                            </div>
+                            <div class="flex flex-wrap gap-2">
+                                <button onclick="downloadUpdatedHtml()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20">
+                                    <span>⬇ Скачать обновлённый index.html</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_PIN = "admin_news_2026";
+        const WORDS_PER_MINUTE = 200;
+        const NEWS_IMAGES_FOLDER = "images/news/";
+        const LOGO_FOLDER = "images/logo/";
+
+        let NEWS_DATA = [
+
+        ];
+
+        // Временное хранилище превью для перетащенных файлов (чтобы они сразу отображались в браузере)
+        const TEMP_IMAGE_PREVIEWS = {};
+
+        let currentCategory = 'Все';
+        let searchQuery = '';
+        let currentOpenedArticleId = null;
+        let isAdminUnlocked = false;
+        let currentAdminTab = 'create';
+        let footerClickCount = 0;
+        let footerClickTimer = null;
+        let isPreviewFromAdmin = false;
+
+        // Текущие координаты кадрирования в форме
+        let cropState = { posX: 50, posY: 50, scale: 1 };
+
+        const CATEGORIES = ['Все', 'Технологии', 'Наука', 'Кино и Медиа', 'Игры', 'Бизнес', 'Общество'];
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            initCurrentDate();
+            initLogoAndFavicon();
+            initAdminState();
+            renderCategories();
+            renderPage();
+            setupSearchListeners();
+            setupImageDropZone();
+            setupCropInteractiveDrag();
+            resetGeneratorForm();
+            checkUrlHashForArticle();
+        });
+
+        // Генерирует inline-стиль для любого фото новости (строго применяет выбранную зону 16:9)
+        function getImageFrameStyle(item) {
+            const x = item && item.posX !== undefined ? Number(item.posX) : 50;
+            const y = item && item.posY !== undefined ? Number(item.posY) : 50;
+            const s = item && item.scale !== undefined ? Number(item.scale) : 1;
+            return `object-position: ${x}% ${y}%; transform-origin: ${x}% ${y}%; --img-scale: ${s};`;
+        }
+
+        // Настройка перетаскивания самого фото мышкой или пальцем внутри рамки 16:9
+        function setupCropInteractiveDrag() {
+            const viewport = document.getElementById('crop-viewport');
+            if (!viewport) return;
+
+            let isDragging = false;
+            let startX = 0;
+            let startY = 0;
+            let initialPosX = 50;
+            let initialPosY = 50;
+
+            const startDrag = (clientX, clientY) => {
+                isDragging = true;
+                startX = clientX;
+                startY = clientY;
+                initialPosX = cropState.posX;
+                initialPosY = cropState.posY;
+            };
+
+            const onMove = (clientX, clientY) => {
+                if (!isDragging) return;
+                const rect = viewport.getBoundingClientRect();
+                if (!rect.width || !rect.height) return;
+
+                // Чувствительность сдвига с учетом зума
+                const sensitivity = 100 / Math.max(1, cropState.scale * 0.85);
+                const deltaX = ((clientX - startX) / rect.width) * sensitivity;
+                const deltaY = ((clientY - startY) / rect.height) * sensitivity;
+
+                cropState.posX = Math.round(Math.max(0, Math.min(100, initialPosX - deltaX)));
+                cropState.posY = Math.round(Math.max(0, Math.min(100, initialPosY - deltaY)));
+
+                syncSlidersAndPreviewFromCropState();
+            };
+
+            const stopDrag = () => {
+                isDragging = false;
+            };
+
+            viewport.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startDrag(e.clientX, e.clientY);
+            });
+            window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
+            window.addEventListener('mouseup', stopDrag);
+
+            viewport.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    startDrag(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchmove', (e) => {
+                if (isDragging && e.touches.length === 1) {
+                    onMove(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }, { passive: true });
+            window.addEventListener('touchend', stopDrag);
+        }
+
+        function updateCropFromSliders() {
+            const xSlider = document.getElementById('crop-pos-x');
+            const ySlider = document.getElementById('crop-pos-y');
+            const scaleSlider = document.getElementById('crop-scale');
+
+            cropState.posX = Number(xSlider.value);
+            cropState.posY = Number(ySlider.value);
+            cropState.scale = Number(scaleSlider.value) / 100;
+
+            syncSlidersAndPreviewFromCropState();
+        }
+
+        function syncSlidersAndPreviewFromCropState() {
+            const xSlider = document.getElementById('crop-pos-x');
+            const ySlider = document.getElementById('crop-pos-y');
+            const scaleSlider = document.getElementById('crop-scale');
+            const previewImg = document.getElementById('crop-preview-img');
+
+            if (xSlider) xSlider.value = cropState.posX;
+            if (ySlider) ySlider.value = cropState.posY;
+            if (scaleSlider) scaleSlider.value = Math.round(cropState.scale * 100);
+
+            document.getElementById('crop-x-label').textContent = `${cropState.posX}%`;
+            document.getElementById('crop-y-label').textContent = `${cropState.posY}%`;
+            document.getElementById('crop-scale-label').textContent = `${Math.round(cropState.scale * 100)}%`;
+            document.getElementById('crop-coords-badge').textContent = `${cropState.posX}% / ${cropState.posY}% (${Math.round(cropState.scale * 100)}%)`;
+
+            if (previewImg) {
+                previewImg.style.objectPosition = `${cropState.posX}% ${cropState.posY}%`;
+                previewImg.style.transformOrigin = `${cropState.posX}% ${cropState.posY}%`;
+                previewImg.style.transform = `scale(${cropState.scale})`;
+            }
+        }
+
+        function resetCropPosition() {
+            cropState = { posX: 50, posY: 50, scale: 1 };
+            syncSlidersAndPreviewFromCropState();
+        }
+
+        // Настройка перетаскивания (Drag & Drop) файла картинки в поле ввода пути
+        function setupImageDropZone() {
+            const dropZone = document.getElementById('image-drop-zone');
+            const imageInput = document.getElementById('gen-image');
+            if (!dropZone || !imageInput) return;
+
+            ['dragenter', 'dragover'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.add('border-brand-500', 'bg-brand-50/60', 'dark:bg-brand-500/10');
+                });
+            });
+
+            ['dragleave', 'drop'].forEach(evtName => {
+                dropZone.addEventListener(evtName, (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    dropZone.classList.remove('border-brand-500', 'bg-brand-50/60', 'dark:bg-brand-500/10');
+                });
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                const files = e.dataTransfer && e.dataTransfer.files;
+                if (files && files.length > 0) {
+                    applyDroppedOrSelectedFile(files[0]);
+                    return;
+                }
+                const droppedText = e.dataTransfer && e.dataTransfer.getData('text');
+                if (droppedText) {
+                    imageInput.value = resolveNewsImagePath(droppedText.trim());
+                    resetCropPosition();
+                    handleManualImageInput();
+                }
+            });
+        }
+
+        function handleImageFileSelect(e) {
+            const files = e.target.files;
+            if (files && files.length > 0) {
+                applyDroppedOrSelectedFile(files[0]);
+            }
+        }
+
+        function applyDroppedOrSelectedFile(file) {
+            const cleanName = file.name.trim();
+            const targetPath = NEWS_IMAGES_FOLDER + cleanName;
+            const imageInput = document.getElementById('gen-image');
+            imageInput.value = targetPath;
+
+            resetCropPosition();
+
+            if (file.type && file.type.startsWith('image/')) {
+                const blobUrl = URL.createObjectURL(file);
+                TEMP_IMAGE_PREVIEWS[targetPath] = blobUrl;
+                showCropEditor(blobUrl, targetPath);
+            } else {
+                showCropEditor(targetPath, targetPath);
+            }
+
+            showToast(`Подставлен путь: ${targetPath}`);
+        }
+
+        function showCropEditor(previewSrc, pathText) {
+            const editor = document.getElementById('image-crop-editor');
+            const img = document.getElementById('crop-preview-img');
+            if (!editor || !img) return;
+
+            img.onerror = () => {
+                if (TEMP_IMAGE_PREVIEWS[pathText] && img.src !== TEMP_IMAGE_PREVIEWS[pathText]) {
+                    img.src = TEMP_IMAGE_PREVIEWS[pathText];
+                } else {
+                    img.onerror = null;
+                    img.src = 'https://placehold.co/800x450/1e293b/ffffff?text=News+16:9';
+                }
+            };
+            img.src = previewSrc;
+            syncSlidersAndPreviewFromCropState();
+            editor.classList.remove('hidden');
+        }
+
+        function hideCropEditor() {
+            const editor = document.getElementById('image-crop-editor');
+            if (editor) editor.classList.add('hidden');
+            const fileInput = document.getElementById('gen-image-file');
+            if (fileInput) fileInput.value = '';
+        }
+
+        function handleManualImageInput() {
+            const val = document.getElementById('gen-image').value.trim();
+            if (!val) {
+                hideCropEditor();
+                return;
+            }
+            const resolved = resolveNewsImagePath(val);
+            const previewUrl = TEMP_IMAGE_PREVIEWS[resolved] || resolved;
+            showCropEditor(previewUrl, resolved);
+        }
+
+        function getDisplayImageSrc(storedPath) {
+            return storedPath || 'https://placehold.co/800x450/1e293b/ffffff?text=News';
+        }
+
+        function handleArticleImageError(imgElement, storedPath, fallbackUrl) {
+            if (TEMP_IMAGE_PREVIEWS[storedPath] && imgElement.src !== TEMP_IMAGE_PREVIEWS[storedPath]) {
+                imgElement.src = TEMP_IMAGE_PREVIEWS[storedPath];
+            } else {
+                imgElement.onerror = null;
+                imgElement.src = fallbackUrl;
+            }
+        }
+
+        // Автоматический подхват логотипа и фавикона из папки images/logo/
+        function initLogoAndFavicon() {
+            const logoCandidates = [
+                LOGO_FOLDER + 'logo.png',
+                LOGO_FOLDER + 'logo.svg',
+                LOGO_FOLDER + 'logo.webp',
+                LOGO_FOLDER + 'logo.jpg',
+                LOGO_FOLDER + 'logo.jpeg'
+            ];
+
+            const faviconCandidates = [
+                LOGO_FOLDER + 'favicon.png',
+                LOGO_FOLDER + 'favicon.ico',
+                LOGO_FOLDER + 'favicon.svg',
+                LOGO_FOLDER + 'favicon.webp',
+                LOGO_FOLDER + 'logo.png',
+                LOGO_FOLDER + 'logo.svg'
+            ];
+
+            function tryLoadLogo(index) {
+                if (index >= logoCandidates.length) return;
+                const url = logoCandidates[index];
+                const testImg = new Image();
+                testImg.onload = () => {
+                    const headerImg = document.getElementById('header-logo-img');
+                    const headerFallback = document.getElementById('header-logo-fallback');
+                    const footerImg = document.getElementById('footer-logo-img');
+                    const footerFallback = document.getElementById('footer-logo-fallback');
+
+                    if (headerImg && headerFallback) {
+                        headerImg.src = url;
+                        headerImg.classList.remove('hidden');
+                        headerFallback.classList.add('hidden');
+                    }
+                    if (footerImg && footerFallback) {
+                        footerImg.src = url;
+                        footerImg.classList.remove('hidden');
+                        footerFallback.classList.add('hidden');
+                    }
+                };
+                testImg.onerror = () => tryLoadLogo(index + 1);
+                testImg.src = url;
+            }
+
+            function tryLoadFavicon(index) {
+                if (index >= faviconCandidates.length) return;
+                const url = faviconCandidates[index];
+                const testImg = new Image();
+                testImg.onload = () => {
+                    let link = document.getElementById('dynamic-favicon');
+                    if (!link) {
+                        link = document.createElement('link');
+                        link.id = 'dynamic-favicon';
+                        link.rel = 'icon';
+                        document.head.appendChild(link);
+                    }
+                    link.href = url;
+                };
+                testImg.onerror = () => tryLoadFavicon(index + 1);
+                testImg.src = url;
+            }
+
+            tryLoadLogo(0);
+            tryLoadFavicon(0);
+        }
+
+        function resolveNewsImagePath(rawPath) {
+            const val = (rawPath || '').trim();
+            if (!val) return 'https://placehold.co/800x450/1e293b/ffffff?text=News';
+            if (/^(https?:\/\/|data:|blob:|\/|images\/)/i.test(val)) {
+                return val;
+            }
+            return NEWS_IMAGES_FOLDER + val;
+        }
+
+        function initAdminState() {
+            if (sessionStorage.getItem('chronicle_admin_unlocked') === 'true') {
+                enableAdminUI(false);
+            }
+            const hash = window.location.hash;
+            const params = new URLSearchParams(window.location.search);
+            if (hash === '#admin' || params.get('admin') === '1') {
+                triggerAdminAccess();
+            }
+        }
+
+        function triggerAdminAccess() {
+            if (isAdminUnlocked) openGeneratorModal('manage');
+            else openPinModal();
+        }
+
+        function handleSecretFooterClick() {
+            footerClickCount++;
+            clearTimeout(footerClickTimer);
+            if (footerClickCount >= 5) {
+                footerClickCount = 0;
+                triggerAdminAccess();
+            } else {
+                footerClickTimer = setTimeout(() => { footerClickCount = 0; }, 1500);
+            }
+        }
+
+        function openPinModal() {
+            const modal = document.getElementById('pin-modal');
+            const input = document.getElementById('admin-pin-input');
+            document.getElementById('pin-error').classList.add('hidden');
+            input.value = '';
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function closePinModal() {
+            document.getElementById('pin-modal').classList.add('hidden');
+            if (window.location.hash === '#admin') {
+                history.replaceState(null, null, window.location.pathname);
+            }
+        }
+
+        function verifyAdminPin(e) {
+            e.preventDefault();
+            const entered = document.getElementById('admin-pin-input').value.trim();
+            if (entered === ADMIN_PIN) {
+                closePinModal();
+                enableAdminUI(true);
+                openGeneratorModal('manage');
+            } else {
+                document.getElementById('pin-error').classList.remove('hidden');
+            }
+        }
+
+        function enableAdminUI(showNotification = true) {
+            isAdminUnlocked = true;
+            sessionStorage.setItem('chronicle_admin_unlocked', 'true');
+            const btn = document.getElementById('admin-create-btn');
+            const logoutBtn = document.getElementById('admin-logout-btn');
+            const floatingBar = document.getElementById('admin-floating-bar');
+            btn.classList.remove('hidden');
+            btn.classList.add('flex');
+            logoutBtn.classList.remove('hidden');
+            floatingBar.classList.remove('hidden');
+            floatingBar.classList.add('flex');
+            renderPage();
+            renderAdminArticlesList();
+            if (showNotification) showToast('Режим редактора включен!');
+        }
+
+        function lockAdmin() {
+            isAdminUnlocked = false;
+            sessionStorage.removeItem('chronicle_admin_unlocked');
+            document.getElementById('admin-create-btn').classList.add('hidden');
+            document.getElementById('admin-create-btn').classList.remove('flex');
+            document.getElementById('admin-logout-btn').classList.add('hidden');
+            const fb = document.getElementById('admin-floating-bar');
+            fb.classList.add('hidden');
+            fb.classList.remove('flex');
+            closeGeneratorModal();
+            renderPage();
+            showToast('Режим автора скрыт');
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('news_theme');
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        }
+
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('news_theme', isDark ? 'dark' : 'light');
+        }
+
+        function initCurrentDate() {
+            const now = new Date();
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            const formatted = now.toLocaleDateString('ru-RU', options);
+            document.getElementById('current-date-display').textContent = formatted.charAt(0).toUpperCase() + formatted.slice(1);
+            document.getElementById('footer-year').textContent = now.getFullYear();
+        }
+
+        function renderCategories() {
+            const nav = document.getElementById('category-nav');
+            nav.innerHTML = CATEGORIES.map(cat => {
+                const isActive = cat === currentCategory;
+                const activeClasses = 'bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm';
+                const inactiveClasses = 'bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700';
+                return `<button onclick="selectCategory('${cat}')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition ${isActive ? activeClasses : inactiveClasses}">${cat}</button>`;
+            }).join('');
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            renderCategories();
+            renderPage();
+        }
+
+        function resetFilters() {
+            currentCategory = 'Все';
+            searchQuery = '';
+            document.getElementById('search-input-desktop').value = '';
+            document.getElementById('search-input-mobile').value = '';
+            renderCategories();
+            renderPage();
+        }
+
+        function setupSearchListeners() {
+            const desktopInput = document.getElementById('search-input-desktop');
+            const mobileInput = document.getElementById('search-input-mobile');
+            const handleSearch = (e) => {
+                searchQuery = e.target.value.trim().toLowerCase();
+                desktopInput.value = e.target.value;
+                mobileInput.value = e.target.value;
+                renderPage();
+            };
+            desktopInput.addEventListener('input', handleSearch);
+            mobileInput.addEventListener('input', handleSearch);
+        }
+
+        function getAdminCardOverlayHtml(articleId) {
+            if (!isAdminUnlocked) return '';
+            return `
+                <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5" onclick="event.stopPropagation()">
+                    <button type="button" onclick="startEditArticle('${articleId}')" title="Редактировать" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 hover:bg-brand-600 hover:text-white shadow-md backdrop-blur-sm transition flex items-center gap-1">
+                        <span>✏️</span><span class="hidden sm:inline">Изменить</span>
+                    </button>
+                    <button type="button" onclick="deleteArticleById('${articleId}')" title="Удалить" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-rose-600/95 hover:bg-rose-700 text-white shadow-md backdrop-blur-sm transition flex items-center gap-1">
+                        <span>🗑️</span><span class="hidden sm:inline">Удалить</span>
+                    </button>
+                </div>
+            `;
+        }
+
+        function renderPage() {
+            const featuredSection = document.getElementById('featured-section');
+            const newsGrid = document.getElementById('news-grid');
+            const emptyState = document.getElementById('empty-state');
+            const articlesCount = document.getElementById('articles-count');
+            const feedTitle = document.getElementById('feed-title');
+
+            const filtered = NEWS_DATA.filter(item => {
+                const matchesCategory = currentCategory === 'Все' || item.category === currentCategory;
+                const matchesSearch = !searchQuery ||
+                    item.title.toLowerCase().includes(searchQuery) ||
+                    item.summary.toLowerCase().includes(searchQuery) ||
+                    item.category.toLowerCase().includes(searchQuery);
+                return matchesCategory && matchesSearch;
+            });
+
+            feedTitle.textContent = currentCategory === 'Все' ? 'Последние публикации' : `Рубрика: ${currentCategory}`;
+            articlesCount.textContent = `${filtered.length} ${getNounPlural(filtered.length, 'материал', 'материала', 'материалов')}`;
+
+            if (filtered.length === 0) {
+                featuredSection.innerHTML = '';
+                featuredSection.classList.add('hidden');
+                newsGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+
+            let gridItems = [...filtered];
+
+            // ИСПРАВЛЕНО: Главная новость отображается ТОЛЬКО если у статьи явно стоит галочка featured === true
+            const featuredItem = (currentCategory === 'Все' && !searchQuery)
+                ? filtered.find(item => item.featured === true)
+                : null;
+
+            if (featuredItem) {
+                gridItems = filtered.filter(item => item.id !== featuredItem.id);
+                featuredSection.classList.remove('hidden');
+                featuredSection.innerHTML = `
+                    <div onclick="openArticleModal('${featuredItem.id}')" class="relative group cursor-pointer rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                        ${getAdminCardOverlayHtml(featuredItem.id)}
+                        <div class="lg:col-span-7 aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
+                            <img src="${getDisplayImageSrc(featuredItem.image)}" alt="${escapeHtml(featuredItem.title)}" style="${getImageFrameStyle(featuredItem)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(featuredItem.image)}', 'https://placehold.co/800x450/1e293b/ffffff?text=News')">
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-600 text-white shadow">Главная тема</span>
+                        </div>
+                        <div class="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2.5 text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3">
+                                    <span>${featuredItem.category}</span><span class="text-slate-300 dark:text-slate-700">•</span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-normal">${featuredItem.date}</span>
+                                </div>
+                                <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug mb-4 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${featuredItem.title}</h1>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3">${featuredItem.summary}</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+                                <span>Время чтения: ${featuredItem.readTime}</span>
+                                <span class="font-semibold text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Читать полностью →</span>
+                            </div>
+                        </div>
+                    </div>`;
+            } else {
+                featuredSection.innerHTML = '';
+                featuredSection.classList.add('hidden');
+            }
+
+            newsGrid.innerHTML = gridItems.map(item => `
+                <article onclick="openArticleModal('${item.id}')" class="relative group cursor-pointer bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+                    ${getAdminCardOverlayHtml(item.id)}
+                    <div class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
+                        <img src="${getDisplayImageSrc(item.image)}" alt="${escapeHtml(item.title)}" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/600x340/1e293b/ffffff?text=News')">
+                        <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/75 text-white backdrop-blur-sm">${item.category}</span>
+                    </div>
+                    <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400 mb-2.5">
+                                <span>${item.date}</span><span>•</span><span>${item.readTime}</span>
+                            </div>
+                            <h3 class="text-lg font-bold leading-snug mb-2.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${item.title}</h3>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">${item.summary}</p>
+                        </div>
+                        <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
+                            <span>Открыть статью</span><span class="group-hover:translate-x-1 transition-transform">→</span>
+                        </div>
+                    </div>
+                </article>`).join('');
+        }
+
+        function openArticleModal(id) {
+            const article = NEWS_DATA.find(item => item.id === id);
+            if (!article) return;
+            currentOpenedArticleId = id;
+            isPreviewFromAdmin = false;
+            document.getElementById('modal-category').textContent = article.category;
+            document.getElementById('modal-date').textContent = article.date;
+            document.getElementById('modal-readtime').textContent = `Чтение: ${article.readTime}`;
+            document.getElementById('modal-title').textContent = article.title;
+            const imgEl = document.getElementById('modal-image');
+            imgEl.setAttribute('style', getImageFrameStyle(article));
+            imgEl.onerror = () => handleArticleImageError(imgEl, article.image, 'https://placehold.co/800x450/1e293b/ffffff?text=News');
+            imgEl.src = getDisplayImageSrc(article.image);
+            imgEl.alt = article.title;
+            document.getElementById('modal-body').innerHTML = article.content;
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            history.replaceState(null, null, `#article=${id}`);
+        }
+
+        function closeArticleModal() {
+            document.getElementById('article-modal').classList.add('hidden');
+            currentOpenedArticleId = null;
+            const generatorOpen = !document.getElementById('generator-modal').classList.contains('hidden');
+            if (!generatorOpen && !isPreviewFromAdmin) {
+                document.body.style.overflow = '';
+            }
+            if (isPreviewFromAdmin) {
+                isPreviewFromAdmin = false;
+                document.getElementById('generator-modal').classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+                return;
+            }
+            if (!generatorOpen && window.location.hash !== '#admin') {
+                history.replaceState(null, null, window.location.pathname);
+            }
+        }
+
+        function previewGeneratedArticle() {
+            const articleObj = buildArticleObjectFromForm();
+            currentOpenedArticleId = null;
+            isPreviewFromAdmin = true;
+
+            document.getElementById('modal-category').textContent = articleObj.category;
+            document.getElementById('modal-date').textContent = articleObj.date;
+            document.getElementById('modal-readtime').textContent = `Чтение: ${articleObj.readTime}`;
+            document.getElementById('modal-title').textContent = articleObj.title;
+            const imgEl = document.getElementById('modal-image');
+            imgEl.setAttribute('style', getImageFrameStyle(articleObj));
+            imgEl.onerror = () => handleArticleImageError(imgEl, articleObj.image, 'https://placehold.co/800x450/1e293b/ffffff?text=News');
+            imgEl.src = getDisplayImageSrc(articleObj.image);
+            imgEl.alt = articleObj.title;
+            document.getElementById('modal-body').innerHTML = articleObj.content;
+
+            document.getElementById('generator-modal').classList.add('hidden');
+            document.getElementById('article-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function shareCurrentArticle() {
+            if (!currentOpenedArticleId) {
+                showToast('Это предпросмотр — сначала сохраните статью');
+                return;
+            }
+            const shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            copyTextToClipboard(shareUrl, 'Ссылка на статью скопирована!');
+        }
+
+        function checkUrlHashForArticle() {
+            const hash = window.location.hash;
+            if (hash.startsWith('#article=')) {
+                const articleId = hash.replace('#article=', '');
+                openArticleModal(articleId);
+            }
+        }
+
+        function openGeneratorModal(defaultTab = 'create') {
+            if (!isAdminUnlocked) {
+                openPinModal();
+                return;
+            }
+            document.getElementById('generator-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            switchAdminTab(defaultTab);
+            renderAdminArticlesList();
+        }
+
+        function closeGeneratorModal() {
+            document.getElementById('generator-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+            if (window.location.hash === '#admin') {
+                history.replaceState(null, null, window.location.pathname);
+            }
+        }
+
+        function switchAdminTab(tabName) {
+            currentAdminTab = tabName;
+            const createTab = document.getElementById('admin-tab-create');
+            const manageTab = document.getElementById('admin-tab-manage');
+            const btnCreate = document.getElementById('tab-btn-create');
+            const btnManage = document.getElementById('tab-btn-manage');
+            if (tabName === 'create') {
+                createTab.classList.remove('hidden');
+                manageTab.classList.add('hidden');
+                btnCreate.className = 'px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition';
+                btnManage.className = 'px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition flex items-center gap-2';
+            } else {
+                createTab.classList.add('hidden');
+                manageTab.classList.remove('hidden');
+                btnManage.className = 'px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition flex items-center gap-2';
+                btnCreate.className = 'px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-slate-500 hover:text-slate-800 dark:hover:text-slate-200 transition';
+                renderAdminArticlesList();
+            }
+        }
+
+        function renderAdminArticlesList() {
+            const listContainer = document.getElementById('admin-articles-list');
+            const badge = document.getElementById('manage-count-badge');
+            if (!listContainer || !badge) return;
+            badge.textContent = NEWS_DATA.length;
+
+            if (NEWS_DATA.length === 0) {
+                listContainer.innerHTML = `<div class="text-center py-10 px-4 rounded-xl border border-dashed border-slate-300 dark:border-slate-800 text-slate-500 text-sm">В ленте нет новостей. Перейдите во вкладку «Добавить новость», чтобы создать первую статью!</div>`;
+                return;
+            }
+
+            listContainer.innerHTML = NEWS_DATA.map(item => `
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-16 aspect-video rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0 relative">
+                            <img src="${getDisplayImageSrc(item.image)}" alt="" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/120x80/1e293b/ffffff?text=News')">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+                                <span class="font-semibold text-brand-600 dark:text-brand-400">${escapeHtml(item.category)}</span>
+                                <span>•</span><span>${escapeHtml(item.date)}</span>
+                                ${item.featured ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">Главная</span>' : ''}
+                            </div>
+                            <h5 class="text-xs sm:text-sm font-bold truncate">${escapeHtml(item.title)}</h5>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="startEditArticle('${item.id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-700 hover:bg-brand-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 transition">✏️ Изменить</button>
+                        <button type="button" onclick="deleteArticleById('${item.id}')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white dark:bg-rose-500/15 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-500/30 transition">🗑️ Удалить</button>
+                    </div>
+                </div>`).join('');
+        }
+
+        function deleteArticleById(articleId) {
+            const index = NEWS_DATA.findIndex(item => item.id === articleId);
+            if (index === -1) return;
+            const removedTitle = NEWS_DATA[index].title;
+            NEWS_DATA.splice(index, 1);
+            if (document.getElementById('gen-edit-id').value === articleId) resetGeneratorForm();
+            renderPage();
+            renderAdminArticlesList();
+            showToast(`Удалено: «${removedTitle.slice(0, 35)}...»`);
+        }
+
+        function deleteAllArticles() {
+            NEWS_DATA = [];
+            resetGeneratorForm();
+            renderPage();
+            renderAdminArticlesList();
+            showToast('Все новости очищены!');
+        }
+
+        function startEditArticle(articleId) {
+            const article = NEWS_DATA.find(item => item.id === articleId);
+            if (!article) return;
+            document.getElementById('gen-edit-id').value = article.id;
+            document.getElementById('gen-title').value = article.title;
+            document.getElementById('gen-category').value = CATEGORIES.includes(article.category) ? article.category : 'Технологии';
+            document.getElementById('gen-date').value = article.date;
+            document.getElementById('gen-image').value = article.image;
+            document.getElementById('gen-summary').value = article.summary;
+            document.getElementById('gen-featured').checked = Boolean(article.featured);
+
+            cropState = {
+                posX: article.posX !== undefined ? Number(article.posX) : 50,
+                posY: article.posY !== undefined ? Number(article.posY) : 50,
+                scale: article.scale !== undefined ? Number(article.scale) : 1
+            };
+
+            const plainText = article.content
+                .replace(/<\/p>\s*<p>/gi, '\n\n')
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<\/?p>/gi, '')
+                .trim();
+            document.getElementById('gen-content').value = plainText;
+
+            updateReadTimeFromContent();
+            handleManualImageInput();
+
+            document.getElementById('edit-mode-banner').classList.remove('hidden');
+            document.getElementById('edit-mode-banner').classList.add('flex');
+            document.getElementById('save-article-btn').textContent = '💾 Сохранить изменения';
+
+            openGeneratorModal('create');
+        }
+
+        function resetGeneratorForm() {
+            const now = new Date();
+            const defaultDate = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
+            document.getElementById('gen-edit-id').value = '';
+            document.getElementById('gen-title').value = '';
+            document.getElementById('gen-category').value = 'Технологии';
+            document.getElementById('gen-date').value = defaultDate;
+            document.getElementById('gen-readtime').value = '1 мин';
+            document.getElementById('gen-image').value = '';
+            document.getElementById('gen-summary').value = '';
+            document.getElementById('gen-content').value = '';
+            document.getElementById('gen-featured').checked = false;
+            document.getElementById('edit-mode-banner').classList.add('hidden');
+            document.getElementById('edit-mode-banner').classList.remove('flex');
+            document.getElementById('save-article-btn').textContent = '+ Добавить статью в ленту сайта';
+            resetCropPosition();
+            hideCropEditor();
+        }
+
+        function setImageTemplate(val) {
+            const input = document.getElementById('gen-image');
+            input.value = val;
+            resetCropPosition();
+            handleManualImageInput();
+            input.focus();
+        }
+
+        function updateReadTimeFromContent() {
+            const content = document.getElementById('gen-content').value;
+            const words = content.trim().split(/\s+/).filter(Boolean).length;
+            const minutes = Math.max(1, Math.ceil(words / WORDS_PER_MINUTE));
+            document.getElementById('gen-readtime').value = minutes + ' мин';
+        }
+
+        function buildArticleObjectFromForm() {
+            const editId = document.getElementById('gen-edit-id').value.trim();
+            const title = document.getElementById('gen-title').value.trim() || 'Заголовок вашей новой статьи';
+            const category = document.getElementById('gen-category').value;
+            const readTime = document.getElementById('gen-readtime').value.trim() || '1 мин';
+            const image = resolveNewsImagePath(document.getElementById('gen-image').value);
+            const summary = document.getElementById('gen-summary').value.trim() || 'Краткое описание новости для главной страницы.';
+            const rawContent = document.getElementById('gen-content').value.trim() || 'Первый абзац вашей новости.\n\nВторой абзац вашей новости.';
+            const featured = Boolean(document.getElementById('gen-featured').checked);
+
+            const now = new Date();
+            const fallbackDate = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
+            const dateStr = document.getElementById('gen-date').value.trim() || fallbackDate;
+
+            const paragraphs = rawContent
+                .split(/\n\s*\n/)
+                .map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`)
+                .join('\n                    ');
+
+            return {
+                id: editId || ('news-' + Date.now().toString().slice(-6)),
+                title,
+                category,
+                date: dateStr,
+                readTime,
+                image,
+                posX: cropState.posX,
+                posY: cropState.posY,
+                scale: cropState.scale,
+                summary,
+                featured,
+                content: `\n                    ${paragraphs}\n                `
+            };
+        }
+
+        function saveArticleToFeed() {
+            const articleObj = buildArticleObjectFromForm();
+            const editId = document.getElementById('gen-edit-id').value.trim();
+
+            if (articleObj.featured) {
+                NEWS_DATA.forEach(item => item.featured = false);
+            }
+
+            if (editId) {
+                const idx = NEWS_DATA.findIndex(item => item.id === editId);
+                if (idx !== -1) NEWS_DATA[idx] = articleObj;
+                else NEWS_DATA.unshift(articleObj);
+                showToast('✅ Изменения применены! Сайт обновлён.');
+            } else {
+                NEWS_DATA.unshift(articleObj);
+                showToast('✅ Статья добавлена в ленту!');
+            }
+
+            resetGeneratorForm();
+            renderPage();
+            renderAdminArticlesList();
+            switchAdminTab('manage');
+        }
+
+        function serializeNewsDataArray() {
+            const itemsCode = NEWS_DATA.map(obj => {
+                return `            {
+                id: ${JSON.stringify(obj.id)},
+                title: ${JSON.stringify(obj.title)},
+                category: ${JSON.stringify(obj.category)},
+                date: ${JSON.stringify(obj.date)},
+                readTime: ${JSON.stringify(obj.readTime)},
+                image: ${JSON.stringify(obj.image)},
+                posX: ${Number(obj.posX ?? 50)},
+                posY: ${Number(obj.posY ?? 50)},
+                scale: ${Number(obj.scale ?? 1)},
+                summary: ${JSON.stringify(obj.summary)},
+                featured: ${Boolean(obj.featured)},
+                content: \`${obj.content.replace(/`/g, '\\`')}\`
+            }`;
+            }).join(',\n');
+            return `let NEWS_DATA = [\n${itemsCode}\n        ];`;
+        }
+
+        function downloadUpdatedHtml() {
+            const titleField = document.getElementById('gen-title').value.trim();
+            if (titleField) saveArticleToFeed();
+
+            const cloneDoc = document.documentElement.cloneNode(true);
+            ['#generator-modal', '#pin-modal', '#article-modal', '#image-crop-editor'].forEach(sel => {
+                const el = cloneDoc.querySelector(sel);
+                if (el) el.classList.add('hidden');
+            });
+            ['#admin-create-btn', '#admin-logout-btn', '#admin-floating-bar'].forEach(sel => {
+                const el = cloneDoc.querySelector(sel);
+                if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+            });
+            cloneDoc.querySelector('body').style.overflow = '';
+
+            let cleanHtml = "<!DOCTYPE html>\n" + cloneDoc.outerHTML;
+            const regex = /let\s+NEWS_DATA\s*=\s*\[[\s\S]*?\];/;
+            const newArrayCode = serializeNewsDataArray();
+
+            if (regex.test(cleanHtml)) cleanHtml = cleanHtml.replace(regex, newArrayCode);
+            else { showToast('Ошибка: не удалось найти массив NEWS_DATA'); return; }
+
+            const blob = new Blob([cleanHtml], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'index.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('✅ index.html скачан! Загрузите его на GitHub.');
+        }
+
+        function copyTextToClipboard(text, successMessage) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.opacity = '0';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast(successMessage);
+            } catch (err) {
+                showToast('Не удалось скопировать');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-message').textContent = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3400);
+        }
+
+        function getNounPlural(number, one, two, five) {
+            let n = Math.abs(number); n %= 100;
+            if (n >= 5 && n <= 20) return five;
+            n %= 10;
+            if (n === 1) return one;
+            if (n >= 2 && n <= 4) return two;
+            return five;
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                if (isPreviewFromAdmin) { closeArticleModal(); return; }
+                closeArticleModal();
+                closeGeneratorModal();
+                closePinModal();
+            }
+            if (e.altKey && (e.code === 'KeyA' || e.key === 'a' || e.key === 'ф' || e.key === 'A' || e.key === 'Ф')) {
+                e.preventDefault();
+                triggerAdminAccess();
+            }
+        });
+
+        document.getElementById('article-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'article-modal' || e.target.parentElement.id === 'article-modal') {
+                closeArticleModal();
+            }
+        });
+
+        document.getElementById('generator-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'generator-modal' || e.target.parentElement.id === 'generator-modal') {
+                closeGeneratorModal();
+            }
+        });
+    </script>
+
+</body></html>
