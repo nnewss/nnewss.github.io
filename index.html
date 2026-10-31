@@ -10,7 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Merriweather:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -49,11 +49,9 @@
             transform: scale(calc(var(--img-scale, 1) * 1.04));
         }
 
-        /* Лайтбокс */
         #lightbox-image { cursor: zoom-out; max-width: 100%; max-height: 92vh; object-fit: contain; }
         .article-content img { cursor: zoom-in; }
 
-        /* Кнопки карусели */
         .modal-gallery-btn {
             position: absolute; top: 50%; transform: translateY(-50%);
             z-index: 6; width: 2.5rem; height: 2.5rem;
@@ -67,7 +65,6 @@
         .modal-gallery-prev { left: 0.75rem; }
         .modal-gallery-next { right: 0.75rem; }
 
-        /* Трек-слайдер: фотографии перелистываются как настоящие страницы */
         #modal-image-track {
             display: flex;
             width: 100%;
@@ -91,7 +88,6 @@
             pointer-events: none;
         }
 
-        /* Точки-полоски */
         .gallery-dot {
             height: 0.5rem;
             width: 0.5rem;
@@ -103,22 +99,17 @@
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                         background-color 0.25s ease;
         }
-        .gallery-dot:hover:not(.is-active) {
-            background-color: rgba(255,255,255,0.75);
-        }
-        .gallery-dot.is-active {
-            width: 1.25rem;
-            background-color: #ffffff;
-        }
+        .gallery-dot:hover:not(.is-active) { background-color: rgba(255,255,255,0.75); }
+        .gallery-dot.is-active { width: 1.25rem; background-color: #ffffff; }
     </style>
-</head>
-<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{inset:0px}.bottom-2{bottom:0.5rem}.bottom-3{bottom:0.75rem}.bottom-4{bottom:1rem}.bottom-5{bottom:1.25rem}.left-1\/2{left:50%}.left-2{left:0.5rem}.left-3\.5{left:0.875rem}.right-2{right:0.5rem}.right-3{right:0.75rem}.right-4{right:1rem}.right-5{right:1.25rem}.top-0{top:0px}.top-1\/2{top:50%}.top-3{top:0.75rem}.top-4{top:1rem}.bottom-1{bottom:0.25rem}.left-1{left:0.25rem}.right-1{right:0.25rem}.top-1{top:0.25rem}.left-4{left:1rem}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[5\]{z-index:5}.z-\[70\]{z-index:70}.z-\[80\]{z-index:80}.z-\[81\]{z-index:81}.z-20{z-index:20}.col-span-full{grid-column:1 / -1}.mx-auto{margin-left:auto;margin-right:auto}.my-6{margin-top:1.5rem;margin-bottom:1.5rem}.mb-1{margin-bottom:0.25rem}.mb-10{margin-bottom:2.5rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}.ml-3{margin-left:0.75rem}.ml-auto{margin-left:auto}.mt-1{margin-top:0.25rem}.mt-16{margin-top:4rem}.mt-3{margin-top:0.75rem}.line-clamp-3{overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.aspect-video{aspect-ratio:16 / 9}.h-10{height:2.5rem}.h-12{height:3rem}.h-14{height:3.5rem}.h-16{height:4rem}.h-2{height:0.5rem}.h-2\.5{height:0.625rem}.h-4{height:1rem}.h-5{height:1.25rem}.h-6{height:1.5rem}.h-7{height:1.75rem}.h-full{height:100%}.max-h-\[42vh\]{max-height:42vh}.max-h-\[82vh\]{max-height:82vh}.min-h-screen{min-height:100vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-14{width:3.5rem}.w-2{width:0.5rem}.w-2\.5{width:0.625rem}.w-28{width:7rem}.w-4{width:1rem}.w-5{width:1.25rem}.w-6{width:1.5rem}.w-7{width:1.75rem}.w-\[95\%\]{width:95%}.w-full{width:100%}.w-16{width:4rem}.min-w-0{min-width:0px}.max-w-3xl{max-width:48rem}.max-w-4xl{max-width:56rem}.max-w-7xl{max-width:80rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-1\/2{--tw-translate-y:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-20{--tw-translate-y:5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-default{cursor:default}.cursor-move{cursor:move}.cursor-pointer{cursor:pointer}.cursor-grab{cursor:grab}.select-none{-webkit-user-select:none;user-select:none}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.grid-rows-3{grid-template-rows:repeat(3, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-stretch{align-items:stretch}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:0.25rem}.gap-1\.5{gap:0.375rem}.gap-2{gap:0.5rem}.gap-2\.5{gap:0.625rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-6{gap:1.5rem}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-x-auto{overflow-x:auto}.overflow-y-auto{overflow-y:auto}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.whitespace-nowrap{white-space:nowrap}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-md{border-radius:0.375rem}.rounded-xl{border-radius:0.75rem}.rounded-3xl{border-radius:1.5rem}.border{border-width:1px}.border-2{border-width:2px}.border-b{border-bottom-width:1px}.border-b-2{border-bottom-width:2px}.border-r{border-right-width:1px}.border-t{border-top-width:1px}.border-dashed{border-style:dashed}.border-amber-500\/30{border-color:rgb(245 158 11 / 0.3)}.border-brand-500\/60{border-color:rgb(59 130 246 / 0.6)}.border-brand-600{--tw-border-opacity:1;border-color:rgb(37 99 235 / var(--tw-border-opacity, 1))}.border-emerald-300{--tw-border-opacity:1;border-color:rgb(110 231 183 / var(--tw-border-opacity, 1))}.border-emerald-500\/30{border-color:rgb(16 185 129 / 0.3)}.border-rose-200{--tw-border-opacity:1;border-color:rgb(254 205 211 / var(--tw-border-opacity, 1))}.border-slate-100{--tw-border-opacity:1;border-color:rgb(241 245 249 / var(--tw-border-opacity, 1))}.border-slate-200{--tw-border-opacity:1;border-color:rgb(226 232 240 / var(--tw-border-opacity, 1))}.border-slate-300{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.border-slate-700{--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.border-transparent{border-color:transparent}.border-white\/40{border-color:rgb(255 255 255 / 0.4)}.border-brand-500{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.bg-amber-500\/15{background-color:rgb(245 158 11 / 0.15)}.bg-brand-50{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.bg-brand-600{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.bg-emerald-400{--tw-bg-opacity:1;background-color:rgb(52 211 153 / var(--tw-bg-opacity, 1))}.bg-emerald-50{--tw-bg-opacity:1;background-color:rgb(236 253 245 / var(--tw-bg-opacity, 1))}.bg-emerald-500{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.bg-emerald-500\/15{background-color:rgb(16 185 129 / 0.15)}.bg-emerald-600{--tw-bg-opacity:1;background-color:rgb(5 150 105 / var(--tw-bg-opacity, 1))}.bg-rose-50{--tw-bg-opacity:1;background-color:rgb(255 241 242 / var(--tw-bg-opacity, 1))}.bg-slate-100{--tw-bg-opacity:1;background-color:rgb(241 245 249 / var(--tw-bg-opacity, 1))}.bg-slate-100\/60{background-color:rgb(241 245 249 / 0.6)}.bg-slate-100\/70{background-color:rgb(241 245 249 / 0.7)}.bg-slate-200{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.bg-slate-200\/70{background-color:rgb(226 232 240 / 0.7)}.bg-slate-50{--tw-bg-opacity:1;background-color:rgb(248 250 252 / var(--tw-bg-opacity, 1))}.bg-slate-700{--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-slate-900\/80{background-color:rgb(15 23 42 / 0.8)}.bg-slate-900\/95{background-color:rgb(15 23 42 / 0.95)}.bg-slate-950\/75{background-color:rgb(2 6 23 / 0.75)}.bg-slate-950\/80{background-color:rgb(2 6 23 / 0.8)}.bg-slate-950\/95{background-color:rgb(2 6 23 / 0.95)}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/85{background-color:rgb(255 255 255 / 0.85)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-brand-50\/60{background-color:rgb(239 246 255 / 0.6)}.bg-amber-500{--tw-bg-opacity:1;background-color:rgb(245 158 11 / var(--tw-bg-opacity, 1))}.bg-rose-600{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.bg-slate-900\/70{background-color:rgb(15 23 42 / 0.7)}.bg-amber-500\/20{background-color:rgb(245 158 11 / 0.2)}.bg-rose-600\/95{background-color:rgb(225 29 72 / 0.95)}.bg-white\/95{background-color:rgb(255 255 255 / 0.95)}.object-contain{object-fit:contain}.object-cover{object-fit:cover}.p-1\.5{padding:0.375rem}.p-2{padding:0.5rem}.p-2\.5{padding:0.625rem}.p-3{padding:0.75rem}.p-3\.5{padding:0.875rem}.p-4{padding:1rem}.p-6{padding:1.5rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-3\.5{padding-left:0.875rem;padding-right:0.875rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-16{padding-top:4rem;padding-bottom:4rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-2\.5{padding-top:0.625rem;padding-bottom:0.625rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.px-1\.5{padding-left:0.375rem;padding-right:0.375rem}.pb-2{padding-bottom:0.5rem}.pb-3{padding-bottom:0.75rem}.pl-10{padding-left:2.5rem}.pr-1{padding-right:0.25rem}.pr-4{padding-right:1rem}.pt-1{padding-top:0.25rem}.pt-2{padding-top:0.5rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}.font-sans{font-family:Inter, sans-serif}.font-serif{font-family:Merriweather, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-medium{font-weight:500}.font-semibold{font-weight:600}.font-normal{font-weight:400}.uppercase{text-transform:uppercase}.normal-case{text-transform:none}.italic{font-style:italic}.leading-none{line-height:1}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.leading-relaxed{line-height:1.625}.tracking-tight{letter-spacing:-0.025em}.tracking-wider{letter-spacing:0.05em}.text-amber-400{--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.text-amber-700{--tw-text-opacity:1;color:rgb(180 83 9 / var(--tw-text-opacity, 1))}.text-brand-500{--tw-text-opacity:1;color:rgb(59 130 246 / var(--tw-text-opacity, 1))}.text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.text-brand-700{--tw-text-opacity:1;color:rgb(29 78 216 / var(--tw-text-opacity, 1))}.text-emerald-400{--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.text-emerald-600{--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.text-emerald-700{--tw-text-opacity:1;color:rgb(4 120 87 / var(--tw-text-opacity, 1))}.text-rose-500{--tw-text-opacity:1;color:rgb(244 63 94 / var(--tw-text-opacity, 1))}.text-rose-600{--tw-text-opacity:1;color:rgb(225 29 72 / var(--tw-text-opacity, 1))}.text-slate-300{--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-slate-500{--tw-text-opacity:1;color:rgb(100 116 139 / var(--tw-text-opacity, 1))}.text-slate-600{--tw-text-opacity:1;color:rgb(71 85 105 / var(--tw-text-opacity, 1))}.text-slate-700{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.text-slate-800{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.text-slate-900{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-amber-600{--tw-text-opacity:1;color:rgb(217 119 6 / var(--tw-text-opacity, 1))}.underline{-webkit-text-decoration-line:underline;text-decoration-line:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.accent-brand-600{accent-color:#2563eb}.opacity-0{opacity:0}.opacity-40{opacity:0.4}.shadow{--tw-shadow:0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-sm{--tw-shadow:0 1px 2px 0 rgb(0 0 0 / 0.05);--tw-shadow-colored:0 1px 2px 0 var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-brand-500\/20{--tw-shadow-color:rgb(59 130 246 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.shadow-emerald-600\/20{--tw-shadow-color:rgb(5 150 105 / 0.2);--tw-shadow:var(--tw-shadow-colored)}.outline-none{outline:2px solid transparent;outline-offset:2px}.ring-2{--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000)}.ring-brand-500\/40{--tw-ring-color:rgb(59 130 246 / 0.4)}.ring-brand-500{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.backdrop-blur-md{--tw-backdrop-blur:blur(12px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-200{transition-duration:200ms}.duration-300{transition-duration:300ms}.hover\:border-slate-300:hover{--tw-border-opacity:1;border-color:rgb(203 213 225 / var(--tw-border-opacity, 1))}.hover\:bg-brand-500:hover{--tw-bg-opacity:1;background-color:rgb(59 130 246 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-700:hover{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-100:hover{--tw-bg-opacity:1;background-color:rgb(209 250 229 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-500:hover{--tw-bg-opacity:1;background-color:rgb(16 185 129 / var(--tw-bg-opacity, 1))}.hover\:bg-emerald-700:hover{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-100:hover{--tw-bg-opacity:1;background-color:rgb(255 228 230 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-200:hover{--tw-bg-opacity:1;background-color:rgb(226 232 240 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-300:hover{--tw-bg-opacity:1;background-color:rgb(203 213 225 / var(--tw-bg-opacity, 1))}.hover\:bg-slate-600:hover{--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:bg-rose-500:hover{--tw-bg-opacity:1;background-color:rgb(244 63 94 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-50:hover{--tw-bg-opacity:1;background-color:rgb(239 246 255 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-600:hover{--tw-bg-opacity:1;background-color:rgb(37 99 235 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-600:hover{--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.hover\:bg-rose-700:hover{--tw-bg-opacity:1;background-color:rgb(190 18 60 / var(--tw-bg-opacity, 1))}.hover\:text-slate-700:hover{--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.hover\:text-slate-800:hover{--tw-text-opacity:1;color:rgb(30 41 59 / var(--tw-text-opacity, 1))}.hover\:text-slate-900:hover{--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:underline:hover{-webkit-text-decoration-line:underline;text-decoration-line:underline}.hover\:shadow-xl:hover{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-brand-500:focus{--tw-border-opacity:1;border-color:rgb(59 130 246 / var(--tw-border-opacity, 1))}.focus\:bg-white:focus{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.focus\:ring-brand-500:focus{--tw-ring-opacity:1;--tw-ring-color:rgb(59 130 246 / var(--tw-ring-opacity, 1))}.active\:cursor-grabbing:active{cursor:grabbing}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:bg-brand-700{--tw-bg-opacity:1;background-color:rgb(29 78 216 / var(--tw-bg-opacity, 1))}.group:hover .group-hover\:text-brand-600{--tw-text-opacity:1;color:rgb(37 99 235 / var(--tw-text-opacity, 1))}.group:hover .group-hover\:opacity-75{opacity:0.75}.group:hover .group-hover\:opacity-100{opacity:1}.dark\:block:is(.dark *){display:block}.dark\:hidden:is(.dark *){display:none}.dark\:border-emerald-500\/30:is(.dark *){border-color:rgb(16 185 129 / 0.3)}.dark\:border-rose-500\/30:is(.dark *){border-color:rgb(244 63 94 / 0.3)}.dark\:border-slate-700:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:border-slate-800:is(.dark *){--tw-border-opacity:1;border-color:rgb(30 41 59 / var(--tw-border-opacity, 1))}.dark\:border-slate-800\/70:is(.dark *){border-color:rgb(30 41 59 / 0.7)}.dark\:border-slate-600:is(.dark *){--tw-border-opacity:1;border-color:rgb(71 85 105 / var(--tw-border-opacity, 1))}.dark\:bg-brand-500\/10:is(.dark *){background-color:rgb(59 130 246 / 0.1)}.dark\:bg-brand-500\/15:is(.dark *){background-color:rgb(59 130 246 / 0.15)}.dark\:bg-emerald-500\/15:is(.dark *){background-color:rgb(16 185 129 / 0.15)}.dark\:bg-rose-500\/15:is(.dark *){background-color:rgb(244 63 94 / 0.15)}.dark\:bg-slate-700:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800:is(.dark *){--tw-bg-opacity:1;background-color:rgb(30 41 59 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-800\/60:is(.dark *){background-color:rgb(30 41 59 / 0.6)}.dark\:bg-slate-800\/70:is(.dark *){background-color:rgb(30 41 59 / 0.7)}.dark\:bg-slate-800\/95:is(.dark *){background-color:rgb(30 41 59 / 0.95)}.dark\:bg-slate-900:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/85:is(.dark *){background-color:rgb(15 23 42 / 0.85)}.dark\:bg-slate-900\/90:is(.dark *){background-color:rgb(15 23 42 / 0.9)}.dark\:bg-slate-950:is(.dark *){--tw-bg-opacity:1;background-color:rgb(2 6 23 / var(--tw-bg-opacity, 1))}.dark\:bg-white:is(.dark *){--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.dark\:bg-slate-900\/95:is(.dark *){background-color:rgb(15 23 42 / 0.95)}.dark\:text-amber-300:is(.dark *){--tw-text-opacity:1;color:rgb(252 211 77 / var(--tw-text-opacity, 1))}.dark\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}.dark\:text-emerald-400:is(.dark *){--tw-text-opacity:1;color:rgb(52 211 153 / var(--tw-text-opacity, 1))}.dark\:text-emerald-600:is(.dark *){--tw-text-opacity:1;color:rgb(5 150 105 / var(--tw-text-opacity, 1))}.dark\:text-rose-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 113 133 / var(--tw-text-opacity, 1))}.dark\:text-slate-100:is(.dark *){--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.dark\:text-slate-200:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:text-slate-300:is(.dark *){--tw-text-opacity:1;color:rgb(203 213 225 / var(--tw-text-opacity, 1))}.dark\:text-slate-400:is(.dark *){--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.dark\:text-slate-900:is(.dark *){--tw-text-opacity:1;color:rgb(15 23 42 / var(--tw-text-opacity, 1))}.dark\:text-amber-400:is(.dark *){--tw-text-opacity:1;color:rgb(251 191 36 / var(--tw-text-opacity, 1))}.dark\:text-slate-700:is(.dark *){--tw-text-opacity:1;color:rgb(51 65 85 / var(--tw-text-opacity, 1))}.dark\:hover\:border-slate-700:hover:is(.dark *){--tw-border-opacity:1;border-color:rgb(51 65 85 / var(--tw-border-opacity, 1))}.dark\:hover\:bg-emerald-500\/25:hover:is(.dark *){background-color:rgb(16 185 129 / 0.25)}.dark\:hover\:bg-rose-500\/25:hover:is(.dark *){background-color:rgb(244 63 94 / 0.25)}.dark\:hover\:bg-slate-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(71 85 105 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-slate-700:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(51 65 85 / var(--tw-bg-opacity, 1))}.dark\:hover\:bg-rose-600:hover:is(.dark *){--tw-bg-opacity:1;background-color:rgb(225 29 72 / var(--tw-bg-opacity, 1))}.dark\:hover\:text-slate-200:hover:is(.dark *){--tw-text-opacity:1;color:rgb(226 232 240 / var(--tw-text-opacity, 1))}.dark\:hover\:text-white:hover:is(.dark *){--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.dark\:focus\:bg-slate-900:focus:is(.dark *){--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.group:hover .dark\:group-hover\:text-brand-400:is(.dark *){--tw-text-opacity:1;color:rgb(96 165 250 / var(--tw-text-opacity, 1))}@media (min-width: 640px){.sm\:col-span-3{grid-column:span 3 / span 3}.sm\:inline{display:inline}.sm\:h-20{height:5rem}.sm\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:gap-3{gap:0.75rem}.sm\:p-10{padding:2.5rem}.sm\:p-8{padding:2rem}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:py-10{padding-top:2.5rem;padding-bottom:2.5rem}.sm\:py-12{padding-top:3rem;padding-bottom:3rem}.sm\:py-8{padding-top:2rem;padding-bottom:2rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}.sm\:text-base{font-size:1rem;line-height:1.5rem}}@media (min-width: 768px){.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:block{display:block}.md\:hidden{display:none}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:p-10{padding:2.5rem}.lg\:px-8{padding-left:2rem;padding-right:2rem}.lg\:text-3xl{font-size:1.875rem;line-height:2.25rem}}</style></head>
+<body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col" style="">
 
     <div id="toast" class="fixed bottom-5 right-5 z-[100] transform transition-all duration-300 pointer-events-none bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-3 rounded-xl shadow-xl flex items-center gap-3 font-medium text-sm translate-y-20 opacity-0">
         <svg class="w-5 h-5 text-emerald-400 dark:text-emerald-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
         </svg>
-        <span id="toast-message">Все новости очищены!</span>
+        <span id="toast-message">✅ index.html скачан! Загрузите его на GitHub.</span>
     </div>
 
     <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
@@ -129,7 +120,7 @@
                     <div id="header-logo-fallback" class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center text-white font-extrabold text-xl shadow-md shadow-brand-500/20 group-hover:bg-brand-700 transition hidden">Х</div>
                     <div>
                         <span class="text-xl sm:text-2xl font-extrabold tracking-tight block leading-none">ХРОНИКА</span>
-                        <span id="current-date-display" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block mt-1">Суббота, 31 октября 2026 г.</span>
+                        <span id="current-date-display" class="text-[11px] text-slate-500 dark:text-slate-400 font-medium block mt-1">Воскресенье, 1 ноября 2026 г.</span>
                     </div>
                 </a>
 
@@ -166,21 +157,50 @@
                 </div>
             </div>
 
-            <nav id="category-nav" class="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-t border-slate-100 dark:border-slate-800/70"></nav>
+            <nav id="category-nav" class="flex items-center gap-2 py-3 overflow-x-auto no-scrollbar border-t border-slate-100 dark:border-slate-800/70"><button onclick="selectCategory('Все')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-900 text-white dark:bg-white dark:text-slate-900 shadow-sm">Все</button><button onclick="selectCategory('Технологии')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Технологии</button><button onclick="selectCategory('Наука')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Наука</button><button onclick="selectCategory('Кино и Медиа')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Кино и Медиа</button><button onclick="selectCategory('Игры')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Игры</button><button onclick="selectCategory('Бизнес')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Бизнес</button><button onclick="selectCategory('Общество')" class="px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold whitespace-nowrap transition bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700">Общество</button></nav>
         </div>
     </header>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <section id="featured-section" class="mb-10 hidden"></section>
+        <section id="featured-section" class="mb-10">
+                    <div onclick="openArticleModal('news-479994')" class="relative group cursor-pointer rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                        
+                <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5" onclick="event.stopPropagation()">
+                    <button type="button" onclick="startEditArticle('news-479994')" title="Редактировать" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-white/95 dark:bg-slate-900/95 text-slate-800 dark:text-slate-100 hover:bg-brand-600 hover:text-white shadow-md backdrop-blur-sm transition flex items-center gap-1">
+                        <span>✏️</span><span class="hidden sm:inline">Изменить</span>
+                    </button>
+                    <button type="button" onclick="deleteArticleById('news-479994')" title="Удалить" class="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-rose-600/95 hover:bg-rose-700 text-white shadow-md backdrop-blur-sm transition flex items-center gap-1">
+                        <span>🗑️</span><span class="hidden sm:inline">Удалить</span>
+                    </button>
+                </div>
+                        <div class="lg:col-span-7 aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
+                            <img src="blob:null/adac66b7-f49f-46e0-bd42-0de03ed77553" alt="Это вам не конфеты клянчить: как проходит настоящий суровый русский Хэллоуин" loading="eager" style="object-position: 50% 56%; transform-origin: 50% 56%; --img-scale: 1;" class="news-framed-img" onerror="handleArticleImageError(this, 'images/news/хэллоуин.jfif', 'https://placehold.co/800x450/1e293b/ffffff?text=News')">
+                            <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-600 text-white shadow">Главная тема</span>
+                        </div>
+                        <div class="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2.5 text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3">
+                                    <span>Общество</span><span class="text-slate-300 dark:text-slate-700">•</span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-normal">1 ноября 2026 г. в 03:57</span>
+                                </div>
+                                <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug mb-4 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Это вам не конфеты клянчить: как проходит настоящий суровый русский Хэллоуин</h1>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3">В России-матушке Хэллоуин — это не конфеты. Это пацаны с района, биты, пиво и разбитая машина.</p>
+                            </div>
+                            <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+                                <span>Время чтения: 2 мин</span>
+                                <span class="font-semibold text-brand-600 dark:text-brand-400 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">Читать полностью →</span>
+                            </div>
+                        </div>
+                    </div></section>
 
         <div class="flex items-center justify-between mb-6">
             <h2 id="feed-title" class="text-xl sm:text-2xl font-bold tracking-tight">Последние публикации</h2>
-            <span id="articles-count" class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 bg-slate-200/70 dark:bg-slate-800 px-3 py-1 rounded-full">0 материалов</span>
+            <span id="articles-count" class="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 bg-slate-200/70 dark:bg-slate-800 px-3 py-1 rounded-full">1 материал</span>
         </div>
 
         <section id="news-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></section>
 
-        <div id="empty-state" class="text-center py-16 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 my-6">
+        <div id="empty-state" class="text-center py-16 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-slate-800 my-6 hidden">
             <div class="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-400">
                 <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -221,7 +241,6 @@
         </div>
     </footer>
 
-    <!-- ВХОД ДЛЯ РЕДАКТОРА -->
     <div id="pin-modal" class="fixed inset-0 z-[70] overflow-y-auto bg-slate-950/80 backdrop-blur-sm transition-opacity hidden">
         <div class="min-h-screen px-4 flex items-center justify-center">
             <div class="bg-white dark:bg-slate-900 w-full max-w-sm rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 p-6 text-center">
@@ -243,12 +262,11 @@
         </div>
     </div>
 
-    <!-- ЧТЕНИЕ СТАТЬИ -->
     <div id="article-modal" class="fixed inset-0 z-50 overflow-y-auto bg-slate-950/75 backdrop-blur-sm transition-opacity hidden">
         <div class="min-h-screen px-2 py-6 sm:px-6 sm:py-12 flex items-center justify-center">
             <article class="bg-white dark:bg-slate-900 w-full max-w-3xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden relative">
                 <div class="sticky top-0 z-10 flex items-center justify-between px-4 sm:px-6 py-3.5 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-100 dark:border-slate-800">
-                    <span id="modal-category" class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">Технологии</span>
+                    <span id="modal-category" class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-500/15 dark:text-brand-400">Общество</span>
                     <div class="flex items-center gap-2">
                         <button onclick="shareCurrentArticle()" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,29 +282,52 @@
                     </div>
                 </div>
                 <div id="modal-image-container" class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
-                    <div id="modal-image-track"></div>
-                    <button type="button" id="modal-gallery-prev" class="modal-gallery-btn modal-gallery-prev hidden" onclick="event.stopPropagation(); modalGalleryStep(-1)" aria-label="Предыдущее фото">‹</button>
-                    <button type="button" id="modal-gallery-next" class="modal-gallery-btn modal-gallery-next hidden" onclick="event.stopPropagation(); modalGalleryStep(1)" aria-label="Следующее фото">›</button>
-                    <span id="modal-gallery-counter" class="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/80 text-white backdrop-blur-sm hidden"></span>
-                    <div id="modal-gallery-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-[5] hidden"></div>
+                    <div id="modal-image-track" style="transform: translateX(0%);">
+                    <div class="modal-gallery-slide" data-index="0" onclick="openLightboxBySlide(0)">
+                        <img src="blob:null/adac66b7-f49f-46e0-bd42-0de03ed77553" alt="Фото 1" style="object-position: 50% 56%; transform-origin: 50% 56%; transform: scale(1);" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                
+                    <div class="modal-gallery-slide" data-index="1" onclick="openLightboxBySlide(1)">
+                        <img data-src="blob:null/1a570577-ee02-4c40-a17b-133d4e286759" alt="Фото 2" style="object-position: 83% 46%; transform-origin: 83% 46%; transform: scale(1);" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                
+                    <div class="modal-gallery-slide" data-index="2" onclick="openLightboxBySlide(2)">
+                        <img data-src="blob:null/59411ba5-286e-471c-974a-00b81d2c76c3" alt="Фото 3" style="object-position: 50% 50%; transform-origin: 50% 50%; transform: scale(1);" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                
+                    <div class="modal-gallery-slide" data-index="3" onclick="openLightboxBySlide(3)">
+                        <img data-src="blob:null/bd3f67f8-5c5f-4023-b9b0-007f3e6f8868" alt="Фото 4" style="object-position: 47% 54%; transform-origin: 47% 54%; transform: scale(1);" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                
+                    <div class="modal-gallery-slide" data-index="4" onclick="openLightboxBySlide(4)">
+                        <img data-src="blob:null/1ce6a87b-f973-49a3-bb25-2483ccd7610f" alt="Фото 5" style="object-position: 50% 50%; transform-origin: 50% 50%; transform: scale(1);" onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                </div>
+                    <button type="button" id="modal-gallery-prev" class="modal-gallery-btn modal-gallery-prev" onclick="event.stopPropagation(); modalGalleryStep(-1)" aria-label="Предыдущее фото">‹</button>
+                    <button type="button" id="modal-gallery-next" class="modal-gallery-btn modal-gallery-next" onclick="event.stopPropagation(); modalGalleryStep(1)" aria-label="Следующее фото">›</button>
+                    <span id="modal-gallery-counter" class="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/80 text-white backdrop-blur-sm">1 / 5</span>
+                    <div id="modal-gallery-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-[5]"><button type="button" onclick="event.stopPropagation(); setModalGalleryIndex(0)" aria-label="Фото 1" class="gallery-dot is-active"></button><button type="button" onclick="event.stopPropagation(); setModalGalleryIndex(1)" aria-label="Фото 2" class="gallery-dot"></button><button type="button" onclick="event.stopPropagation(); setModalGalleryIndex(2)" aria-label="Фото 3" class="gallery-dot"></button><button type="button" onclick="event.stopPropagation(); setModalGalleryIndex(3)" aria-label="Фото 4" class="gallery-dot"></button><button type="button" onclick="event.stopPropagation(); setModalGalleryIndex(4)" aria-label="Фото 5" class="gallery-dot"></button></div>
                 </div>
                 <div class="p-6 sm:p-10">
                     <div class="flex items-center gap-3 text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-3">
-                        <span id="modal-date">31 октября 2026</span>
+                        <span id="modal-date">1 ноября 2026 г. в 03:52</span>
                         <span>•</span>
-                        <span id="modal-readtime">Чтение: 1 мин</span>
+                        <span id="modal-readtime">Чтение: 2 мин</span>
                     </div>
-                    <h1 id="modal-title" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6">Заголовок вашей новой статьи</h1>
+                    <h1 id="modal-title" class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-6">Это вам не конфеты клянчить: как проходит настоящий суровый русский Хэллоуин</h1>
                     <div id="modal-body" class="article-content font-serif text-base sm:text-lg text-slate-800 dark:text-slate-200 border-t border-slate-100 dark:border-slate-800 pt-6">
-                        <p>Первый абзац вашей новости.</p>
-                        <p>Второй абзац вашей новости.</p>
-                    </div>
+                    <p>Пока на Западе дети в милых пластиковых костюмах ходят по домам с криками «Trick or Treat» (сладости или гадости), в необъятной России-матушке нечисть отмечает праздник по-своему — брутально, с цепями, битами и пивом.</p>
+                    <p>Посмотрите на эту колоритную банду. Вампир-интеллигент в очках (явно доцент или айтишник), зомби в винтажном спортивном костюме, суровый оборотень в косухе и скелет в худи. Западным ведьмочкам такое даже не снилось. Вместо жуткого тумана из спецэффектов — дым от сигарет, а вместо замка Дракулы — панельки и мусорные контейнеры.</p>
+                    <p>Сначала компания чинно позировала на фоне двора, попивая «Балтику» и вырезая тыкву. Но, как это обычно и бывает в наших дворах, праздник пошел не по сценарию. Судя по эксклюзивным кадрам, кто-то из нечисти вспомнил, что сосед опять припарковал свою «шестерку» на их месте.</p>
+                    <p>Дальше — больше. Оборотень орудует битой, вампир натягивает цепь до искр, зомби наносит сокрушительный удар ногой по кузову, а скелет с крыши метко запускает ту самую праздничную тыкву прямо в лобовое стекло. Видимо, это и есть тот самый западный обычай «Trick or Treat», только переведенный на наш суровый язык: «Или давай конфеты, или мы разберем твою тачку на запчасти».</p>
+                    <p>Какой там Хогвартс, тут настоящий русский экшен! Западные тыквы со стразами нервно курят в сторонке. Вот она, широкая и бесшабашная душа России: разбить чужую машину ради праздника — это вам не тыкву на крыльце вырезать.</p>
+                    <p>Местные бабушки у подъезда сообщают, что компания вела себя прилично, нечисть никого не укусила, а только разбила лобовое стекло одному слишком наглому водителю. Так что, как видите, наш народный Хэллоуин гораздо страшнее западного: у них там выдуманные монстры, а в России-матушке — реальные пацаны во дворе, которым не понравилось, как ты припарковался.</p>
+                </div>
                 </div>
             </article>
         </div>
     </div>
 
-    <!-- ЛАЙТБОКС -->
     <div id="lightbox-modal" class="fixed inset-0 z-[80] bg-slate-950/95 backdrop-blur-md hidden">
         <div class="min-h-screen flex items-center justify-center p-4 relative">
             <button onclick="closeLightbox()" aria-label="Закрыть" class="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition z-[81]">
@@ -294,11 +335,10 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
-            <img id="lightbox-image" src="" alt="Просмотр фото">
+            <img id="lightbox-image" src="blob:null/59411ba5-286e-471c-974a-00b81d2c76c3" alt="Просмотр фото">
         </div>
     </div>
 
-    <!-- СТУДИЯ УПРАВЛЕНИЯ -->
     <div id="generator-modal" class="fixed inset-0 z-40 overflow-y-auto bg-slate-950/75 backdrop-blur-sm transition-opacity hidden">
         <div class="min-h-screen px-3 py-6 sm:py-10 flex items-center justify-center">
             <div class="bg-white dark:bg-slate-900 w-full max-w-4xl rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
@@ -323,7 +363,7 @@
                     </button>
                     <button id="tab-btn-manage" onclick="switchAdminTab('manage')" class="px-4 py-2.5 text-xs sm:text-sm font-bold border-b-2 border-brand-600 text-brand-600 dark:text-brand-400 transition flex items-center gap-2">
                         <span>🗑️ Управление и удаление</span>
-                        <span id="manage-count-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">0</span>
+                        <span id="manage-count-badge" class="px-2 py-0.5 text-[11px] rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">1</span>
                     </button>
                 </div>
 
@@ -354,8 +394,11 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Дата публикации</label>
-                                <input type="text" id="gen-date" placeholder="31 октября 2026" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Дата и время публикации</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="gen-date" placeholder="31 октября 2026" class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                                    <input type="time" id="gen-time" value="12:00" class="w-28 shrink-0 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                                </div>
                             </div>
                             <div>
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Время чтения <span class="normal-case text-[10px] text-brand-500 font-medium">(авто)</span></label>
@@ -369,7 +412,7 @@
                                 </div>
 
                                 <div id="image-drop-zone" class="relative rounded-xl border-2 border-dashed border-slate-200 dark:border-slate-700 bg-slate-100/70 dark:bg-slate-800/70 p-3 transition-all">
-                                    <input type="file" id="gen-image-file" accept="image/*" multiple class="hidden" onchange="handleImageFileSelect(event)">
+                                    <input type="file" id="gen-image-file" accept="image/*" multiple="" class="hidden" onchange="handleImageFileSelect(event)">
                                     <div class="flex items-center gap-2 mb-2">
                                         <input type="text" id="gen-gallery-input" placeholder="Введите URL или имя файла (photo.jpg)..." class="flex-1 px-3 py-2 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500">
                                         <button type="button" onclick="addGalleryPhotoFromInput()" class="px-3 py-2 rounded-lg text-xs font-semibold bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 transition">+ По пути</button>
@@ -379,13 +422,13 @@
                                     </div>
                                 </div>
 
-                                <div id="gallery-thumbs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-3"></div>
+                                <div id="gallery-thumbs-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mt-3"><p class="col-span-full text-center text-xs text-slate-400 italic py-2">Фотографий пока нет — добавьте через поле выше</p></div>
 
                                 <div id="image-crop-editor" class="mt-3 pt-3 border-t border-slate-200 dark:border-slate-700 hidden">
                                     <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
                                         <div class="flex items-center gap-2">
                                             <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-brand-600 text-white">16:9</span>
-                                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Кадр: <span id="crop-editing-name" class="text-brand-600 dark:text-brand-400 font-mono"></span></span>
+                                            <span class="text-xs font-bold text-slate-700 dark:text-slate-200">Кадр: <span id="crop-editing-name" class="text-brand-600 dark:text-brand-400 font-mono">#5 подготовка к празднику.jfif</span></span>
                                         </div>
                                         <button type="button" onclick="resetCropPosition()" class="text-xs text-brand-600 dark:text-brand-400 hover:underline font-semibold">↺ Сбросить по центру</button>
                                     </div>
@@ -393,7 +436,7 @@
                                     <div class="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
                                         <div class="md:col-span-7">
                                             <div id="crop-viewport" class="aspect-video w-full rounded-xl overflow-hidden relative bg-slate-900 border-2 border-brand-500/60 shadow-md cursor-move select-none group">
-                                                <img id="crop-preview-img" src="" alt="Предпросмотр 16:9" draggable="false" class="w-full h-full object-cover pointer-events-none" style="object-position: 50% 50%; transform-origin: 50% 50%; transform: scale(1);">
+                                                <img id="crop-preview-img" src="blob:null/1ce6a87b-f973-49a3-bb25-2483ccd7610f" alt="Предпросмотр 16:9" draggable="false" class="w-full h-full object-cover pointer-events-none" style="object-position: 50% 50%; transform-origin: 50% 50%; transform: scale(1);">
                                                 <div class="absolute inset-0 pointer-events-none grid grid-cols-3 grid-rows-3 opacity-40 group-hover:opacity-75 transition-opacity">
                                                     <div class="border-r border-b border-white/40"></div><div class="border-r border-b border-white/40"></div><div class="border-b border-white/40"></div>
                                                     <div class="border-r border-b border-white/40"></div><div class="border-r border-b border-white/40"></div><div class="border-b border-white/40"></div>
@@ -441,7 +484,7 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Полный текст статьи (разделяйте абзацы пустой строкой) *</label>
                                 <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Первый абзац вашей статьи...
 
-Второй абзац статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
+Второй абзац статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500" style="height: 424px;"></textarea>
                             </div>
                             <div class="sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-1">
                                 <div class="flex items-center gap-2.5">
@@ -465,7 +508,27 @@
                             </div>
                             <button type="button" onclick="deleteAllArticles()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-rose-50 text-rose-600 hover:bg-rose-100 dark:bg-rose-500/15 dark:text-rose-400 dark:hover:bg-rose-500/25 border border-rose-200 dark:border-rose-500/30 transition">🗑️ Удалить все новости</button>
                         </div>
-                        <div id="admin-articles-list" class="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1"></div>
+                        <div id="admin-articles-list" class="space-y-2.5 max-h-[42vh] overflow-y-auto pr-1">
+                <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-16 aspect-video rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0 relative">
+                            <img src="blob:null/adac66b7-f49f-46e0-bd42-0de03ed77553" alt="" loading="lazy" style="object-position: 50% 56%; transform-origin: 50% 56%; --img-scale: 1;" class="news-framed-img" onerror="handleArticleImageError(this, 'images/news/хэллоуин.jfif', 'https://placehold.co/120x80/1e293b/ffffff?text=News')">
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+                                <span class="font-semibold text-brand-600 dark:text-brand-400">Общество</span>
+                                <span>•</span>
+                                <span>1 ноября 2026 г. в 03:57</span>
+                                <span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">Главная</span>
+                            </div>
+                            <h5 class="text-xs sm:text-sm font-bold truncate">Это вам не конфеты клянчить: как проходит настоящий суровый русский Хэллоуин</h5>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button type="button" onclick="startEditArticle('news-479994')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-white dark:bg-slate-700 hover:bg-brand-50 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 transition">✏️ Изменить</button>
+                        <button type="button" onclick="deleteArticleById('news-479994')" class="px-2.5 py-1.5 rounded-lg text-xs font-semibold bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white dark:bg-rose-500/15 dark:text-rose-400 dark:hover:bg-rose-600 dark:hover:text-white border border-rose-200 dark:border-rose-500/30 transition">🗑️ Удалить</button>
+                    </div>
+                </div></div>
                     </div>
 
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
@@ -492,8 +555,33 @@
         const NEWS_IMAGES_FOLDER = "images/news/";
         const LOGO_FOLDER = "images/logo/";
         const GALLERY_AUTOPLAY_MS = 5000;
+        const RELATIVE_TIME_MAX_DAYS = 7;
 
-        let NEWS_DATA = [];
+        let NEWS_DATA = [
+            {
+                id: "news-479994",
+                title: "Это вам не конфеты клянчить: как проходит настоящий суровый русский Хэллоуин",
+                category: "Общество",
+                date: "1 ноября 2026",
+                publishedAt: "2026-10-31T20:57:00.000Z",
+                readTime: "2 мин",
+                image: "images/news/хэллоуин.jfif",
+                posX: 50,
+                posY: 56,
+                scale: 1,
+                gallery: [{"url":"images/news/празднование.jfif","posX":48,"posY":46,"scale":1},{"url":"images/news/русский народный.jfif","posX":50,"posY":50,"scale":1},{"url":"images/news/сладость или бригадость.jfif","posX":46,"posY":55,"scale":1},{"url":"images/news/подготовка к празднику.jfif","posX":50,"posY":50,"scale":1}],
+                summary: "В России-матушке Хэллоуин — это не конфеты. Это пацаны с района, биты, пиво и разбитая машина.",
+                featured: true,
+                content: `
+                    <p>Пока на Западе дети в милых пластиковых костюмах ходят по домам с криками «Trick or Treat» (сладости или гадости), в необъятной России-матушке нечисть отмечает праздник по-своему — брутально, с цепями, битами и пивом.</p>
+                    <p>Посмотрите на эту колоритную банду. Вампир-интеллигент в очках (явно доцент или айтишник), зомби в винтажном спортивном костюме, суровый оборотень в косухе и скелет в худи. Западным ведьмочкам такое даже не снилось. Вместо жуткого тумана из спецэффектов — дым от сигарет, а вместо замка Дракулы — панельки и мусорные контейнеры.</p>
+                    <p>Сначала компания чинно позировала на фоне двора, попивая «Балтику» и вырезая тыкву. Но, как это обычно и бывает в наших дворах, праздник пошел не по сценарию. Судя по эксклюзивным кадрам, кто-то из нечисти вспомнил, что сосед опять припарковал свою «шестерку» на их месте.</p>
+                    <p>Дальше — больше. Оборотень орудует битой, вампир натягивает цепь до искр, зомби наносит сокрушительный удар ногой по кузову, а скелет с крыши метко запускает ту самую праздничную тыкву прямо в лобовое стекло. Видимо, это и есть тот самый западный обычай «Trick or Treat», только переведенный на наш суровый язык: «Или давай конфеты, или мы разберем твою тачку на запчасти».</p>
+                    <p>Какой там Хогвартс, тут настоящий русский экшен! Западные тыквы со стразами нервно курят в сторонке. Вот она, широкая и бесшабашная душа России: разбить чужую машину ради праздника — это вам не тыкву на крыльце вырезать.</p>
+                    <p>Местные бабушки у подъезда сообщают, что компания вела себя прилично, нечисть никого не укусила, а только разбила лобовое стекло одному слишком наглому водителю. Так что, как видите, наш народный Хэллоуин гораздо страшнее западного: у них там выдуманные монстры, а в России-матушке — реальные пацаны во дворе, которым не понравилось, как ты припарковался.</p>
+                `
+            }
+        ];
         const TEMP_IMAGE_PREVIEWS = {};
 
         let currentCategory = 'Все';
@@ -530,6 +618,65 @@
             resetGeneratorForm();
             checkUrlHashForArticle();
         });
+
+        /* ========== ВРЕМЯ ПУБЛИКАЦИИ ========== */
+
+        const MONTHS_RU = { 'января': 0, 'февраля': 1, 'марта': 2, 'апреля': 3, 'мая': 4, 'июня': 5, 'июля': 6, 'августа': 7, 'сентября': 8, 'октября': 9, 'ноября': 10, 'декабря': 11 };
+
+        // Парсит "31 октября 2026" + "14:30" → Date. Возвращает null при ошибке.
+        function parseRussianDate(dateStr, timeStr) {
+            if (!dateStr) return null;
+            const clean = String(dateStr).replace(/\s*г\.?\s*$/, '').trim();
+            const parts = clean.split(/\s+/);
+            if (parts.length !== 3) return null;
+            const day = parseInt(parts[0], 10);
+            const month = MONTHS_RU[parts[1].toLowerCase()];
+            const year = parseInt(parts[2], 10);
+            if (isNaN(day) || month === undefined || isNaN(year)) return null;
+            const [hours, minutes] = (timeStr || '00:00').split(':').map(Number);
+            return new Date(year, month, day, isNaN(hours) ? 0 : hours, isNaN(minutes) ? 0 : minutes);
+        }
+
+        // Полная дата и время: "31 октября 2026, 14:30"
+        function formatAbsoluteDateTime(date) {
+            if (!date || isNaN(date.getTime())) return '';
+            return date.toLocaleString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            }).replace(',', ',');
+        }
+
+        // «Умное» время: относительное до 7 дней, абсолютное после
+        function formatSmartTime(isoString, fallbackDate) {
+            if (!isoString) return fallbackDate || '';
+            const date = new Date(isoString);
+            if (isNaN(date.getTime())) return fallbackDate || isoString;
+
+            const now = new Date();
+            const diffMs = now - date;
+            const MAX_REL_MS = RELATIVE_TIME_MAX_DAYS * 24 * 60 * 60 * 1000;
+
+            if (diffMs < 0 || diffMs > MAX_REL_MS) {
+                return formatAbsoluteDateTime(date);
+            }
+
+            const diffSec = Math.floor(diffMs / 1000);
+            if (diffSec < 60) return 'Только что';
+
+            const diffMins = Math.floor(diffSec / 60);
+            if (diffMins < 60) return `${diffMins} ${getNounPlural(diffMins, 'минуту', 'минуты', 'минут')} назад`;
+
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours} ${getNounPlural(diffHours, 'час', 'часа', 'часов')} назад`;
+
+            const diffDays = Math.floor(diffHours / 24);
+            return `${diffDays} ${getNounPlural(diffDays, 'день', 'дня', 'дней')} назад`;
+        }
+
+        /* ========== ОСТАЛЬНОЕ ========== */
 
         function getImageFrameStyle(item) {
             const x = item && item.posX !== undefined ? Number(item.posX) : 50;
@@ -703,6 +850,7 @@
                         <div class="aspect-video w-full rounded-lg overflow-hidden border-2 ${borderClass} transition bg-slate-900">
                             <img src="${getDisplayImageSrc(item.url)}"
                                  alt="Фото ${i + 1}"
+                                 loading="lazy"
                                  style="object-position: ${item.posX ?? 50}% ${item.posY ?? 50}%; transform-origin: ${item.posX ?? 50}% ${item.posY ?? 50}%; transform: scale(${item.scale ?? 1});"
                                  class="w-full h-full object-cover pointer-events-none"
                                  onerror="this.src='https://placehold.co/200x112/1e293b/ffffff?text=Фото'">
@@ -1063,14 +1211,14 @@
                     <div onclick="openArticleModal('${featuredItem.id}')" class="relative group cursor-pointer rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch">
                         ${getAdminCardOverlayHtml(featuredItem.id)}
                         <div class="lg:col-span-7 aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
-                            <img src="${getDisplayImageSrc(featuredItem.image)}" alt="${escapeHtml(featuredItem.title)}" style="${getImageFrameStyle(featuredItem)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(featuredItem.image)}', 'https://placehold.co/800x450/1e293b/ffffff?text=News')">
+                            <img src="${getDisplayImageSrc(featuredItem.image)}" alt="${escapeHtml(featuredItem.title)}" loading="eager" style="${getImageFrameStyle(featuredItem)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(featuredItem.image)}', 'https://placehold.co/800x450/1e293b/ffffff?text=News')">
                             <span class="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-600 text-white shadow">Главная тема</span>
                         </div>
                         <div class="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center gap-2.5 text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3">
                                     <span>${featuredItem.category}</span><span class="text-slate-300 dark:text-slate-700">•</span>
-                                    <span class="text-slate-500 dark:text-slate-400 font-normal">${featuredItem.date}</span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-normal">${formatSmartTime(featuredItem.publishedAt, featuredItem.date)}</span>
                                 </div>
                                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug mb-4 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${featuredItem.title}</h1>
                                 <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3">${featuredItem.summary}</p>
@@ -1089,13 +1237,13 @@
                 <article onclick="openArticleModal('${item.id}')" class="relative group cursor-pointer bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
                     ${getAdminCardOverlayHtml(item.id)}
                     <div class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
-                        <img src="${getDisplayImageSrc(item.image)}" alt="${escapeHtml(item.title)}" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/600x340/1e293b/ffffff?text=News')">
+                        <img src="${getDisplayImageSrc(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/600x340/1e293b/ffffff?text=News')">
                         <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/75 text-white backdrop-blur-sm">${item.category}</span>
                     </div>
                     <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 text-xs text-slate-400 mb-2.5">
-                                <span>${item.date}</span><span>•</span><span>${item.readTime}</span>
+                                <span>${formatSmartTime(item.publishedAt, item.date)}</span><span>•</span><span>${item.readTime}</span>
                             </div>
                             <h3 class="text-lg font-bold leading-snug mb-2.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${item.title}</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">${item.summary}</p>
@@ -1116,8 +1264,6 @@
             return imgs;
         }
 
-        /* ========== СЛАЙДЕР В СТАТЬЕ ========== */
-
         function buildModalGalleryTrack(images) {
             const track = document.getElementById('modal-image-track');
             if (!track) return;
@@ -1125,21 +1271,39 @@
             const list = images && images.length > 0 ? images : fallback;
 
             track.style.transition = 'none';
-            track.innerHTML = list.map((img, i) => `
-                <div class="modal-gallery-slide" data-index="${i}" onclick="openLightboxBySlide(${i})">
-                    <img src="${getDisplayImageSrc(img.url)}"
-                         alt="Фото ${i + 1}"
-                         style="object-position: ${img.posX ?? 50}% ${img.posY ?? 50}%; transform-origin: ${img.posX ?? 50}% ${img.posY ?? 50}%; transform: scale(${img.scale ?? 1});"
-                         onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
-                </div>
-            `).join('');
+            track.innerHTML = list.map((img, i) => {
+                const isFirst = i === 0;
+                const srcAttr = isFirst
+                    ? `src="${getDisplayImageSrc(img.url)}"`
+                    : `data-src="${getDisplayImageSrc(img.url)}"`;
+                return `
+                    <div class="modal-gallery-slide" data-index="${i}" onclick="openLightboxBySlide(${i})">
+                        <img ${srcAttr}
+                             alt="Фото ${i + 1}"
+                             style="object-position: ${img.posX ?? 50}% ${img.posY ?? 50}%; transform-origin: ${img.posX ?? 50}% ${img.posY ?? 50}%; transform: scale(${img.scale ?? 1});"
+                             onerror="this.onerror=null; this.src='https://placehold.co/800x450/1e293b/ffffff?text=News';">
+                    </div>
+                `;
+            }).join('');
 
             track.style.transform = 'translateX(0%)';
             void track.offsetWidth;
             track.style.transition = '';
         }
 
+        function hydrateSlide(i) {
+            if (i < 0 || i >= currentModalImages.length) return;
+            const slide = document.querySelector(`#modal-image-track .modal-gallery-slide[data-index="${i}"]`);
+            if (!slide) return;
+            const img = slide.querySelector('img');
+            if (img && !img.getAttribute('src') && img.dataset.src) {
+                img.src = img.dataset.src;
+                delete img.dataset.src;
+            }
+        }
+
         function openLightboxBySlide(i) {
+            hydrateSlide(i);
             const slide = document.querySelector(`#modal-image-track .modal-gallery-slide[data-index="${i}"]`);
             if (!slide) return;
             const img = slide.querySelector('img');
@@ -1183,12 +1347,15 @@
             const oldIdx = modalGalleryIndex;
             if (newIdx === oldIdx) return;
 
+            hydrateSlide(newIdx);
+            hydrateSlide(newIdx + 1 >= total ? 0 : newIdx + 1);
+
             const delta = Math.abs(newIdx - oldIdx);
             let duration;
-            if (delta === 1) duration = 450;         // обычное плавное перелистывание
+            if (delta === 1) duration = 450;
             else if (delta === 2) duration = 380;
             else if (delta === 3) duration = 320;
-            else duration = 250;                     // быстрое проматывание через все фото
+            else duration = 250;
 
             track.style.transition = `transform ${duration}ms cubic-bezier(0.4, 0, 0.2, 1)`;
             track.style.transform = `translateX(-${newIdx * 100}%)`;
@@ -1213,7 +1380,6 @@
             if (currentModalImages.length > 1) {
                 modalGalleryTimer = setInterval(() => {
                     if (document.getElementById('lightbox-modal').classList.contains('hidden')) {
-                        // При достижении последнего слайда — следующий переход будет "проматыванием" к первому
                         goToSlide(modalGalleryIndex + 1);
                     }
                 }, GALLERY_AUTOPLAY_MS);
@@ -1251,7 +1417,10 @@
             currentOpenedArticleId = id;
             isPreviewFromAdmin = false;
             document.getElementById('modal-category').textContent = article.category;
-            document.getElementById('modal-date').textContent = article.date;
+            // В статье всегда полная дата и время
+            document.getElementById('modal-date').textContent = article.publishedAt
+                ? formatAbsoluteDateTime(new Date(article.publishedAt))
+                : article.date;
             document.getElementById('modal-readtime').textContent = `Чтение: ${article.readTime}`;
             document.getElementById('modal-title').textContent = article.title;
 
@@ -1290,7 +1459,9 @@
             isPreviewFromAdmin = true;
 
             document.getElementById('modal-category').textContent = articleObj.category;
-            document.getElementById('modal-date').textContent = articleObj.date;
+            document.getElementById('modal-date').textContent = articleObj.publishedAt
+                ? formatAbsoluteDateTime(new Date(articleObj.publishedAt))
+                : articleObj.date;
             document.getElementById('modal-readtime').textContent = `Чтение: ${articleObj.readTime}`;
             document.getElementById('modal-title').textContent = articleObj.title;
 
@@ -1367,12 +1538,13 @@
                 <div class="flex items-center justify-between gap-3 p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 transition">
                     <div class="flex items-center gap-3 min-w-0">
                         <div class="w-16 aspect-video rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-700 shrink-0 relative">
-                            <img src="${getDisplayImageSrc(item.image)}" alt="" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/120x80/1e293b/ffffff?text=News')">
+                            <img src="${getDisplayImageSrc(item.image)}" alt="" loading="lazy" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="handleArticleImageError(this, '${escapeHtml(item.image)}', 'https://placehold.co/120x80/1e293b/ffffff?text=News')">
                         </div>
                         <div class="min-w-0">
                             <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
                                 <span class="font-semibold text-brand-600 dark:text-brand-400">${escapeHtml(item.category)}</span>
-                                <span>•</span><span>${escapeHtml(item.date)}</span>
+                                <span>•</span>
+                                <span>${escapeHtml(item.publishedAt ? formatAbsoluteDateTime(new Date(item.publishedAt)) : item.date)}</span>
                                 ${item.featured ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold">Главная</span>' : ''}
                             </div>
                             <h5 class="text-xs sm:text-sm font-bold truncate">${escapeHtml(item.title)}</h5>
@@ -1409,10 +1581,24 @@
             if (!article) return;
             document.getElementById('gen-edit-id').value = article.id;
             document.getElementById('gen-title').value = article.title;
-                        document.getElementById('gen-category').value = CATEGORIES.includes(article.category) ? article.category : 'Технологии';
-            document.getElementById('gen-date').value = article.date;
+            document.getElementById('gen-category').value = CATEGORIES.includes(article.category) ? article.category : 'Технологии';
             document.getElementById('gen-summary').value = article.summary;
             document.getElementById('gen-featured').checked = Boolean(article.featured);
+
+            // Восстанавливаем дату и время из publishedAt (если есть) или из старого поля date
+            if (article.publishedAt) {
+                const d = new Date(article.publishedAt);
+                if (!isNaN(d.getTime())) {
+                    document.getElementById('gen-date').value = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
+                    document.getElementById('gen-time').value = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+                } else {
+                    document.getElementById('gen-date').value = article.date || '';
+                    document.getElementById('gen-time').value = '12:00';
+                }
+            } else {
+                document.getElementById('gen-date').value = article.date || '';
+                document.getElementById('gen-time').value = '12:00';
+            }
 
             currentGalleryDraft = [];
             if (article.image) currentGalleryDraft.push({
@@ -1452,10 +1638,12 @@
         function resetGeneratorForm() {
             const now = new Date();
             const defaultDate = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
+            const defaultTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
             document.getElementById('gen-edit-id').value = '';
             document.getElementById('gen-title').value = '';
             document.getElementById('gen-category').value = 'Технологии';
             document.getElementById('gen-date').value = defaultDate;
+            document.getElementById('gen-time').value = defaultTime;
             document.getElementById('gen-readtime').value = '1 мин';
             document.getElementById('gen-summary').value = '';
             document.getElementById('gen-content').value = '';
@@ -1494,6 +1682,11 @@
             const now = new Date();
             const fallbackDate = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
             const dateStr = document.getElementById('gen-date').value.trim() || fallbackDate;
+            const timeStr = document.getElementById('gen-time').value || '12:00';
+
+            // Собираем publishedAt из даты и времени
+            const parsed = parseRussianDate(dateStr, timeStr);
+            const publishedAt = (parsed || new Date()).toISOString();
 
             const paragraphs = rawContent
                 .split(/\n\s*\n/)
@@ -1510,7 +1703,7 @@
 
             return {
                 id: editId || ('news-' + Date.now().toString().slice(-6)),
-                title, category, date: dateStr, readTime,
+                title, category, date: dateStr, publishedAt, readTime,
                 image: mainPhoto.url,
                 posX: mainPhoto.posX,
                 posY: mainPhoto.posY,
@@ -1551,6 +1744,7 @@
                 title: ${JSON.stringify(obj.title)},
                 category: ${JSON.stringify(obj.category)},
                 date: ${JSON.stringify(obj.date)},
+                publishedAt: ${JSON.stringify(obj.publishedAt || '')},
                 readTime: ${JSON.stringify(obj.readTime)},
                 image: ${JSON.stringify(obj.image)},
                 posX: ${Number(obj.posX ?? 50)},
@@ -1662,5 +1856,5 @@
             if (e.target.tagName === 'IMG') openLightbox(e.target.src);
         });
     </script>
-</body>
-</html>
+
+</body></html>
