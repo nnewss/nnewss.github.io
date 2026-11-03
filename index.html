@@ -41,14 +41,15 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        /* ОБНОВЛЕНО: Используем CSS-переменные для эффекта наведения */
+        /* ОБНОВЛЕНО: panning через object-position (работает с переливом cover),
+           zoom — через transform:scale с transform-origin в той же точке. */
         .news-framed-img {
             width: 100%; height: 100%; object-fit: cover;
-            transform: translate(var(--shift-x, 0%), var(--shift-y, 0%)) scale(var(--scale, 1));
+            transform: scale(var(--scale, 1));
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .group:hover .news-framed-img {
-            transform: translate(var(--shift-x, 0%), var(--shift-y, 0%)) scale(calc(var(--scale, 1) * 1.04));
+            transform: scale(calc(var(--scale, 1) * 1.04));
         }
 
         #lightbox-image { cursor: zoom-out; max-width: 100%; max-height: 92vh; object-fit: contain; }
@@ -59,9 +60,17 @@
             z-index: 6; width: 2.5rem; height: 2.5rem;
             display: flex; align-items: center; justify-content: center;
             border-radius: 9999px; background: rgba(15,23,42,0.7); color: #fff;
-            font-size: 1.35rem; font-weight: 700; line-height: 1;
-            transition: background 0.2s, transform 0.2s; backdrop-filter: blur(4px); border: none;
+            transition: background 0.2s, transform 0.2s; backdrop-filter: blur(4px);
+            border: none; padding: 0; line-height: 0;
         }
+        .modal-gallery-btn svg { display: block; }
+
+        /* Оптическая компенсация: шеврон кажется смещённым к острию.
+           Сдвигаем на 0.5px от острия — prev (‹, остриё слева) → вправо,
+           next (›, остриё справа) → влево. */
+        .modal-gallery-prev svg { transform: translateX(-1px); }
+        .modal-gallery-next svg { transform: translateX(1px); }
+
         .modal-gallery-btn:hover { background: rgba(15,23,42,0.92); }
         .modal-gallery-prev { left: 0.75rem; }
         .modal-gallery-next { right: 0.75rem; }
@@ -83,6 +92,127 @@
         }
         .gallery-dot:hover:not(.is-active) { background-color: rgba(255,255,255,0.75); }
         .gallery-dot.is-active { width: 1.25rem; background-color: #ffffff; }
+
+        /* Глобальная плашка-тултип для описаний */
+        #global-tooltip {
+            position: fixed;
+            z-index: 90;
+            max-width: 24rem;
+            padding: 0.65rem 0.9rem;
+            border-radius: 0.85rem;
+            background: rgba(15, 23, 42, 0.97);
+            color: #f8fafc;
+            font-size: 0.8125rem;
+            font-weight: 500;
+            line-height: 1.55;
+            letter-spacing: 0.01em;
+            border: 1px solid rgba(96, 165, 250, 0.55);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.15);
+            pointer-events: none;
+            opacity: 0;
+            transform: translateY(4px);
+            transition: opacity 0.15s ease, transform 0.15s ease;
+            white-space: normal;
+            word-break: break-word;
+        }
+        #global-tooltip.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Стрелочка-указатель. base — сам треугольник, ::before — контур под ним. */
+        #global-tooltip::before,
+        #global-tooltip::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 0;
+            pointer-events: none;
+        }
+        #global-tooltip::before {
+            /* контурная часть стрелки (синяя рамка) */
+            z-index: -1;
+        }
+        /* Тултип НАД описанием — стрелка снизу, смотрит вниз */
+        #global-tooltip.arrow-bottom::after {
+            top: 100%;
+            left: var(--arrow-left, 50%);
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid rgba(15, 23, 42, 0.97);
+        }
+        #global-tooltip.arrow-bottom::before {
+            top: calc(100% + 1px);
+            left: var(--arrow-left, 50%);
+            transform: translateX(-50%);
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-top: 9px solid rgba(96, 165, 250, 0.55);
+        }
+        /* Тултип ПОД описанием — стрелка сверху, смотрит вверх */
+        #global-tooltip.arrow-top::after {
+            bottom: 100%;
+            left: var(--arrow-left, 50%);
+            transform: translateX(-50%);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid rgba(15, 23, 42, 0.97);
+        }
+        #global-tooltip.arrow-top::before {
+            bottom: calc(100% + 1px);
+            left: var(--arrow-left, 50%);
+            transform: translateX(-50%);
+            border-left: 9px solid transparent;
+            border-right: 9px solid transparent;
+            border-bottom: 9px solid rgba(96, 165, 250, 0.55);
+        }
+
+        /* ================= ПЛАВНОЕ ПОЯВЛЕНИЕ МОДАЛОК =================
+           display:none не анимируется через transition, поэтому используем @keyframes —
+           они запускаются в момент появления элемента из display:none.
+           Длительности чуть длиннее + мягкий easing (easeOutQuint-ish), меньше
+           амплитуда transform — ощущается «плавное всплытие», а не «прыжок». */
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes modalCardIn {
+            from { opacity: 0; transform: translateY(8px) scale(0.98); }
+            to   { opacity: 1; transform: translateY(0)   scale(1); }
+        }
+
+        /* Модалка статьи */
+        #article-modal:not(.hidden) { animation: modalFadeIn 0.26s ease-out both; }
+        #article-modal:not(.hidden) > div > article {
+            animation: modalCardIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* Админ-панель */
+        #generator-modal:not(.hidden) { animation: modalFadeIn 0.26s ease-out both; }
+        #generator-modal:not(.hidden) > div > div {
+            animation: modalCardIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* PIN-модалка */
+        #pin-modal:not(.hidden) { animation: modalFadeIn 0.26s ease-out both; }
+        #pin-modal:not(.hidden) > div > div {
+            animation: modalCardIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        /* Лайтбокс — плавное появление с лёгким зумом */
+        @keyframes lightboxIn {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+        @keyframes lightboxImgIn {
+            from { opacity: 0; transform: scale(0.97); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+        #lightbox-modal:not(.hidden) { animation: lightboxIn 0.26s ease-out both; }
+        #lightbox-modal:not(.hidden) > div > img {
+            animation: lightboxImgIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
@@ -93,6 +223,9 @@
         </svg>
         <span id="toast-message">✅ Изменения применены! Сайт обновлён.</span>
     </div>
+
+    <!-- Плашка с полным текстом описания -->
+    <div id="global-tooltip"></div>
 
     <header class="sticky top-0 z-30 bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -196,17 +329,58 @@
         </div>
     </div>
 
+    <!-- Кнопка «Наверх» (появляется при прокрутке) -->
+    <button id="back-to-top" type="button" aria-label="Наверх"
+            class="group fixed bottom-5 sm:bottom-6 right-4 sm:right-6 z-40 w-11 h-11 sm:w-12 sm:h-12 rounded-full
+                   bg-white/70 dark:bg-slate-800/60
+                   backdrop-blur-md backdrop-saturate-150
+                   border border-slate-200/80 dark:border-slate-700/70
+                   text-slate-700 dark:text-slate-200
+                   hover:bg-white dark:hover:bg-slate-700/80
+                   hover:text-brand-600 dark:hover:text-brand-400
+                   hover:border-brand-300/70 dark:hover:border-brand-500/50
+                   hover:-translate-y-0.5 hover:shadow-xl hover:shadow-slate-900/10 dark:hover:shadow-black/30
+                   flex items-center justify-center
+                   shadow-lg shadow-slate-900/10 dark:shadow-black/30
+                   opacity-0 translate-y-3 pointer-events-none
+                   transition-all duration-300 ease-out">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"
+             class="transition-transform duration-300 group-hover:-translate-y-0.5">
+            <path d="M12 19V5M5 12l7-7 7 7"></path>
+        </svg>
+    </button>
+
     <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 mt-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
-            <div onclick="handleSecretFooterClick()" class="flex items-center gap-3 select-none cursor-default" title="Хроника">
-                <img id="footer-logo-img" src="images/logo/logo.png" alt="Логотип" class="w-7 h-7 rounded-lg object-contain">
-                <div id="footer-logo-fallback" class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm hidden">Х</div>
-                <span>© <span id="footer-year">2026</span> «Хроника». Информационный портал.</span>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+            <!-- НОВОЕ: контактная строка — почта для предложений, сотрудничества и новостей -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3 pb-5 mb-5 border-b border-slate-200 dark:border-slate-800 text-sm text-slate-500 dark:text-slate-400 text-center">
+                <span class="font-medium text-slate-700 dark:text-slate-300">
+                    Есть идея, новость или предложение о сотрудничестве?
+                </span>
+                <a href="mailto:info@chronicle.ru?subject=Обратная%20связь%20с%20сайта%20%C2%ABХроника%C2%BB"
+                   title="Написать в редакцию: предложения, сотрудничество, новости"
+                   class="inline-flex items-center gap-1.5 font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 hover:underline underline-offset-2 transition">
+                    <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                    <span>info@chronicle.ru</span>
+                </a>
             </div>
-            <div class="flex items-center gap-4">
-                <button id="admin-logout-btn" onclick="lockAdmin()" class="text-xs text-rose-500 hover:underline hidden">Выйти из режима админа</button>
-                <a href="#top" class="hover:text-slate-900 dark:hover:text-white transition">Наверх ↑</a>
+
+            <!-- Существующая нижняя строка -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-slate-500 dark:text-slate-400">
+                <div onclick="handleSecretFooterClick()" class="flex items-center gap-3 select-none cursor-default" title="Хроника">
+                    <img id="footer-logo-img" src="images/logo/logo.png" alt="Логотип" class="w-7 h-7 rounded-lg object-contain">
+                    <div id="footer-logo-fallback" class="w-7 h-7 rounded-lg bg-brand-600 flex items-center justify-center text-white font-bold text-sm hidden">Х</div>
+                    <span>© <span id="footer-year">2026</span> «Хроника». Информационный портал.</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="admin-logout-btn" onclick="lockAdmin()" class="text-xs text-rose-500 hover:underline hidden">Выйти из режима админа</button>
+                    <a href="#top" class="hover:text-slate-900 dark:hover:text-white transition">Наверх ↑</a>
+                </div>
             </div>
+
         </div>
     </footer>
 
@@ -254,8 +428,12 @@
                 </div>
                 <div id="modal-image-container" class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative">
                     <div id="modal-image-track" style="transform: translateX(0%); transition: transform 450ms cubic-bezier(0.4, 0, 0.2, 1);"></div>
-                    <button type="button" id="modal-gallery-prev" class="modal-gallery-btn modal-gallery-prev" onclick="event.stopPropagation(); modalGalleryStep(-1)" aria-label="Предыдущее фото">‹</button>
-                    <button type="button" id="modal-gallery-next" class="modal-gallery-btn modal-gallery-next" onclick="event.stopPropagation(); modalGalleryStep(1)" aria-label="Следующее фото">›</button>
+                    <button type="button" id="modal-gallery-prev" class="modal-gallery-btn modal-gallery-prev" onclick="event.stopPropagation(); modalGalleryStep(-1)" aria-label="Предыдущее фото">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+                    </button>
+                    <button type="button" id="modal-gallery-next" class="modal-gallery-btn modal-gallery-next" onclick="event.stopPropagation(); modalGalleryStep(1)" aria-label="Следующее фото">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+                    </button>
                     <span id="modal-gallery-counter" class="absolute top-3 right-3 px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-900/80 text-white backdrop-blur-sm">1 / 1</span>
                     <div id="modal-gallery-dots" class="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-[5]"></div>
                 </div>
@@ -328,8 +506,8 @@
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Заголовок новости *</label>
                                 <input type="text" id="gen-title" placeholder="Например: Квантовый прорыв..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
                             </div>
-                            
-                            <!-- НОВОЕ ПОЛЕ: Имя папки (Slug) -->
+
+                            <!-- Имя папки (Slug) -->
                             <div class="sm:col-span-3">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Имя папки (URL / Slug) <span class="normal-case text-[10px] text-brand-500 font-medium">(необязательно)</span></label>
                                 <input type="text" id="gen-slug" placeholder="например: mars_rover_news" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500">
@@ -422,7 +600,7 @@
                             </div>
                             <div class="sm:col-span-3">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Полный текст статьи *</label>
-                                <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Первый абзац...\n\nВторой абзац..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
+                                <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Текст статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
                             </div>
                             <div class="sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-1">
                                 <div class="flex items-center gap-2.5">
@@ -453,7 +631,7 @@
                     <div class="pt-4 border-t border-slate-200 dark:border-slate-800">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <div>
-                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Экспорт для GitHub</span>
+                                <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Экспорт</span>
                                 <span class="text-[11px] text-slate-400">Скачивает .zip с папками news/ и файлами index.json</span>
                             </div>
                             <div class="flex flex-wrap gap-2">
@@ -472,7 +650,7 @@
         // ================= КОНФИГУРАЦИЯ =================
         const ADMIN_PIN = "admin_news_2026";
         const WORDS_PER_MINUTE = 200;
-        const NEWS_REPO_BASE_URL = './'; 
+        const NEWS_REPO_BASE_URL = './';
         const INDEX_JSON_URL = NEWS_REPO_BASE_URL + 'index.json';
         const LOGO_FOLDER = "images/logo/";
         const GALLERY_AUTOPLAY_MS = 5000;
@@ -503,6 +681,10 @@
         let currentModalImages = [];
         let currentGalleryDraft = [];
 
+        // id статей, которые были созданы/отредактированы в этой сессии.
+        // Только для них при экспорте перезаписывается article.json и копируются файлы.
+        let modifiedArticleIds = new Set();
+
         let draggedIndex = null;
         let thumbDragMoved = false;
 
@@ -516,6 +698,7 @@
             setupSearchListeners();
             setupImageDropZone();
             setupCropInteractiveDrag();
+            initTooltip();
             resetGeneratorForm();
 
             await fetchNewsData();
@@ -600,16 +783,14 @@
             return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
 
-        // ИСПРАВЛЕНО: Возвращаем CSS-переменные для наведения
+        // Panning через object-position (работает с переливом cover), zoom — через
+        // transform:scale с transform-origin в той же точке.
         function getImageFrameStyle(item) {
             const x = item && item.posX !== undefined ? Number(item.posX) : 50;
             const y = item && item.posY !== undefined ? Number(item.posY) : 50;
             const s = item && item.scale !== undefined ? Number(item.scale) : 1;
 
-            const shiftX = (50 - x) * (s - 1);
-            const shiftY = (50 - y) * (s - 1);
-
-            return `object-position: center center; transform-origin: 50% 50%; --shift-x: ${shiftX}%; --shift-y: ${shiftY}%; --scale: ${s};`;
+            return `object-position: ${x}% ${y}%; transform-origin: ${x}% ${y}%; --scale: ${s};`;
         }
 
         function getDisplayImageSrc(storedPath) {
@@ -690,10 +871,10 @@
             const year = d.getFullYear();
             const month = String(d.getMonth() + 1).padStart(2, '0');
             const day = String(d.getDate()).padStart(2, '0');
-            
+
             const sourceText = customSlug && customSlug.trim() !== '' ? customSlug.trim() : title;
             const slug = generateSlug(sourceText) || 'article_' + Date.now();
-            
+
             return `news/${year}/${month}/${day}/${slug}`;
         }
 
@@ -740,7 +921,11 @@
             if (sessionStorage.getItem('chronicle_admin_unlocked') === 'true') enableAdminUI(false);
             const hash = window.location.hash;
             const params = new URLSearchParams(window.location.search);
-            if (hash === '#admin' || params.get('admin') === '1') triggerAdminAccess();
+            if (hash === '#admin' || params.get('admin') === '1') {
+                // Чистим хэш, чтобы после закрытия PIN можно было снова вызвать #admin.
+                if (hash === '#admin') history.replaceState(null, null, window.location.pathname + window.location.search);
+                triggerAdminAccess();
+            }
         }
 
         function triggerAdminAccess() { if (isAdminUnlocked) openGeneratorModal('manage'); else openPinModal(); }
@@ -771,6 +956,7 @@
             document.getElementById('admin-floating-bar').classList.remove('hidden');
             document.getElementById('admin-floating-bar').classList.add('flex');
             renderPage(); renderAdminArticlesList();
+            syncBackToTopOffset();
             if (notify) showToast('Режим редактора включен!');
         }
 
@@ -783,6 +969,7 @@
             document.getElementById('admin-floating-bar').classList.add('hidden');
             document.getElementById('admin-floating-bar').classList.remove('flex');
             closeGeneratorModal(); renderPage();
+            syncBackToTopOffset();
             showToast('Режим автора скрыт');
         }
 
@@ -866,7 +1053,7 @@
                                     <span class="text-slate-500 dark:text-slate-400 font-normal">${formatSmartTime(featuredItem.publishedAt, featuredItem.date)}</span>
                                 </div>
                                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug mb-4 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${featuredItem.title}</h1>
-                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3">${featuredItem.summary}</p>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3" data-tooltip="${escapeHtml(featuredItem.summary)}">${featuredItem.summary}</p>
                             </div>
                             <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
                                 <span>Время чтения: ${featuredItem.readTime}</span>
@@ -891,7 +1078,7 @@
                                 <span>${formatSmartTime(item.publishedAt, item.date)}</span><span>•</span><span>${item.readTime}</span>
                             </div>
                             <h3 class="text-lg font-bold leading-snug mb-2.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${item.title}</h3>
-                            <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed">${item.summary}</p>
+                            <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed" data-tooltip="${escapeHtml(item.summary)}">${item.summary}</p>
                         </div>
                         <div class="mt-5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs font-semibold text-brand-600 dark:text-brand-400">
                             <span>Открыть статью</span><span class="group-hover:translate-x-1 transition-transform">→</span>
@@ -908,7 +1095,7 @@
             track.style.transition = 'none';
             track.innerHTML = list.map((img, i) => {
                 const srcAttr = i === 0 ? `src="${getDisplayImageSrc(img.url)}"` : `data-src="${getDisplayImageSrc(img.url)}"`;
-                return `<div class="modal-gallery-slide" data-index="${i}" onclick="openLightboxBySlide(${i})"><img ${srcAttr} style="${getImageFrameStyle(img)}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';"></div>`;
+                return `<div class="modal-gallery-slide" data-index="${i}" onclick="openLightboxBySlide(${i})"><img class="news-framed-img" draggable="false" ${srcAttr} style="${getImageFrameStyle(img)}" onerror="this.onerror=null; this.src='${FALLBACK_IMG}';"></div>`;
             }).join('');
             track.style.transform = 'translateX(0%)';
             void track.offsetWidth;
@@ -1002,8 +1189,27 @@
             const summaryData = NEWS_DATA.find(item => item.id === id);
             if (!summaryData) return;
 
-            document.getElementById('modal-title').textContent = "Загрузка...";
-            document.getElementById('article-modal').classList.remove('hidden');
+            const articleModalEl = document.getElementById('article-modal');
+            const bodyEl = document.getElementById('modal-body');
+            const trackEl = document.getElementById('modal-image-track');
+
+            // 1. Очищаем поля предыдущей статьи ДО показа модалки — иначе
+            //    при переключении между новостями на долю секунды мелькает
+            //    контент прошлой статьи.
+            document.getElementById('modal-category').textContent = summaryData.category || '';
+            document.getElementById('modal-date').textContent = '';
+            document.getElementById('modal-readtime').textContent = '';
+            document.getElementById('modal-title').textContent = 'Загрузка…';
+            bodyEl.innerHTML = '<p class="text-slate-400 italic">Загрузка статьи…</p>';
+            trackEl.innerHTML = '';
+            document.getElementById('modal-gallery-dots').innerHTML = '';
+            document.getElementById('modal-gallery-counter').textContent = '';
+            document.getElementById('modal-gallery-prev').classList.add('hidden');
+            document.getElementById('modal-gallery-next').classList.add('hidden');
+
+            // 2. Показываем модалку уже с чистым состоянием.
+            articleModalEl.scrollTop = 0;
+            articleModalEl.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
 
             try {
@@ -1011,11 +1217,9 @@
                 if (summaryData.path && !summaryData.content) {
                     let basePath = summaryData.path;
                     if (basePath.endsWith('/')) basePath = basePath.slice(0, -1);
-
                     const fullUrl = basePath.startsWith('http')
                         ? (basePath + '/article.json')
                         : (NEWS_REPO_BASE_URL + basePath + '/article.json');
-
                     const res = await fetch(fullUrl);
                     if (res.ok) {
                         const data = await res.json();
@@ -1026,7 +1230,9 @@
                 currentOpenedArticleId = id;
 
                 document.getElementById('modal-category').textContent = fullArticle.category;
-                document.getElementById('modal-date').textContent = fullArticle.publishedAt ? formatAbsoluteDateTime(new Date(fullArticle.publishedAt)) : fullArticle.date;
+                document.getElementById('modal-date').textContent = fullArticle.publishedAt
+                    ? formatAbsoluteDateTime(new Date(fullArticle.publishedAt))
+                    : fullArticle.date;
                 document.getElementById('modal-readtime').textContent = `Чтение: ${fullArticle.readTime}`;
                 document.getElementById('modal-title').textContent = fullArticle.title;
 
@@ -1034,7 +1240,9 @@
                 renderModalGallery();
                 startModalGalleryAutoPlay();
 
-                document.getElementById('modal-body').innerHTML = formatContent(fullArticle.content);
+                bodyEl.innerHTML = formatContent(fullArticle.content);
+                // Мягкое появление текста после загрузки (Web Animations API).
+                bodyEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
                 history.replaceState(null, null, `#article=${id}`);
             } catch (e) {
                 console.error(e);
@@ -1044,12 +1252,13 @@
         }
 
         function closeArticleModal() {
-            document.getElementById('article-modal').classList.add('hidden');
+            const articleModalEl = document.getElementById('article-modal');
+            articleModalEl.scrollTop = 0; // на случай следующего открытия
+            articleModalEl.classList.add('hidden');
             currentOpenedArticleId = null;
             stopModalGalleryAutoPlay();
             if (!document.getElementById('lightbox-modal').classList.contains('hidden')) closeLightbox();
-            
-            // Очищаем адресную строку от #article=... чтобы при F5 не открывалась статья
+
             if (!isPreviewFromAdmin && window.location.hash.startsWith('#article=')) {
                 history.replaceState(null, null, window.location.pathname + window.location.search);
             }
@@ -1144,11 +1353,18 @@
             const index = NEWS_DATA.findIndex(item => item.id === articleId);
             if (index === -1) return;
             NEWS_DATA.splice(index, 1);
+            modifiedArticleIds.delete(articleId);
             renderPage(); renderAdminArticlesList();
             showToast(`Удалено`);
         }
 
-        function deleteAllArticles() { NEWS_DATA = []; resetGeneratorForm(); renderPage(); renderAdminArticlesList(); showToast('Все новости очищены!'); }
+        function deleteAllArticles() {
+            NEWS_DATA = [];
+            modifiedArticleIds.clear();
+            resetGeneratorForm();
+            renderPage(); renderAdminArticlesList();
+            showToast('Все новости очищены!');
+        }
 
         function startEditArticle(articleId) {
             const article = NEWS_DATA.find(item => item.id === articleId);
@@ -1159,7 +1375,6 @@
             document.getElementById('gen-summary').value = article.summary;
             document.getElementById('gen-featured').checked = Boolean(article.featured);
 
-            // Извлекаем текущий slug из пути
             if (article.path) {
                 const pathParts = article.path.split('/');
                 document.getElementById('gen-slug').value = pathParts[pathParts.length - 1];
@@ -1191,7 +1406,14 @@
 
                 if (article.gallery && article.gallery.length > 0) {
                     article.gallery.forEach(g => {
-                        currentGalleryDraft.push({ url: g.url, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
+                        // ИСПРАВЛЕНО: после сохранения статьи gallery-элементы хранятся как basenames
+                        // (например "photo2.jpg"). При повторном редактировании надо префиксовать
+                        // путём статьи, иначе getDisplayImageSrc() не найдёт файл и покажет заглушку.
+                        let url = g.url;
+                        if (!url.startsWith('http') && !url.startsWith('data:') && !url.includes('/')) {
+                            url = article.path ? (article.path + '/' + url) : url;
+                        }
+                        currentGalleryDraft.push({ url, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
                     });
                     renderGalleryThumbs();
                     openCropEditor();
@@ -1251,7 +1473,7 @@
             const now = new Date();
             document.getElementById('gen-edit-id').value = '';
             document.getElementById('gen-title').value = '';
-            document.getElementById('gen-slug').value = ''; // Очищаем slug
+            document.getElementById('gen-slug').value = '';
             document.getElementById('gen-category').value = 'Технологии';
             document.getElementById('gen-date').value = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
             document.getElementById('gen-time').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
@@ -1276,7 +1498,7 @@
             syncCropStateToActive();
             const editId = document.getElementById('gen-edit-id').value.trim();
             const title = document.getElementById('gen-title').value.trim() || 'Заголовок';
-            const customSlug = document.getElementById('gen-slug').value.trim(); // Читаем slug
+            const customSlug = document.getElementById('gen-slug').value.trim();
             const category = document.getElementById('gen-category').value;
             const readTime = document.getElementById('gen-readtime').value.trim();
             const summary = document.getElementById('gen-summary').value.trim() || 'Описание';
@@ -1287,10 +1509,19 @@
             const parsed = parseRussianDate(dateStr, timeStr);
             const publishedAt = (parsed || new Date()).toISOString();
 
-            const galleryAll = currentGalleryDraft.map(g => ({ url: g.url, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 }));
+            // НОВОЕ: чистим значения перед записью в JSON. Позиция — целые проценты,
+            // масштаб — до 2 знаков (2.2 вместо 2.2000000001).
+            const roundPos = v => Math.round(Number(v));
+            const roundScale = v => Math.round(Number(v) * 100) / 100;
+
+            const galleryAll = currentGalleryDraft.map(g => ({
+                url: g.url,
+                posX: g.posX ?? 50,
+                posY: g.posY ?? 50,
+                scale: g.scale ?? 1
+            }));
             const mainPhoto = galleryAll[0] || { url: FALLBACK_IMG, posX: 50, posY: 50, scale: 1 };
 
-            // Передаем customSlug в функцию
             let articlePath = getArticlePath(dateStr, title, customSlug);
             if (editId) {
                 const existing = NEWS_DATA.find(n => n.id === editId);
@@ -1304,11 +1535,18 @@
                 id: editId || ('news-' + Date.now().toString().slice(-6)),
                 title, category, date: dateStr, publishedAt, readTime,
                 cover: coverName,
-                posX: mainPhoto.posX, posY: mainPhoto.posY, scale: mainPhoto.scale,
+                posX: roundPos(mainPhoto.posX),
+                posY: roundPos(mainPhoto.posY),
+                scale: roundScale(mainPhoto.scale),
                 summary, featured,
                 gallery: galleryAll.slice(1).map(g => {
                     const isExt = g.url.startsWith('http') || g.url.startsWith('data:');
-                    return { ...g, url: isExt ? g.url : g.url.split('/').pop() };
+                    return {
+                        url: isExt ? g.url : g.url.split('/').pop(),
+                        posX: roundPos(g.posX ?? 50),
+                        posY: roundPos(g.posY ?? 50),
+                        scale: roundScale(g.scale ?? 1)
+                    };
                 }),
                 content: rawContent,
                 path: articlePath
@@ -1324,6 +1562,8 @@
             articleObj.image = articleObj.cover.startsWith('http') || articleObj.cover.startsWith('data:')
                 ? articleObj.cover
                 : articleObj.path + '/' + articleObj.cover;
+
+            modifiedArticleIds.add(articleObj.id);
 
             if (editId) {
                 const idx = NEWS_DATA.findIndex(item => item.id === editId);
@@ -1363,6 +1603,7 @@
 
             for (const item of NEWS_DATA) {
                 if (!item.path) continue;
+                if (!modifiedArticleIds.has(item.id)) continue;
 
                 let basePath = item.path.endsWith('/') ? item.path : item.path + '/';
 
@@ -1472,6 +1713,7 @@
                             <img src="${getDisplayImageSrc(item.url)}"
                                  alt="Фото ${i + 1}"
                                  loading="lazy"
+                                 draggable="false"
                                  style="${getImageFrameStyle(item)}"
                                  class="news-framed-img"
                                  onerror="this.src='${FALLBACK_IMG}'">
@@ -1507,9 +1749,10 @@
             e.currentTarget.classList.add('opacity-40');
         }
         function onThumbDragOver(e) {
-            if (e.dataTransfer.types.includes('Files')) return;
             e.preventDefault();
-            e.dataTransfer.dropEffect = 'move';
+            const types = e.dataTransfer.types ? Array.from(e.dataTransfer.types) : [];
+            const isFileDrag = types.includes('Files');
+            e.dataTransfer.dropEffect = draggedIndex !== null ? 'move' : (isFileDrag ? 'copy' : 'move');
             e.currentTarget.classList.add('ring-2', 'ring-brand-500');
         }
         function onThumbDragLeave(e) {
@@ -1519,7 +1762,7 @@
             e.preventDefault();
             e.currentTarget.classList.remove('ring-2', 'ring-brand-500');
 
-            if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+            if (draggedIndex === null && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                 handleFilesAdded(e.dataTransfer.files);
                 return;
             }
@@ -1534,7 +1777,9 @@
             else if (draggedIndex > activeCropIndex && targetIndex <= activeCropIndex) activeCropIndex++;
 
             draggedIndex = null;
+            thumbDragMoved = true;
             renderGalleryThumbs();
+            openCropEditor();
         }
         function onThumbDragEnd(e) {
             e.currentTarget.classList.remove('opacity-40');
@@ -1590,14 +1835,24 @@
         }
 
         function syncSlidersAndPreviewFromCropState() {
-            document.getElementById('crop-pos-x').value = cropState.posX;
-            document.getElementById('crop-pos-y').value = cropState.posY;
+            // Слайдеры и подписи — целые проценты. Внутри cropState.posX/posY хранятся как
+            // числа с дробной частью, чтобы движение было плавным (без "ступенек").
+            const rx = Math.round(cropState.posX);
+            const ry = Math.round(cropState.posY);
+
+            document.getElementById('crop-pos-x').value = rx;
+            document.getElementById('crop-pos-y').value = ry;
             document.getElementById('crop-scale').value = Math.round(cropState.scale * 100);
-            document.getElementById('crop-x-label').textContent = `${cropState.posX}%`;
-            document.getElementById('crop-y-label').textContent = `${cropState.posY}%`;
+            document.getElementById('crop-x-label').textContent = `${rx}%`;
+            document.getElementById('crop-y-label').textContent = `${ry}%`;
             document.getElementById('crop-scale-label').textContent = `${Math.round(cropState.scale * 100)}%`;
+
             const img = document.getElementById('crop-preview-img');
-            img.style.cssText = getImageFrameStyle(cropState);
+            // object-position и transform-origin принимают дробные значения — это нормально,
+            // и именно они дают плавное позиционирование при перетаскивании.
+            img.style.objectPosition = `${cropState.posX}% ${cropState.posY}%`;
+            img.style.transformOrigin = `${cropState.posX}% ${cropState.posY}%`;
+            img.style.transform = `scale(${cropState.scale})`;
         }
 
         function resetCropPosition() { cropState = { posX: 50, posY: 50, scale: 1 }; syncSlidersAndPreviewFromCropState(); syncCropStateToActive(); updateThumbPreview(activeCropIndex); }
@@ -1606,23 +1861,87 @@
         function setupCropInteractiveDrag() {
             const viewport = document.getElementById('crop-viewport');
             if (!viewport) return;
+
             let isDragging = false, startX = 0, startY = 0, initialPosX = 50, initialPosY = 50;
-            const startDrag = (cx, cy) => { isDragging = true; startX = cx; startY = cy; initialPosX = cropState.posX; initialPosY = cropState.posY; };
-            const onMove = (cx, cy) => {
-                if (!isDragging) return;
+            let pendingMove = null;
+            let rafId = null;
+
+            const applyMove = () => {
+                rafId = null;
+                if (!pendingMove || !isDragging) return;
+                const { cx, cy } = pendingMove;
+                pendingMove = null;
+
                 const rect = viewport.getBoundingClientRect();
-                const sens = 100 / Math.max(1, cropState.scale * 0.85);
-                cropState.posX = Math.round(Math.max(0, Math.min(100, initialPosX - ((cx - startX) / rect.width) * sens)));
-                cropState.posY = Math.round(Math.max(0, Math.min(100, initialPosY - ((cy - startY) / rect.height) * sens)));
+                const img = document.getElementById('crop-preview-img');
+                const nw = img.naturalWidth || 0;
+                const nh = img.naturalHeight || 0;
+
+                // Если картинка ещё не загружена — fallback на старую формулу
+                // (без нормировки). Это редкий пограничный случай.
+                if (!nw || !nh) {
+                    const refSize = Math.max(1, rect.height);
+                    const effectiveScale = Math.max(1, cropState.scale);
+                    const dX = ((cx - startX) / refSize) * 100 / effectiveScale;
+                    const dY = ((cy - startY) / refSize) * 100 / effectiveScale;
+                    cropState.posX = Math.max(0, Math.min(100, initialPosX - dX));
+                    cropState.posY = Math.max(0, Math.min(100, initialPosY - dY));
+                    syncSlidersAndPreviewFromCropState();
+                    return;
+                }
+
+                const cw = rect.width;
+                const ch = rect.height;
+                const s = Math.max(1, cropState.scale);
+
+                // Размер картинки при object-fit: cover (scale=1)
+                const coverScale = Math.max(cw / nw, ch / nh);
+                const displayW = nw * coverScale;
+                const displayH = nh * coverScale;
+
+                // Перелив — сколько пикселей картинки выходит за контейнер.
+                // 1% object-position = overflow/100 пикселей визуального сдвига.
+                // Поэтому делим пиксели мыши на overflow/100 → одинаковый
+                // визуальный ход при любых соотношениях сторон и любом зуме.
+                const overflowX = Math.max(0, displayW * s - cw);
+                const overflowY = Math.max(0, displayH * s - ch);
+
+                // SPEED: 1.0 → картинка следует за мышью 1:1 по обеим осям.
+                // <1 — медленнее/точнее, >1 — быстрее.
+                const SPEED = 1.0;
+                const deltaPxX = cx - startX;
+                const deltaPxY = cy - startY;
+
+                const deltaPosX = overflowX > 0 ? (deltaPxX / overflowX) * 100 * SPEED : 0;
+                const deltaPosY = overflowY > 0 ? (deltaPxY / overflowY) * 100 * SPEED : 0;
+
+                cropState.posX = Math.max(0, Math.min(100, initialPosX - deltaPosX));
+                cropState.posY = Math.max(0, Math.min(100, initialPosY - deltaPosY));
+
                 syncSlidersAndPreviewFromCropState();
             };
-            const stopDrag = () => {
-                if (isDragging) {
-                    isDragging = false;
-                    syncCropStateToActive();
-                    updateThumbPreview(activeCropIndex);
-                }
+
+            const startDrag = (cx, cy) => {
+                isDragging = true;
+                startX = cx;
+                startY = cy;
+                initialPosX = cropState.posX;
+                initialPosY = cropState.posY;
             };
+            const onMove = (cx, cy) => {
+                if (!isDragging) return;
+                pendingMove = { cx, cy };
+                if (!rafId) rafId = requestAnimationFrame(applyMove);
+            };
+            const stopDrag = () => {
+                if (!isDragging) return;
+                isDragging = false;
+                if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+                if (pendingMove) applyMove();
+                syncCropStateToActive();
+                updateThumbPreview(activeCropIndex);
+            };
+
             viewport.addEventListener('mousedown', (e) => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
             window.addEventListener('mousemove', (e) => onMove(e.clientX, e.clientY));
             window.addEventListener('mouseup', stopDrag);
@@ -1651,9 +1970,18 @@
             document.getElementById('modal-title').textContent = articleObj.title;
             currentModalImages = getArticleAllImages(articleObj);
             renderModalGallery(); startModalGalleryAutoPlay();
-            document.getElementById('modal-body').innerHTML = formatContent(articleObj.content);
+
+            // ↓↓↓ ЗАМЕНА ЗДЕСЬ ↓↓↓
+            const previewBodyEl = document.getElementById('modal-body');
+            previewBodyEl.innerHTML = formatContent(articleObj.content);
+            if (previewBodyEl.animate) {
+                previewBodyEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
+            }
+
             document.getElementById('generator-modal').classList.add('hidden');
-            document.getElementById('article-modal').classList.remove('hidden');
+            const previewModalEl = document.getElementById('article-modal');
+            previewModalEl.scrollTop = 0;
+            previewModalEl.classList.remove('hidden');
         }
 
         function showToast(message) {
@@ -1663,16 +1991,210 @@
             setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3400);
         }
 
+        // Глобальный тултип для описаний (data-tooltip)
+        function initTooltip() {
+            const tip = document.getElementById('global-tooltip');
+            if (!tip) return;
+            let hideTimer = null;
+            const ARROW_OFFSET = 14;   // зазор между стрелкой и описанием
+            const EDGE_PADDING = 10;   // минимальный отступ от края окна
+
+            function showTooltip(anchor) {
+                const text = anchor.getAttribute('data-tooltip');
+                if (!text) return;
+                clearTimeout(hideTimer);
+
+                tip.textContent = text;
+                // Сбрасываем классы прошлого показа, чтобы измерить реальные размеры.
+                tip.classList.remove('is-visible', 'arrow-top', 'arrow-bottom');
+                // Невидимо, но измеримо. Важно: НЕ трогаем opacity инлайн —
+                // иначе перебьём класс .is-visible (inline > класс по специфичности).
+                tip.style.visibility = 'hidden';
+                tip.style.top = '-9999px';
+                tip.style.left = '-9999px';
+
+                const anchorRect = anchor.getBoundingClientRect();
+                const tw = tip.offsetWidth;
+                const th = tip.offsetHeight;
+
+                // Пробуем разместить над описанием; если не хватает места — под ним.
+                const spaceAbove = anchorRect.top;
+                const spaceBelow = window.innerHeight - anchorRect.bottom;
+                const placeTop = spaceAbove >= (th + ARROW_OFFSET + EDGE_PADDING) || spaceAbove >= spaceBelow;
+
+                let top, arrowClass;
+                if (placeTop) {
+                    top = anchorRect.top - th - ARROW_OFFSET;
+                    arrowClass = 'arrow-bottom';
+                } else {
+                    top = anchorRect.bottom + ARROW_OFFSET;
+                    arrowClass = 'arrow-top';
+                }
+
+                // Горизонтальное центрирование относительно описания, но с учётом краёв окна.
+                const anchorCenterX = anchorRect.left + anchorRect.width / 2;
+                let left = anchorCenterX - tw / 2;
+                left = Math.max(EDGE_PADDING, Math.min(window.innerWidth - tw - EDGE_PADDING, left));
+
+                // Насколько смещён центр описания от центра плашки — туда и ставим стрелку.
+                const arrowLeft = Math.max(14, Math.min(tw - 14, anchorCenterX - left));
+
+                tip.style.setProperty('--arrow-left', arrowLeft + 'px');
+                tip.style.top = top + 'px';
+                tip.style.left = left + 'px';
+                tip.classList.add(arrowClass);
+
+                requestAnimationFrame(() => {
+                    tip.style.visibility = 'visible';
+                    tip.classList.add('is-visible');
+                });
+            }
+
+            function hideTooltip() {
+                hideTimer = setTimeout(() => {
+                    tip.classList.remove('is-visible');
+                }, 60);
+            }
+
+            document.addEventListener('mouseover', (e) => {
+                const anchor = e.target.closest('[data-tooltip]');
+                if (anchor) showTooltip(anchor);
+            });
+            document.addEventListener('mouseout', (e) => {
+                const anchor = e.target.closest('[data-tooltip]');
+                if (!anchor) return;
+                if (e.relatedTarget && anchor.contains(e.relatedTarget)) return;
+                hideTooltip();
+            });
+            window.addEventListener('scroll', () => { tip.classList.remove('is-visible'); }, true);
+            window.addEventListener('resize', () => { tip.classList.remove('is-visible'); });
+        }
+
+        let secretShortcutArmed = false;
+        let secretShortcutTimer = null;
+
+        function armSecretShortcut() {
+            secretShortcutArmed = true;
+            clearTimeout(secretShortcutTimer);
+            secretShortcutTimer = setTimeout(() => { secretShortcutArmed = false; }, 1500);
+        }
+        function consumeSecretShortcut() {
+            clearTimeout(secretShortcutTimer);
+            secretShortcutArmed = false;
+        }
+
         window.addEventListener('keydown', (e) => {
+            const el = document.activeElement;
+            const inField = el && (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.isContentEditable);
+
+            if (!inField) {
+                // Шаг 1: Alt+A — «взводим» комбинацию на 1.5 секунды.
+                if (e.altKey && !e.ctrlKey && !e.metaKey && (e.key === 'a' || e.key === 'A' || e.code === 'KeyA')) {
+                    armSecretShortcut();
+                    e.preventDefault();
+                    return;
+                }
+
+                // Шаг 2: 0 — если комбинация взведена, открываем панель.
+                // Работает и как «Alt+A, затем 0», и как «Alt+A+0 одновременно»
+                // (порядок keydown: сначала A — взводит, потом 0 — срабатывает).
+                const isZero = (e.code === 'Digit0' || e.code === 'Numpad0' || e.key === '0');
+                if (isZero && secretShortcutArmed) {
+                    consumeSecretShortcut();
+                    e.preventDefault();
+                    if (!isAdminUnlocked) triggerAdminAccess();
+                    else openGeneratorModal('manage');
+                    return;
+                }
+            }
+
             if (e.key === 'Escape') {
                 if (!document.getElementById('lightbox-modal').classList.contains('hidden')) { closeLightbox(); return; }
                 closeArticleModal(); closeGeneratorModal(); closePinModal();
+            }
+        });
+        // ================= РЕАГИРУЕМ НА ИЗМЕНЕНИЕ URL-ХЭША В РЕАЛЬНОМ ВРЕМЕНИ =================
+        window.addEventListener('hashchange', () => {
+            const hash = window.location.hash;
+
+            if (hash === '#admin') {
+                // Чистим хэш, чтобы можно было повторно вызвать #admin, если закрыли PIN.
+                history.replaceState(null, null, window.location.pathname + window.location.search);
+                triggerAdminAccess();
+            } else if (hash.startsWith('#article=')) {
+                openArticleModal(hash.replace('#article=', ''));
             }
         });
         document.getElementById('article-modal').addEventListener('click', (e) => { if (e.target.id === 'article-modal' || e.target.parentElement.id === 'article-modal') closeArticleModal(); });
         document.getElementById('generator-modal').addEventListener('click', (e) => { if (e.target.id === 'generator-modal' || e.target.parentElement.id === 'generator-modal') closeGeneratorModal(); });
         document.getElementById('lightbox-modal').addEventListener('click', (e) => { if (e.target.id === 'lightbox-image' || e.target.closest('button')) return; closeLightbox(); });
         document.getElementById('modal-body').addEventListener('click', (e) => { if (e.target.tagName === 'IMG') openLightbox(e.target.src); });
+
+                // ================= КНОПКА «НАВЕРХ» =================
+        (function initBackToTop() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) return;
+
+            const SHOW_AFTER = 400;   // px от верха — с этого момента кнопка может быть видна
+            const footer = document.querySelector('footer');
+
+            const update = () => {
+                const scrollY = window.scrollY || document.documentElement.scrollTop;
+
+                // Скрываем кнопку, когда футер уже виден в окне (чтобы она не лежала на нём).
+                // getBoundingClientRect().top — это расстояние от верха окна до футера;
+                // пока оно больше высоты окна, футер ещё не виден.
+                let footerInView = false;
+                if (footer) {
+                    const footerTop = footer.getBoundingClientRect().top;
+                    footerInView = footerTop < window.innerHeight;
+                }
+
+                const show = scrollY > SHOW_AFTER && !footerInView;
+
+                if (show) {
+                    btn.classList.remove('opacity-0', 'translate-y-3', 'pointer-events-none');
+                    btn.classList.add('opacity-100', 'translate-y-0');
+                } else {
+                    btn.classList.add('opacity-0', 'translate-y-3', 'pointer-events-none');
+                    btn.classList.remove('opacity-100', 'translate-y-0');
+                }
+            };
+
+            let ticking = false;
+            window.addEventListener('scroll', () => {
+                if (ticking) return;
+                ticking = true;
+                requestAnimationFrame(() => { update(); ticking = false; });
+            }, { passive: true });
+
+            window.addEventListener('resize', update);
+
+            btn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+
+            syncBackToTopOffset();
+            update();
+        })();
+
+        // Адаптивный отступ кнопки «Наверх»: близко к краю для обычных пользователей,
+        // выше — когда видна плавающая админ-панель (иначе кнопка «сядет» на неё).
+        function syncBackToTopOffset() {
+            const btn = document.getElementById('back-to-top');
+            if (!btn) return;
+
+            btn.classList.remove(
+                'bottom-5', 'sm:bottom-6',
+                'bottom-24', 'sm:bottom-28'
+            );
+
+            if (isAdminUnlocked) {
+                btn.classList.add('bottom-24', 'sm:bottom-28');
+            } else {
+                btn.classList.add('bottom-5', 'sm:bottom-6');
+            }
+        }
     </script>
 </body>
 </html>
