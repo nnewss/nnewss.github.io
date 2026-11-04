@@ -816,15 +816,15 @@
             return rawContent.split(/\n\s*\n/).map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
         }
 
-        function getArticleAllImages(article) {
+       function getArticleAllImages(article) {
             const imgs = [];
-            const seenFiles = new Set();
 
+            // ГЛАВНОЕ ФОТО
             if (article && article.image) {
-                let fname = article.image.split('/').pop();
                 imgs.push({ url: article.image, posX: article.posX ?? 50, posY: article.posY ?? 50, scale: article.scale ?? 1 });
-                seenFiles.add(fname);
             }
+
+            // ГАЛЕРЕЯ
             if (article && Array.isArray(article.gallery)) {
                 article.gallery.forEach(g => {
                     if (g && g.url) {
@@ -832,11 +832,8 @@
                         if (!fullUrl.startsWith('http') && !fullUrl.includes('/') && article.path) {
                             fullUrl = article.path + '/' + fullUrl;
                         }
-                        let fname = fullUrl.split('/').pop();
-                        if (!seenFiles.has(fname)) {
-                            imgs.push({ url: fullUrl, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
-                            seenFiles.add(fname);
-                        }
+                        // ИСПРАВЛЕНО: убрана проверка на дубликаты по имени файла.
+                        imgs.push({ url: fullUrl, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
                     }
                 });
             }
@@ -1433,26 +1430,14 @@
                             updateReadTimeFromContent();
                         }
                         if (data.gallery && data.gallery.length > 0) {
-                            let newGallery = [];
-                            let seen = new Set();
-
-                            if (article.image) {
-                                seen.add(article.image.split('/').pop());
-                            }
-
                             data.gallery.forEach(g => {
                                 let fullUrl = g.url;
                                 if (!fullUrl.startsWith('http') && !fullUrl.includes('/')) {
                                     fullUrl = article.path + '/' + fullUrl;
                                 }
-                                let fname = fullUrl.split('/').pop();
-                                if (!seen.has(fname)) {
-                                    newGallery.push({ url: fullUrl, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
-                                    seen.add(fname);
-                                }
+                                // ИСПРАВЛЕНО: убрана проверка на дубликаты по имени файла.
+                                currentGalleryDraft.push({ url: fullUrl, posX: g.posX ?? 50, posY: g.posY ?? 50, scale: g.scale ?? 1 });
                             });
-
-                            currentGalleryDraft = currentGalleryDraft.concat(newGallery);
                             renderGalleryThumbs();
                             openCropEditor();
                         }
