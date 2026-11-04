@@ -14,6 +14,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Merriweather:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
+
+    <!-- Flatpickr: современный календарь -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -45,11 +51,13 @@
            zoom — через transform:scale с transform-origin в той же точке. */
         .news-framed-img {
             width: 100%; height: 100%; object-fit: cover;
-            transform: scale(var(--scale, 1));
+            transform: translateZ(0) scale(var(--scale, 1));
             transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            backface-visibility: hidden;
         }
         .group:hover .news-framed-img {
-            transform: scale(calc(var(--scale, 1) * 1.04));
+            will-change: transform;
+            transform: translateZ(0) scale(calc(var(--scale, 1) * 1.04));
         }
 
         #lightbox-image { cursor: zoom-out; max-width: 100%; max-height: 92vh; object-fit: contain; }
@@ -213,6 +221,34 @@
         #lightbox-modal:not(.hidden) > div > img {
             animation: lightboxImgIn 0.34s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
+
+        /* ================= СТИЛИ ДЛЯ FLATPICKR (КАЛЕНДАРЬ) ================= */
+        html.dark .flatpickr-calendar {
+            background: #1e293b !important;
+            border-color: #334155 !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+        }
+        html.dark .flatpickr-day { color: #f8fafc !important; }
+        html.dark .flatpickr-day.selected { background: #2563eb !important; border-color: #2563eb !important; }
+        html.dark .flatpickr-months .flatpickr-month,
+        html.dark .flatpickr-current-month .flatpickr-monthDropdown-months,
+        html.dark .flatpickr-weekdays,
+        html.dark .flatpickr-weekday { color: #e2e8f0 !important; fill: #e2e8f0 !important; }
+        html.dark .flatpickr-prev-month svg,
+        html.dark .flatpickr-next-month svg { fill: #e2e8f0 !important; }
+        html.dark .flatpickr-day:hover,
+        html.dark .flatpickr-day:focus { background: #334155 !important; border-color: #334155 !important; }
+        html.dark .flatpickr-day.prevMonthDay,
+        html.dark .flatpickr-day.nextMonthDay { color: #64748b !important; }
+        html.dark .flatpickr-day.today { border-color: #64748b !important; }
+        html.dark .flatpickr-current-month .flatpickr-monthDropdown-months {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
+        html.dark .flatpickr-current-month .flatpickr-monthDropdown-months option {
+            background-color: #1e293b !important;
+            color: #f8fafc !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 font-sans antialiased transition-colors duration-200 min-h-screen flex flex-col">
@@ -279,7 +315,7 @@
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div id="loading-indicator" class="flex flex-col items-center justify-center py-20">
             <div class="w-10 h-10 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-4"></div>
-            <p class="text-slate-500 font-medium">Загрузка новостей из репозитория...</p>
+            <p class="text-slate-500 font-medium">Загрузка новостей...</p>
         </div>
 
         <div id="error-message" class="hidden text-center py-20 px-4">
@@ -501,20 +537,20 @@
                             <button type="button" onclick="resetGeneratorForm()" class="underline font-bold ml-3 shrink-0">Отменить</button>
                         </div>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                            <div class="sm:col-span-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-4 lg:grid-cols-5 gap-4">
+                            <div class="col-span-full">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Заголовок новости *</label>
                                 <input type="text" id="gen-title" placeholder="Например: Квантовый прорыв..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
                             </div>
 
                             <!-- Имя папки (Slug) -->
-                            <div class="sm:col-span-3">
+                            <div class="col-span-full">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Имя папки (URL / Slug) <span class="normal-case text-[10px] text-brand-500 font-medium">(необязательно)</span></label>
                                 <input type="text" id="gen-slug" placeholder="например: mars_rover_news" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500">
                                 <p class="text-[11px] text-slate-400 mt-1">Короткое имя для папки с новостью. Если оставить пустым, сгенерируется автоматически из заголовка.</p>
                             </div>
 
-                            <div>
+                            <div class="sm:col-span-1">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Рубрика</label>
                                 <select id="gen-category" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
                                     <option value="Технологии">Технологии</option>
@@ -525,19 +561,25 @@
                                     <option value="Общество">Общество</option>
                                 </select>
                             </div>
-                            <div>
+
+                            <div class="sm:col-span-2">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Дата и время</label>
-                                <div class="flex gap-2">
-                                    <input type="text" id="gen-date" placeholder="31 октября 2026" class="flex-1 min-w-0 px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
-                                    <input type="time" id="gen-time" value="12:00" class="w-28 shrink-0 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
+                                <div class="flex gap-2 items-center">
+                                    <input type="text" id="gen-date" placeholder="Дата" class="w-40 shrink-0 px-3 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500 cursor-pointer text-center">
+                                    <div class="flex items-center gap-1 shrink-0">
+                                        <select id="gen-time-hour" class="w-16 px-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500 text-center cursor-pointer dark:[color-scheme:dark]"></select>
+                                        <span class="text-slate-500 font-bold pb-0.5">:</span>
+                                        <select id="gen-time-minute" class="w-16 px-2 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-mono outline-none focus:border-brand-500 text-center cursor-pointer dark:[color-scheme:dark]"></select>
+                                    </div>
                                 </div>
                             </div>
-                            <div>
+
+                            <div class="sm:col-span-1 lg:col-span-2">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Время чтения</label>
                                 <input type="text" id="gen-readtime" value="1 мин" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500">
                             </div>
 
-                            <div class="sm:col-span-3">
+                            <div class="col-span-full">
                                 <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
                                     <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Фотографии</label>
                                     <span class="text-[11px] text-slate-400">★ Первое фото = главное.</span>
@@ -594,15 +636,15 @@
                                 </div>
                             </div>
 
-                            <div class="sm:col-span-3">
+                            <div class="col-span-full">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Краткое описание *</label>
                                 <textarea id="gen-summary" rows="2" placeholder="Одно-два предложения..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
                             </div>
-                            <div class="sm:col-span-3">
+                            <div class="col-span-full">
                                 <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Полный текст статьи *</label>
                                 <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Текст статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
                             </div>
-                            <div class="sm:col-span-3 flex flex-wrap items-center justify-between gap-3 pt-1">
+                            <div class="col-span-full flex flex-wrap items-center justify-between gap-3 pt-1">
                                 <div class="flex items-center gap-2.5">
                                     <input type="checkbox" id="gen-featured" class="w-4 h-4 text-brand-600 rounded focus:ring-brand-500">
                                     <label for="gen-featured" class="text-sm font-medium select-none cursor-pointer">Главная новость (баннер)</label>
@@ -688,6 +730,22 @@
 
         let draggedIndex = null;
         let thumbDragMoved = false;
+        let datePickerInstance = null;
+
+        function setDateValue(dateStr) {
+            if (!dateStr) return;
+            const input = document.getElementById('gen-date');
+            if (datePickerInstance) {
+                if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                    datePickerInstance.setDate(dateStr, false, "Y-m-d");
+                } else {
+                    datePickerInstance.setDate(dateStr, false);
+                }
+                if (!input.value) input.value = dateStr;
+            } else {
+                input.value = dateStr;
+            }
+        }
 
         // ================= ИНИЦИАЛИЗАЦИЯ =================
         window.addEventListener('DOMContentLoaded', async () => {
@@ -700,11 +758,28 @@
             setupImageDropZone();
             setupCropInteractiveDrag();
             initTooltip();
+
+            // 1. Сначала Flatpickr и селекты времени
+            datePickerInstance = flatpickr("#gen-date", {
+                locale: "ru",
+                dateFormat: "j F Y",
+                disableMobile: true,
+                onChange: function() { isTimeManuallyEdited = true; }
+            });
+
+            const hourSel = document.getElementById('gen-time-hour');
+            const minSel = document.getElementById('gen-time-minute');
+            if (hourSel && hourSel.options.length === 0) {
+                for (let i = 0; i < 24; i++) hourSel.add(new Option(String(i).padStart(2, '0'), String(i).padStart(2, '0')));
+                for (let i = 0; i < 60; i++) minSel.add(new Option(String(i).padStart(2, '0'), String(i).padStart(2, '0')));
+            }
+
+            hourSel.addEventListener('change', () => { isTimeManuallyEdited = true; });
+            minSel.addEventListener('change', () => { isTimeManuallyEdited = true; });
+
+            // 2. Только теперь сбрасываем форму — Flatpickr уже готов
             resetGeneratorForm();
-            // Отслеживаем ручное изменение даты/времени — если пользователь их трогал,
-            // уважаем его выбор. Если нет — при сохранении подставим текущее время.
-            document.getElementById('gen-date').addEventListener('input', () => { isTimeManuallyEdited = true; });
-            document.getElementById('gen-time').addEventListener('input', () => { isTimeManuallyEdited = true; });
+
             await fetchNewsData();
             checkUrlHashForArticle();
         });
@@ -740,6 +815,18 @@
         // ================= УТИЛИТЫ =================
         function parseRussianDate(dateStr, timeStr) {
             if (!dateStr) return null;
+
+            // Новый формат от календарика (YYYY-MM-DD)
+            const isoMatch = String(dateStr).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (isoMatch) {
+                const year = parseInt(isoMatch[1], 10);
+                const month = parseInt(isoMatch[2], 10) - 1;
+                const day = parseInt(isoMatch[3], 10);
+                const [hours, minutes] = (timeStr || '00:00').split(':').map(Number);
+                return new Date(year, month, day, isNaN(hours) ? 0 : hours, isNaN(minutes) ? 0 : minutes);
+            }
+
+            // Старый текстовый формат (31 октября 2026) — для обратной совместимости
             const clean = String(dateStr).replace(/\s*г\.?\s*$/, '').trim();
             const parts = clean.split(/\s+/);
             if (parts.length !== 3) return null;
@@ -772,6 +859,15 @@
             if (diffHours < 24) return `${diffHours} ${getNounPlural(diffHours, 'час', 'часа', 'часов')} назад`;
             const diffDays = Math.floor(diffHours / 24);
             return `${diffDays} ${getNounPlural(diffDays, 'день', 'дня', 'дней')} назад`;
+        }
+
+        // Статья «опубликована» — её дата/время уже наступили.
+        // Без publishedAt (старый формат) — считаем опубликованной.
+        function isArticlePublished(item) {
+            if (!item || !item.publishedAt) return true;
+            const t = new Date(item.publishedAt).getTime();
+            if (isNaN(t)) return true;
+            return t <= Date.now();
         }
 
         function getNounPlural(number, one, two, five) {
@@ -1011,7 +1107,26 @@
                 </div>`;
         }
 
+        // Когда наступит время ближайшей отложенной статьи — автоматически перерисовать ленту.
+        let nextScheduledRefreshTimer = null;
+        function scheduleNextScheduledRefresh() {
+            if (nextScheduledRefreshTimer) { clearTimeout(nextScheduledRefreshTimer); nextScheduledRefreshTimer = null; }
+            const now = Date.now();
+            let nextTime = Infinity;
+            NEWS_DATA.forEach(item => {
+                if (!item.publishedAt) return;
+                const t = new Date(item.publishedAt).getTime();
+                if (!isNaN(t) && t > now && t < nextTime) nextTime = t;
+            });
+            if (nextTime === Infinity) return;
+            // setTimeout ограничен ~24.8 днями — ставим безопасный потолок,
+            // при срабатывании renderPage перепланирует следующий таймер.
+            const delay = Math.min(nextTime - now + 1500, 2147483000);
+            nextScheduledRefreshTimer = setTimeout(() => { renderPage(); }, delay);
+        }
+
         function renderPage() {
+            scheduleNextScheduledRefresh();
             const featuredSection = document.getElementById('featured-section');
             const newsGrid = document.getElementById('news-grid');
             const emptyState = document.getElementById('empty-state');
@@ -1019,6 +1134,7 @@
             const feedTitle = document.getElementById('feed-title');
 
             const filtered = NEWS_DATA.filter(item => {
+                if (!isArticlePublished(item)) return false;   // будущие даты скрываем
                 const byCat = currentCategory === 'Все' || item.category === currentCategory;
                 const bySearch = !searchQuery || item.title.toLowerCase().includes(searchQuery) || item.summary.toLowerCase().includes(searchQuery);
                 return byCat && bySearch;
@@ -1051,10 +1167,10 @@
                             <div>
                                 <div class="flex items-center gap-2.5 text-xs font-semibold text-brand-600 dark:text-brand-400 mb-3">
                                     <span>${featuredItem.category}</span><span class="text-slate-300 dark:text-slate-700">•</span>
-                                    <span class="text-slate-500 dark:text-slate-400 font-normal">${formatSmartTime(featuredItem.publishedAt, featuredItem.date)}</span>
+                                    <span class="text-slate-500 dark:text-slate-400 font-normal" data-published-at="${featuredItem.publishedAt || ''}" data-fallback-date="${featuredItem.date || ''}">${formatSmartTime(featuredItem.publishedAt, featuredItem.date)}</span>
                                 </div>
                                 <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-snug mb-4 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${featuredItem.title}</h1>
-                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-3" data-tooltip="${escapeHtml(featuredItem.summary)}">${featuredItem.summary}</p>
+                                <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed mb-6 line-clamp-4" data-tooltip="${escapeHtml(featuredItem.summary)}">${featuredItem.summary}</p>
                             </div>
                             <div class="flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
                                 <span>Время чтения: ${featuredItem.readTime}</span>
@@ -1076,7 +1192,7 @@
                     <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                         <div>
                             <div class="flex items-center gap-2 text-xs text-slate-400 mb-2.5">
-                                <span>${formatSmartTime(item.publishedAt, item.date)}</span><span>•</span><span>${item.readTime}</span>
+                                <span data-published-at="${item.publishedAt || ''}" data-fallback-date="${item.date || ''}">${formatSmartTime(item.publishedAt, item.date)}</span><span>•</span><span>${item.readTime}</span>
                             </div>
                             <h3 class="text-lg font-bold leading-snug mb-2.5 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">${item.title}</h3>
                             <p class="text-sm text-slate-600 dark:text-slate-400 line-clamp-3 leading-relaxed" data-tooltip="${escapeHtml(item.summary)}">${item.summary}</p>
@@ -1189,6 +1305,12 @@
         async function openArticleModal(id) {
             const summaryData = NEWS_DATA.find(item => item.id === id);
             if (!summaryData) return;
+
+            // Будущая статья: скрываем от читателя, но админ / preview — пропускаем
+            if (!isArticlePublished(summaryData) && !isAdminUnlocked && !isPreviewFromAdmin) {
+                showToast('🕒 Статья ещё не опубликована');
+                return;
+            }
 
             const articleModalEl = document.getElementById('article-modal');
             const bodyEl = document.getElementById('modal-body');
@@ -1334,11 +1456,12 @@
                             <img src="${getDisplayImageSrc(item.image)}" alt="" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="this.onerror=null; this.src='${FALLBACK_IMG}'">
                         </div>
                         <div class="min-w-0">
-                            <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400">
+                            <div class="flex items-center gap-2 text-[11px] text-slate-500 dark:text-slate-400 flex-wrap">
                                 <span class="font-semibold text-brand-600 dark:text-brand-400">${escapeHtml(item.category)}</span>
                                 <span>•</span>
                                 <span>${escapeHtml(item.publishedAt ? formatAbsoluteDateTime(new Date(item.publishedAt)) : item.date)}</span>
                                 ${item.featured ? '<span class="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-600 font-bold">Главная</span>' : ''}
+                                ${!isArticlePublished(item) ? '<span class="px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-600 dark:text-sky-400 font-bold" title="Скроется с сайта до наступления времени">🕒 Отложено</span>' : ''}
                             </div>
                             <h5 class="text-xs sm:text-sm font-bold truncate">${escapeHtml(item.title)}</h5>
                         </div>
@@ -1370,6 +1493,7 @@
         function startEditArticle(articleId) {
             const article = NEWS_DATA.find(item => item.id === articleId);
             if (!article) return;
+            isTimeManuallyEdited = false;
             document.getElementById('gen-edit-id').value = article.id;
             document.getElementById('gen-title').value = article.title;
             document.getElementById('gen-category').value = CATEGORIES.includes(article.category) ? article.category : 'Технологии';
@@ -1383,14 +1507,13 @@
                 document.getElementById('gen-slug').value = '';
             }
 
-            if (article.publishedAt) {
-                const d = new Date(article.publishedAt);
-                document.getElementById('gen-date').value = d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
-                document.getElementById('gen-time').value = `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-            } else {
-                document.getElementById('gen-date').value = article.date || '';
-                document.getElementById('gen-time').value = '12:00';
-            }
+            const d = article.publishedAt ? new Date(article.publishedAt) : (parseRussianDate(article.date, '12:00') || new Date());
+            const yyyy = d.getFullYear();
+            const mm = String(d.getMonth() + 1).padStart(2, '0');
+            const dd = String(d.getDate()).padStart(2, '0');
+            setDateValue(`${yyyy}-${mm}-${dd}`);
+            document.getElementById('gen-time-hour').value = String(d.getHours()).padStart(2, '0');
+            document.getElementById('gen-time-minute').value = String(d.getMinutes()).padStart(2, '0');
 
             currentGalleryDraft = [];
             if (article.image) {
@@ -1460,13 +1583,20 @@
 
         function resetGeneratorForm() {
             const now = new Date();
-            isTimeManuallyEdited = false;       // ← НОВОЕ: форма свежая, время не трогали
+            isTimeManuallyEdited = false;       // форма свежая, время не трогали
             document.getElementById('gen-edit-id').value = '';
             document.getElementById('gen-title').value = '';
             document.getElementById('gen-slug').value = '';
             document.getElementById('gen-category').value = 'Технологии';
-            document.getElementById('gen-date').value = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
-            document.getElementById('gen-time').value = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+            // ИЗМЕНЕНО: подставляем сегодняшнюю дату в формате YYYY-MM-DD
+            const yyyy = now.getFullYear();
+            const mm = String(now.getMonth() + 1).padStart(2, '0');
+            const dd = String(now.getDate()).padStart(2, '0');
+            setDateValue(`${yyyy}-${mm}-${dd}`);
+
+            document.getElementById('gen-time-hour').value = String(now.getHours()).padStart(2, '0');
+            document.getElementById('gen-time-minute').value = String(now.getMinutes()).padStart(2, '0');
             document.getElementById('gen-readtime').value = '1 мин';
             document.getElementById('gen-summary').value = '';
             document.getElementById('gen-content').value = '';
@@ -1501,18 +1631,45 @@
             let dateStr, timeStr;
             if (editId || isTimeManuallyEdited) {
                 dateStr = document.getElementById('gen-date').value.trim();
-                timeStr = document.getElementById('gen-time').value || '12:00';
+                timeStr = `${document.getElementById('gen-time-hour').value}:${document.getElementById('gen-time-minute').value}`;
             } else {
                 const now = new Date();
                 dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
                 timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-                // Обновляем форму, чтобы визуально она тоже показала актуальное время
-                document.getElementById('gen-date').value = dateStr;
-                document.getElementById('gen-time').value = timeStr;
+                const yyyy = now.getFullYear();
+                const mm = String(now.getMonth() + 1).padStart(2, '0');
+                const dd = String(now.getDate()).padStart(2, '0');
+                setDateValue(`${yyyy}-${mm}-${dd}`);
+                document.getElementById('gen-time-hour').value = String(now.getHours()).padStart(2, '0');
+                document.getElementById('gen-time-minute').value = String(now.getMinutes()).padStart(2, '0');
             }
 
-            const parsed = parseRussianDate(dateStr, timeStr);
+            // Приоритет — дата прямо из Flatpickr, а не из строки input
+            let parsed = null;
+            const fpDate = datePickerInstance && datePickerInstance.selectedDates && datePickerInstance.selectedDates[0];
+            if (fpDate && !isNaN(fpDate.getTime())) {
+                const [hh, mm] = timeStr.split(':').map(Number);
+                parsed = new Date(
+                    fpDate.getFullYear(),
+                    fpDate.getMonth(),
+                    fpDate.getDate(),
+                    isNaN(hh) ? 0 : hh,
+                    isNaN(mm) ? 0 : mm
+                );
+            } else {
+                parsed = parseRussianDate(dateStr, timeStr);
+            }
+
+            // Страховка: при редактировании, если парсинг провалился — оригинальная дата
+            if (!parsed && editId) {
+                const original = NEWS_DATA.find(n => n.id === editId);
+                if (original && original.publishedAt) parsed = new Date(original.publishedAt);
+            }
+
             const publishedAt = (parsed || new Date()).toISOString();
+            const displayDateStr = parsed
+                ? parsed.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '')
+                : dateStr;
 
             // НОВОЕ: чистим значения перед записью в JSON. Позиция — целые проценты,
             // масштаб — до 2 знаков (2.2 вместо 2.2000000001).
@@ -1538,7 +1695,7 @@
 
             return {
                 id: editId || ('news-' + Date.now().toString().slice(-6)),
-                title, category, date: dateStr, publishedAt, readTime,
+                title, category, date: displayDateStr, publishedAt, readTime,
                 cover: coverName,
                 posX: roundPos(mainPhoto.posX),
                 posY: roundPos(mainPhoto.posY),
@@ -2063,7 +2220,16 @@
 
             document.addEventListener('mouseover', (e) => {
                 const anchor = e.target.closest('[data-tooltip]');
-                if (anchor) showTooltip(anchor);
+                if (!anchor) return;
+
+                // Проверяем, обрезан ли текст визуально (scrollHeight больше clientHeight)
+                // Добавляем +1 пиксель допуска на случай субпиксельного рендеринга
+                const isTruncated = anchor.scrollHeight > anchor.clientHeight + 1;
+
+                // Показываем плашку только если текст реально не влез
+                if (isTruncated) {
+                    showTooltip(anchor);
+                }
             });
             document.addEventListener('mouseout', (e) => {
                 const anchor = e.target.closest('[data-tooltip]');
@@ -2182,6 +2348,45 @@
             syncBackToTopOffset();
             update();
         })();
+
+        // ───── Умный тикер: обновляет время только когда вкладка активна ─────
+        let timeTicker = null;
+
+        function startTimeTicker() {
+            if (timeTicker) return;
+            timeTicker = setInterval(() => {
+                document.querySelectorAll('[data-published-at]').forEach(el => {
+                    const iso = el.getAttribute('data-published-at');
+                    const fallback = el.getAttribute('data-fallback-date');
+                    el.textContent = formatSmartTime(iso, fallback);
+                });
+            }, 60000); // раз в минуту
+        }
+
+        function stopTimeTicker() {
+            if (timeTicker) {
+                clearInterval(timeTicker);
+                timeTicker = null;
+            }
+        }
+
+        // Останавливаем таймер, когда вкладка скрыта
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                stopTimeTicker();
+            } else {
+                // Когда вернулись на вкладку — сразу обновляем один раз
+                document.querySelectorAll('[data-published-at]').forEach(el => {
+                    const iso = el.getAttribute('data-published-at');
+                    const fallback = el.getAttribute('data-fallback-date');
+                    el.textContent = formatSmartTime(iso, fallback);
+                });
+                startTimeTicker();
+            }
+        });
+
+        // Запускаем при старте
+        startTimeTicker();
 
         // Адаптивный отступ кнопки «Наверх»: близко к краю для обычных пользователей,
         // выше — когда видна плавающая админ-панель (иначе кнопка «сядет» на неё).
