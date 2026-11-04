@@ -674,6 +674,7 @@
         let footerClickCount = 0;
         let footerClickTimer = null;
         let isPreviewFromAdmin = false;
+        let isTimeManuallyEdited = false;
         let cropState = { posX: 50, posY: 50, scale: 1 };
         let activeCropIndex = 0;
         let modalGalleryIndex = 0;
@@ -700,7 +701,10 @@
             setupCropInteractiveDrag();
             initTooltip();
             resetGeneratorForm();
-
+            // Отслеживаем ручное изменение даты/времени — если пользователь их трогал,
+            // уважаем его выбор. Если нет — при сохранении подставим текущее время.
+            document.getElementById('gen-date').addEventListener('input', () => { isTimeManuallyEdited = true; });
+            document.getElementById('gen-time').addEventListener('input', () => { isTimeManuallyEdited = true; });
             await fetchNewsData();
             checkUrlHashForArticle();
         });
@@ -1456,6 +1460,7 @@
 
         function resetGeneratorForm() {
             const now = new Date();
+            isTimeManuallyEdited = false;       // ← НОВОЕ: форма свежая, время не трогали
             document.getElementById('gen-edit-id').value = '';
             document.getElementById('gen-title').value = '';
             document.getElementById('gen-slug').value = '';
@@ -1489,8 +1494,23 @@
             const summary = document.getElementById('gen-summary').value.trim() || 'Описание';
             const rawContent = document.getElementById('gen-content').value.trim() || 'Текст';
             const featured = Boolean(document.getElementById('gen-featured').checked);
-            const dateStr = document.getElementById('gen-date').value.trim();
-            const timeStr = document.getElementById('gen-time').value || '12:00';
+
+            // ИСПРАВЛЕНО: при создании новой статьи без ручной правки времени
+            // подставляем текущий момент, а не то, что «зависло» в форме.
+            // При редактировании (editId) или ручной правке — берём из формы.
+            let dateStr, timeStr;
+            if (editId || isTimeManuallyEdited) {
+                dateStr = document.getElementById('gen-date').value.trim();
+                timeStr = document.getElementById('gen-time').value || '12:00';
+            } else {
+                const now = new Date();
+                dateStr = now.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' }).replace(' г.', '');
+                timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+                // Обновляем форму, чтобы визуально она тоже показала актуальное время
+                document.getElementById('gen-date').value = dateStr;
+                document.getElementById('gen-time').value = timeStr;
+            }
+
             const parsed = parseRussianDate(dateStr, timeStr);
             const publishedAt = (parsed || new Date()).toISOString();
 
