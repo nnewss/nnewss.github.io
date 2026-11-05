@@ -20,6 +20,17 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ru.js"></script>
 
+        <!-- Quill.js: Визуальный редактор -->
+    <link href="https://cdn.quilljs.com/1.3.7/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.7/quill.min.js"></script>
+
+        <!-- Prism.js: Красивая подсветка кода -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -41,9 +52,66 @@
         }
     </script>
     <style>
+        /* ================= СТИЛИ ДЛЯ ОТОБРАЖЕНИЯ СТАТЬИ (ВЫХОД ИЗ QUILL) ================= */
         .article-content p { margin-bottom: 1.25rem; line-height: 1.8; }
-        .article-content h3 { font-family: 'Inter', sans-serif; font-weight: 700; font-size: 1.35rem; margin-top: 2rem; margin-bottom: 0.75rem; }
-        .article-content blockquote { border-left: 4px solid #3b82f6; padding-left: 1rem; font-style: italic; margin: 1.5rem 0; opacity: 0.9; }
+
+        /* Заголовки */
+        .article-content h1,
+        .article-content h2,
+        .article-content h3 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+        .article-content h1 { font-size: 1.75rem; }
+        .article-content h2 { font-size: 1.5rem; }
+        .article-content h3 { font-size: 1.25rem; }
+
+        /* Жирный, курсив, подчеркивание, зачеркивание */
+        .article-content strong, .article-content b { font-weight: 700; }
+        .article-content em, .article-content i { font-style: italic; }
+        .article-content u { text-decoration: underline; text-underline-offset: 3px; }
+        .article-content s { text-decoration: line-through; }
+
+        /* Списки (возвращаем точки и цифры после сброса Tailwind) */
+        .article-content ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .article-content ol {
+            list-style-type: decimal;
+            padding-left: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .article-content li {
+            margin-bottom: 0.5rem;
+            line-height: 1.7;
+        }
+        /* Вложенные списки */
+        .article-content ul ul, .article-content ol ol { margin-top: 0.5rem; margin-bottom: 0; }
+
+        /* Цитаты (Blockquote) */
+        .article-content blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            font-style: italic;
+            margin: 1.5rem 0;
+            opacity: 0.9;
+            color: #475569;
+        }
+        .dark .article-content blockquote { color: #94a3b8; }
+
+        /* Ссылки */
+        .article-content a {
+            color: #2563eb;
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+        .dark .article-content a { color: #60a5fa; }
+        .article-content a:hover { text-decoration: none; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
@@ -248,6 +316,155 @@
         html.dark .flatpickr-current-month .flatpickr-monthDropdown-months option {
             background-color: #1e293b !important;
             color: #f8fafc !important;
+        }
+
+        /* ================= СТИЛИ ДЛЯ QUILL.JS ================= */
+        .ql-toolbar.ql-snow {
+            border-color: #e2e8f0;
+            border-top-left-radius: 0.75rem;
+            border-top-right-radius: 0.75rem;
+            background-color: #f8fafc;
+        }
+        .dark .ql-toolbar.ql-snow {
+            border-color: #334155;
+            background-color: #1e293b;
+        }
+        .ql-container.ql-snow {
+            border-color: #e2e8f0;
+            border-bottom-left-radius: 0.75rem;
+            border-bottom-right-radius: 0.75rem;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.875rem;
+            height: 180px; /* Фиксируем высоту контейнера */
+        }
+        .ql-editor {
+            height: 100%; /* Редактор заполняет контейнер */
+            overflow-y: auto; /* Если текста много, появляется скролл внутри */
+            min-height: 100%; /* Чтобы клик по пустому месту работал */
+        }
+        .dark .ql-container.ql-snow {
+            border-color: #334155;
+        }
+        .dark .ql-editor { color: #f8fafc; }
+        .dark .ql-editor.ql-blank::before { color: #64748b; font-style: normal; }
+
+        /* Иконки в темной теме */
+        .dark .ql-snow .ql-stroke { stroke: #cbd5e1; }
+        .dark .ql-snow .ql-fill { fill: #cbd5e1; }
+        .dark .ql-snow .ql-picker { color: #cbd5e1; }
+
+        /* Всплывающая подсказка (ссылки) */
+        .dark .ql-snow .ql-tooltip {
+            background-color: #1e293b;
+            border-color: #334155;
+            color: #f8fafc;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .dark .ql-snow .ql-tooltip input[type=text] {
+            background-color: #0f172a;
+            border-color: #334155;
+            color: #f8fafc;
+        }
+
+        /* Фикс сброса стилей списков и цитат от Tailwind внутри редактора */
+        .ql-editor ul { list-style-type: disc; padding-left: 1.5rem; }
+        .ql-editor ol { list-style-type: decimal; padding-left: 1.5rem; }
+        .ql-editor blockquote {
+            border-left: 4px solid #3b82f6;
+            padding-left: 1rem;
+            font-style: italic;
+            color: #64748b;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .ql-editor h2 { font-size: 1.5rem; font-weight: bold; margin-bottom: 0.5rem; }
+        .ql-editor h3 { font-size: 1.25rem; font-weight: bold; margin-bottom: 0.5rem; }
+
+        /* Красивые отступы для блоков кода Prism */
+        .article-content pre[class*="language-"] {
+            margin-top: 1.5rem !important;
+            margin-bottom: 1.5rem !important;
+            border-radius: 0.5rem !important;
+            font-size: 0.875rem !important;
+        }
+
+        /* ================= КРАСИВАЯ ШАПКА ДЛЯ БЛОКОВ КОДА ================= */
+        .code-block-wrapper {
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: #1e1e1e;
+            border: 1px solid #333;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+        }
+        .code-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1rem;
+            background: #252526;
+            border-bottom: 1px solid #333;
+        }
+        .code-lang {
+            color: #ffffff;
+            font-family: 'JetBrains Mono', 'Consolas', monospace; /* Шрифт как у кода */
+            font-weight: 500;
+            font-size: 0.75rem;
+            text-transform: lowercase; /* Делаем строчными буквами */
+            letter-spacing: 0.05em;
+            line-height: 1;
+        }
+        .copy-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: #e2e8f0;
+            cursor: pointer;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; /* Четкий шрифт без засечек */
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.6rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s ease;
+            line-height: 1;
+            letter-spacing: 0.01em; /* Легкая разрядка для четкости */
+        }
+        .copy-btn:hover {
+            color: #ffffff;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .copy-btn svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* ЖЕСТКО УБИРАЕМ ВОЗДУХ У PRE */
+        .code-block-wrapper pre,
+        .code-block-wrapper pre[class*="language-"] {
+            margin: 0 !important;
+            border-radius: 0 !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+            background: #1e1e1e !important;
+            overflow-x: auto;
+        }
+
+        /* ДОБАВЛЯЕМ ОТСТУПЫ САМОМУ КОДУ */
+        .code-block-wrapper pre code {
+            display: block;
+            padding: 0.75rem 1rem !important;
+            font-family: 'JetBrains Mono', 'Consolas', monospace !important;
+            font-size: 0.8rem !important;
+            line-height: 1.5 !important;
+            text-shadow: none !important;
+        }
+
+        /* Скрываем переносы строк, которые Quill добавляет в конец */
+        .code-block-wrapper pre br {
+            display: none !important;
         }
     </style>
 </head>
@@ -641,8 +858,16 @@
                                 <textarea id="gen-summary" rows="2" placeholder="Одно-два предложения..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
                             </div>
                             <div class="col-span-full">
-                                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-1">Полный текст статьи *</label>
-                                <textarea id="gen-content" rows="6" oninput="updateReadTimeFromContent()" placeholder="Текст статьи..." class="w-full px-3.5 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm outline-none focus:border-brand-500"></textarea>
+                                <div class="flex items-center justify-between mb-1">
+                                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500">Полный текст статьи *</label>
+                                    <span class="text-[11px] text-slate-400">Выделите текст и примените стиль</span>
+                                </div>
+
+                                <!-- Визуальный редактор Quill -->
+                                <div id="gen-content-editor" class="bg-white dark:bg-slate-900 rounded-xl text-sm"></div>
+
+                                <!-- Скрытое поле, куда Quill будет записывать HTML -->
+                                <textarea id="gen-content" class="hidden"></textarea>
                             </div>
                             <div class="col-span-full flex flex-wrap items-center justify-between gap-3 pt-1">
                                 <div class="flex items-center gap-2.5">
@@ -776,6 +1001,29 @@
 
             hourSel.addEventListener('change', () => { isTimeManuallyEdited = true; });
             minSel.addEventListener('change', () => { isTimeManuallyEdited = true; });
+
+            // Инициализация Quill (Визуальный редактор)
+            window.quillEditor = new Quill('#gen-content-editor', {
+                theme: 'snow',
+                placeholder: 'Начните печатать текст статьи...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        ['blockquote', 'code-block'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['link'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Синхронизация Quill со скрытым текстовым полем
+            window.quillEditor.on('text-change', function() {
+                const html = window.quillEditor.root.innerHTML;
+                document.getElementById('gen-content').value = html;
+                updateReadTimeFromContent();
+            });
 
             // 2. Только теперь сбрасываем форму — Flatpickr уже готов
             resetGeneratorForm();
@@ -912,8 +1160,108 @@
 
         function formatContent(rawContent) {
             if (!rawContent) return '<p>Текст статьи отсутствует.</p>';
-            if (rawContent.includes('<p>')) return rawContent;
-            return rawContent.split(/\n\s*\n/).map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+
+            let html = rawContent;
+
+            // Если это старый формат (просто текст без тегов), оборачиваем в <p>
+            if (!html.includes('<p>')) {
+                html = html.split(/\n\s*\n/).map(p => `<p>${p.trim().replace(/\n/g, '<br>')}</p>`).join('');
+            }
+
+            // Убираем пустые параграфы, которые Quill добавляет после блоков кода
+            html = html.replace(/<p><br><\/p>/gi, '');
+            html = html.replace(/<p>\s*<\/p>/gi, '');
+
+            // Убираем лишние пустые строки внутри блоков кода Quill
+            html = html.replace(/\n\s*\n/g, '\n');
+
+            return html;
+        }
+
+        function applyCodeHighlighting(container) {
+            if (!window.Prism) return;
+
+            const codeBlocks = container.querySelectorAll('pre.ql-syntax');
+
+            codeBlocks.forEach(pre => {
+                let codeText = pre.textContent;
+                let lang = 'javascript';
+
+                // 1. Удаляем текстовые подсказки (python, js и т.д.), если они попали в блок
+                codeText = codeText.replace(/^\s*(python|javascript|js|css|html)\s*/i, '');
+
+                // 2. Максимально жестко убираем все пустые строки, пробелы и переносы в начале и в конце
+                codeText = codeText.replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
+
+                // 3. Определяем язык по содержимому
+                const trimmed = codeText;
+                if (/^(def|import|from|class)\s+/.test(trimmed)) {
+                    lang = 'python';
+                } else if (/^(function|const|let|var)\s+/.test(trimmed) || trimmed.includes('console.log')) {
+                    lang = 'javascript';
+                } else if (trimmed.startsWith('<')) {
+                    lang = 'html';
+                } else if (trimmed.includes('{') && trimmed.includes(':') && (trimmed.includes('color') || trimmed.includes('margin') || trimmed.includes('padding'))) {
+                    lang = 'css';
+                }
+
+                // 4. Экранируем теги для безопасного вывода
+                const escapedCode = codeText.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+                pre.innerHTML = `<code class="language-${lang}">${escapedCode}</code>`;
+                pre.className = `language-${lang}`;
+
+                // 5. Создаем обертку и шапку
+                if (!pre.parentElement.classList.contains('code-block-wrapper')) {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'code-block-wrapper';
+
+                    const header = document.createElement('div');
+                    header.className = 'code-block-header';
+
+                    const langLabel = document.createElement('span');
+                    langLabel.className = 'code-lang';
+
+                    const langNames = { javascript: 'JavaScript', python: 'Python', css: 'CSS', html: 'HTML' };
+                    langLabel.textContent = langNames[lang] || lang.toUpperCase();
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'copy-btn';
+
+                    // Современная SVG-иконка для копирования
+                    const copySvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+                    // Зеленая галочка для успешного копирования
+                    const checkSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
+                    copyBtn.innerHTML = `${copySvg} <span>Копировать</span>`;
+
+                    copyBtn.onclick = function() {
+                        navigator.clipboard.writeText(codeText).then(() => {
+                            copyBtn.innerHTML = `${checkSvg} <span style="color:#4ade80">Скопировано</span>`;
+                            setTimeout(() => {
+                                copyBtn.innerHTML = `${copySvg} <span>Копировать</span>`;
+                            }, 2000);
+                        });
+                    };
+
+                    header.appendChild(langLabel);
+                    header.appendChild(copyBtn);
+
+                    pre.parentNode.insertBefore(wrapper, pre);
+                    wrapper.appendChild(header);
+                    wrapper.appendChild(pre);
+                }
+            });
+
+            Prism.highlightAllUnder(container);
+
+            // Удаляем случайные пустые параграфы с названиями языков
+            container.querySelectorAll('p').forEach(p => {
+                const text = p.textContent.trim().toLowerCase();
+                if (['javascript', 'js', 'python', 'css', 'html'].includes(text)) {
+                    p.remove();
+                }
+            });
         }
 
        function getArticleAllImages(article) {
@@ -1364,6 +1712,10 @@
                 startModalGalleryAutoPlay();
 
                 bodyEl.innerHTML = formatContent(fullArticle.content);
+
+                // Запускаем подсветку кода
+                applyCodeHighlighting(bodyEl); // <-- ВЫЗОВ НОВОЙ ФУНКЦИИ
+
                 // Мягкое появление текста после загрузки (Web Animations API).
                 bodyEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
                 history.replaceState(null, null, `#article=${id}`);
@@ -1526,6 +1878,7 @@
 
             if (article.content !== undefined) {
                 document.getElementById('gen-content').value = article.content || '';
+                if (window.quillEditor) window.quillEditor.root.innerHTML = article.content || '';
                 updateReadTimeFromContent();
 
                 if (article.gallery && article.gallery.length > 0) {
@@ -1554,6 +1907,7 @@
                     if (data) {
                         if (data.content) {
                             document.getElementById('gen-content').value = data.content;
+                            if (window.quillEditor) window.quillEditor.root.innerHTML = data.content;
                             updateReadTimeFromContent();
                         }
                         if (data.gallery && data.gallery.length > 0) {
@@ -1600,6 +1954,7 @@
             document.getElementById('gen-readtime').value = '1 мин';
             document.getElementById('gen-summary').value = '';
             document.getElementById('gen-content').value = '';
+            if (window.quillEditor) window.quillEditor.root.innerHTML = ''; // Очищаем визуальный редактор
             document.getElementById('gen-featured').checked = false;
             document.getElementById('edit-mode-banner').classList.add('hidden');
             document.getElementById('edit-mode-banner').classList.remove('flex');
@@ -1610,7 +1965,9 @@
         }
 
         function updateReadTimeFromContent() {
-            const words = document.getElementById('gen-content').value.trim().split(/\s+/).filter(Boolean).length;
+            // Берем чистый текст из Quill, если он инициализирован (без HTML тегов)
+            const text = window.quillEditor ? window.quillEditor.getText().trim() : document.getElementById('gen-content').value.trim();
+            const words = text.split(/\s+/).filter(Boolean).length;
             document.getElementById('gen-readtime').value = Math.max(1, Math.ceil(words / WORDS_PER_MINUTE)) + ' мин';
         }
 
@@ -2136,6 +2493,9 @@
             // ↓↓↓ ЗАМЕНА ЗДЕСЬ ↓↓↓
             const previewBodyEl = document.getElementById('modal-body');
             previewBodyEl.innerHTML = formatContent(articleObj.content);
+
+            applyCodeHighlighting(previewBodyEl); // <-- ВЫЗОВ НОВОЙ ФУНКЦИИ
+
             if (previewBodyEl.animate) {
                 previewBodyEl.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 220, easing: 'ease-out' });
             }
