@@ -1,8 +1,19 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth dark">
+<html lang="ru" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script>
+        (function () {
+            try {
+                var saved = localStorage.getItem('news_theme');
+                var isDark = saved === 'dark' ||
+                    (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches);
+                document.documentElement.classList.toggle('dark', isDark);
+            } catch (e) { /* приватный режим — оставляем светлую тему */ }
+        })();
+    </script>
     <title>Хроника — Современный новостной портал</title>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -128,6 +139,42 @@
             transform: translateZ(0) scale(calc(var(--scale, 1) * 1.04));
         }
 
+        /* ================= АНИМАЦИЯ ПОЯВЛЕНИЯ НОВОСТЕЙ ================= */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-card {
+            opacity: 0;
+            animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            will-change: opacity, transform;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .animate-card {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: none !important;
+            }
+            #loading-indicator {
+                animation: none !important;
+            }
+        }
+
+        /* Плавная анимация для иконок соцсетей */
+        .social-icon {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            will-change: transform;
+        }
+        /* ================= КОНЕЦ АНИМАЦИИ ================= */
+
         #lightbox-image { cursor: zoom-out; max-width: 100%; max-height: 92vh; object-fit: contain; }
         .article-content img { cursor: zoom-in; }
 
@@ -176,18 +223,19 @@
             max-width: 24rem;
             padding: 0.65rem 0.9rem;
             border-radius: 0.85rem;
-            background: rgba(15, 23, 42, 0.97);
-            color: #f8fafc;
+            /* Светлая тема по умолчанию */
+            background: #ffffff;
+            color: #0f172a;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05);
             font-size: 0.8125rem;
             font-weight: 500;
             line-height: 1.55;
             letter-spacing: 0.01em;
-            border: 1px solid rgba(96, 165, 250, 0.55);
-            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.15);
             pointer-events: none;
             opacity: 0;
             transform: translateY(4px);
-            transition: opacity 0.15s ease, transform 0.15s ease;
+            transition: opacity 0.15s ease, transform 0.15s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
             white-space: normal;
             word-break: break-word;
         }
@@ -205,7 +253,7 @@
             pointer-events: none;
         }
         #global-tooltip::before {
-            /* контурная часть стрелки (синяя рамка) */
+            /* контурная часть стрелки (рамка) */
             z-index: -1;
         }
         /* Тултип НАД описанием — стрелка снизу, смотрит вниз */
@@ -215,7 +263,7 @@
             transform: translateX(-50%);
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
-            border-top: 8px solid rgba(15, 23, 42, 0.97);
+            border-top: 8px solid #ffffff; /* Светлая тема */
         }
         #global-tooltip.arrow-bottom::before {
             top: calc(100% + 1px);
@@ -223,7 +271,7 @@
             transform: translateX(-50%);
             border-left: 9px solid transparent;
             border-right: 9px solid transparent;
-            border-top: 9px solid rgba(96, 165, 250, 0.55);
+            border-top: 9px solid #e2e8f0; /* Светлая тема */
         }
         /* Тултип ПОД описанием — стрелка сверху, смотрит вверх */
         #global-tooltip.arrow-top::after {
@@ -232,7 +280,7 @@
             transform: translateX(-50%);
             border-left: 8px solid transparent;
             border-right: 8px solid transparent;
-            border-bottom: 8px solid rgba(15, 23, 42, 0.97);
+            border-bottom: 8px solid #ffffff; /* Светлая тема */
         }
         #global-tooltip.arrow-top::before {
             bottom: calc(100% + 1px);
@@ -240,6 +288,28 @@
             transform: translateX(-50%);
             border-left: 9px solid transparent;
             border-right: 9px solid transparent;
+            border-bottom: 9px solid #e2e8f0; /* Светлая тема */
+        }
+
+        /* ===== ПЕРЕОПРЕДЕЛЕНИЕ ДЛЯ ТЁМНОЙ ТЕМЫ ===== */
+        html.dark #global-tooltip {
+            background: rgba(15, 23, 42, 0.97);
+            color: #f8fafc;
+            border: 1px solid rgba(96, 165, 250, 0.55);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(59, 130, 246, 0.15);
+        }
+        /* Тёмная тема - стрелка снизу */
+        html.dark #global-tooltip.arrow-bottom::after {
+            border-top: 8px solid rgba(15, 23, 42, 0.97);
+        }
+        html.dark #global-tooltip.arrow-bottom::before {
+            border-top: 9px solid rgba(96, 165, 250, 0.55);
+        }
+        /* Тёмная тема - стрелка сверху */
+        html.dark #global-tooltip.arrow-top::after {
+            border-bottom: 8px solid rgba(15, 23, 42, 0.97);
+        }
+        html.dark #global-tooltip.arrow-top::before {
             border-bottom: 9px solid rgba(96, 165, 250, 0.55);
         }
 
@@ -440,6 +510,13 @@
             height: 14px;
         }
 
+        /* ================= АНИМАЦИЯ ПЕРЕКЛЮЧЕНИЯ ТЕМЫ ================= */
+        ::view-transition-old(root),
+        ::view-transition-new(root) {
+            animation: none;
+            mix-blend-mode: normal;
+        }
+
         /* ЖЕСТКО УБИРАЕМ ВОЗДУХ У PRE */
         .code-block-wrapper pre,
         .code-block-wrapper pre[class*="language-"] {
@@ -505,7 +582,7 @@
                         <span>⚙️ Управление новостями</span>
                     </button>
 
-                    <button onclick="toggleTheme()" aria-label="Переключить тему" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
+                    <button onclick="toggleTheme(event)" aria-label="Переключить тему" class="p-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition">
                         <svg id="theme-icon-sun" class="w-5 h-5 hidden dark:block text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
@@ -530,9 +607,67 @@
     </header>
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div id="loading-indicator" class="flex flex-col items-center justify-center py-20">
-            <div class="w-10 h-10 border-4 border-brand-200 border-t-brand-600 rounded-full animate-spin mb-4"></div>
-            <p class="text-slate-500 font-medium">Загрузка новостей...</p>
+        <div id="loading-indicator" class="animate-pulse" role="status" aria-label="Загрузка новостей">
+            <!-- Скелетон главной (featured) карточки -->
+            <div class="mb-10 rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-7 aspect-video w-full bg-slate-200 dark:bg-slate-800"></div>
+                <div class="lg:col-span-5 p-6 sm:p-8 lg:p-10 space-y-4">
+                    <div class="h-3 w-24 rounded bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="h-6 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="h-6 w-4/5 rounded bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="space-y-2 pt-4">
+                        <div class="h-3 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-3 w-11/12 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-3 w-3/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Скелетон сетки карточек -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Карточка 1 -->
+                <div class="rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <div class="aspect-video w-full bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="p-5 sm:p-6 space-y-3">
+                        <div class="h-3 w-32 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-3/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="space-y-2 pt-2">
+                            <div class="h-3 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-11/12 rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-2/3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Карточка 2 -->
+                <div class="rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <div class="aspect-video w-full bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="p-5 sm:p-6 space-y-3">
+                        <div class="h-3 w-32 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-3/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="space-y-2 pt-2">
+                            <div class="h-3 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-11/12 rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-2/3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Карточка 3 -->
+                <div class="rounded-2xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+                    <div class="aspect-video w-full bg-slate-200 dark:bg-slate-800"></div>
+                    <div class="p-5 sm:p-6 space-y-3">
+                        <div class="h-3 w-32 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="h-5 w-3/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        <div class="space-y-2 pt-2">
+                            <div class="h-3 w-full rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-11/12 rounded bg-slate-200 dark:bg-slate-800"></div>
+                            <div class="h-3 w-2/3 rounded bg-slate-200 dark:bg-slate-800"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="error-message" class="hidden text-center py-20 px-4">
@@ -672,8 +807,8 @@
                             </svg>
                             <span>Поделиться</span>
                         </button>
-                        <button onclick="closeArticleModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition" aria-label="Закрыть">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <button onclick="closeArticleModal()" class="p-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-slate-900 dark:hover:text-white transition flex items-center justify-center" aria-label="Закрыть">
+                            <svg class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
@@ -706,12 +841,67 @@
     <!-- Лайтбокс -->
     <div id="lightbox-modal" class="fixed inset-0 z-[80] bg-slate-950/95 backdrop-blur-md hidden">
         <div class="min-h-screen flex items-center justify-center p-4 relative">
-            <button onclick="closeLightbox()" aria-label="Закрыть" class="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition z-[81]">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <button onclick="closeLightbox()" aria-label="Закрыть" class="absolute top-4 right-4 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition z-[81] flex items-center justify-center">
+                <svg class="w-6 h-6 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
             </button>
             <img id="lightbox-image" src="" alt="Просмотр фото">
+        </div>
+    </div>
+
+    <!-- Модальное окно "Поделиться" (ВСТАВИТЬ СЮДА) -->
+    <div id="share-modal" class="fixed inset-0 z-[75] bg-slate-950/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-sm rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700 overflow-hidden transform scale-95 opacity-0 transition-all duration-200" id="share-modal-content">
+            <div class="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white">Поделиться</h3>
+                <button onclick="closeShareMenu()" class="p-1.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-700 text-slate-500 transition-colors flex items-center justify-center">
+                    <svg class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div class="p-5">
+                <!-- Сетка соцсетей -->
+                <div class="grid grid-cols-5 gap-1 mb-6">
+                    <!-- ВКонтакте -->
+                    <a id="share-vk" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                        <img src="images/icons/vk.svg" alt="ВКонтакте" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">VK</span>
+                    </a>
+
+                    <!-- Telegram -->
+                    <a id="share-tg" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                        <img src="images/icons/telegram.svg" alt="Telegram" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">Telegram</span>
+                    </a>
+
+                    <!-- WhatsApp -->
+                    <a id="share-wa" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                        <img src="images/icons/whatsapp.svg" alt="WhatsApp" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">WhatsApp</span>
+                    </a>
+
+                    <!-- Одноклассники -->
+                    <a id="share-ok" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                        <img src="images/icons/odnoklassniki.svg" alt="Одноклассники" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">OK</span>
+                    </a>
+
+                    <!-- MAX -->
+                    <a id="share-max" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm" title="Откроется мессенджер MAX">
+                        <img src="images/icons/max.svg" alt="MAX" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">MAX</span>
+                    </a>
+                </div>
+
+                <!-- Кнопка копирования -->
+                <button onclick="copyArticleLinkFromModal()" class="w-full flex items-center justify-center p-3.5 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-700/50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-600 transition-colors group">
+                    <div id="copy-btn-content" class="flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5 text-slate-500 group-hover:text-brand-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">Скопировать ссылку</span>
+                    </div>
+                </button>
+            </div>
         </div>
     </div>
 
@@ -727,8 +917,8 @@
                             <p class="text-xs text-slate-500 dark:text-slate-400">Генерация файлов для репозитория</p>
                         </div>
                     </div>
-                    <button onclick="closeGeneratorModal()" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white transition">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <button onclick="closeGeneratorModal()" class="p-2 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-white transition flex items-center justify-center">
+                        <svg class="w-5 h-5 block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
@@ -1034,6 +1224,7 @@
 
         async function fetchNewsData() {
             try {
+                //await new Promise(r => setTimeout(r, 5000)); // ← ВРЕМЕННАЯ ЗАДЕРЖКА 5 СЕК
                 const response = await fetch(INDEX_JSON_URL);
                 if (!response.ok) throw new Error('Файл index.json не найден');
                 const data = await response.json();
@@ -1330,9 +1521,45 @@
             else document.documentElement.classList.remove('dark');
         }
 
-        function toggleTheme() {
-            const isDark = document.documentElement.classList.toggle('dark');
-            localStorage.setItem('news_theme', isDark ? 'dark' : 'light');
+        function toggleTheme(e) {
+            // Если браузер старый и не поддерживает View Transitions API
+            if (!document.startViewTransition) {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('news_theme', isDark ? 'dark' : 'light');
+                return;
+            }
+
+            // Берем координаты клика (если нажали с клавиатуры — берем центр экрана)
+            const x = e && e.clientX ? e.clientX : window.innerWidth / 2;
+            const y = e && e.clientY ? e.clientY : window.innerHeight / 2;
+
+            // Вычисляем радиус, чтобы круг покрыл весь экран
+            const endRadius = Math.hypot(
+                Math.max(x, window.innerWidth - x),
+                Math.max(y, window.innerHeight - y)
+            );
+
+            // Запускаем анимацию
+            const transition = document.startViewTransition(() => {
+                const isDark = document.documentElement.classList.toggle('dark');
+                localStorage.setItem('news_theme', isDark ? 'dark' : 'light');
+            });
+
+            transition.ready.then(() => {
+                document.documentElement.animate(
+                    {
+                        clipPath: [
+                            `circle(0px at ${x}px ${y}px)`,
+                            `circle(${endRadius}px at ${x}px ${y}px)`
+                        ]
+                    },
+                    {
+                        duration: 600, // Скорость анимации
+                        easing: 'ease-in-out',
+                        pseudoElement: '::view-transition-new(root)'
+                    }
+                );
+            });
         }
 
         function initCurrentDate() {
@@ -1505,7 +1732,7 @@
                 gridItems = filtered.filter(i => i.id !== featuredItem.id);
                 featuredSection.classList.remove('hidden');
                 featuredSection.innerHTML = `
-                    <div onclick="openArticleModal('${featuredItem.id}')" class="relative group cursor-pointer rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch">
+                    <div onclick="openArticleModal('${featuredItem.id}')" class="animate-card relative group cursor-pointer rounded-3xl overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 items-stretch">
                         ${getAdminCardOverlayHtml(featuredItem.id)}
                         <div class="lg:col-span-7 aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
                             <img src="${getDisplayImageSrc(featuredItem.image)}" alt="${escapeHtml(featuredItem.title)}" style="${getImageFrameStyle(featuredItem)}" class="news-framed-img" onerror="this.onerror=null; this.src='${FALLBACK_IMG}'">
@@ -1530,8 +1757,11 @@
                 featuredSection.innerHTML = ''; featuredSection.classList.add('hidden');
             }
 
-            newsGrid.innerHTML = gridItems.map(item => `
-                <article onclick="openArticleModal('${item.id}')" class="relative group cursor-pointer bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col">
+            newsGrid.innerHTML = gridItems.map((item, index) => {
+                const delay = (index * 50) + 50; // Задержка: 1-я карточка 50мс, 2-я 100мс и т.д.
+
+                return `
+                <article onclick="openArticleModal('${item.id}')" class="animate-card relative group cursor-pointer bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col" style="animation-delay: ${delay}ms">
                     ${getAdminCardOverlayHtml(item.id)}
                     <div class="aspect-video w-full bg-slate-100 dark:bg-slate-800 overflow-hidden relative shrink-0">
                         <img src="${getDisplayImageSrc(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" style="${getImageFrameStyle(item)}" class="news-framed-img" onerror="this.onerror=null; this.src='${FALLBACK_IMG}'">
@@ -1549,7 +1779,8 @@
                             <span>Открыть статью</span><span class="group-hover:translate-x-1 transition-transform">→</span>
                         </div>
                     </div>
-                </article>`).join('');
+                </article>`;
+            }).join('');
         }
 
         function buildModalGalleryTrack(images) {
@@ -1747,14 +1978,93 @@
             document.body.style.overflow = '';
         }
 
+        // Вызов меню "Поделиться"
         function shareCurrentArticle() {
             if (!currentOpenedArticleId) { showToast('Это предпросмотр'); return; }
+
             const shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
-            const textarea = document.createElement('textarea');
-            textarea.value = shareUrl; textarea.style.position = 'fixed'; textarea.style.opacity = '0';
-            document.body.appendChild(textarea); textarea.select();
-            try { document.execCommand('copy'); showToast('Ссылка скопирована!'); } catch (err) { showToast('Ошибка'); }
-            document.body.removeChild(textarea);
+            const shareTitle = document.getElementById('modal-title').textContent;
+
+            // ВСЕГДА открываем наше кастомное меню (без системного окна)
+            openShareMenu(shareUrl, shareTitle);
+        }
+
+        function openShareMenu(url, title) {
+            const modal = document.getElementById('share-modal');
+            const content = document.getElementById('share-modal-content');
+
+            // Формируем ссылки для оставшихся соцсетей
+            document.getElementById('share-vk').href = `https://vk.com/share.php?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
+            document.getElementById('share-tg').href = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`;
+            document.getElementById('share-wa').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' ' + url)}`;
+            document.getElementById('share-ok').href = `https://connect.ok.ru/offer?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`;
+
+            // MAX
+            const maxBtn = document.getElementById('share-max');
+            if (maxBtn) {
+                maxBtn.href = `https://max.ru/share?text=${encodeURIComponent(title + ' ' + url)}`;
+            }
+
+            // Показываем модалку с анимацией
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Небольшая задержка для срабатывания CSS-переходов
+            requestAnimationFrame(() => {
+                content.classList.remove('scale-95', 'opacity-0');
+                content.classList.add('scale-100', 'opacity-100');
+            });
+        }
+
+        function closeShareMenu() {
+            const modal = document.getElementById('share-modal');
+            const content = document.getElementById('share-modal-content');
+
+            content.classList.remove('scale-100', 'opacity-100');
+            content.classList.add('scale-95', 'opacity-0');
+
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 200);
+        }
+
+        function copyArticleLinkFromModal() {
+            const shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            const btnContent = document.getElementById('copy-btn-content');
+
+            // Сохраняем изначальный вид кнопки
+            const originalContent = btnContent.innerHTML;
+
+            // Функция для красивого отображения успеха
+            const showSuccess = () => {
+                // Меняем содержимое на галочку и текст
+                btnContent.innerHTML = `
+                    <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    <span class="text-sm font-semibold text-emerald-500">Ссылка скопирована</span>
+                `;
+
+                // Возвращаем обратно и закрываем меню через 1.5 секунды
+                setTimeout(() => {
+                    btnContent.innerHTML = originalContent;
+                    closeShareMenu();
+                }, 1500);
+            };
+
+            // Копируем в буфер обмена
+            navigator.clipboard.writeText(shareUrl).then(showSuccess).catch(() => {
+                // Фолбэк для старых браузеров
+                const textarea = document.createElement('textarea');
+                textarea.value = shareUrl;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                showSuccess();
+            });
         }
 
         function checkUrlHashForArticle() {
@@ -2660,6 +2970,7 @@
         document.getElementById('generator-modal').addEventListener('click', (e) => { if (e.target.id === 'generator-modal' || e.target.parentElement.id === 'generator-modal') closeGeneratorModal(); });
         document.getElementById('lightbox-modal').addEventListener('click', (e) => { if (e.target.id === 'lightbox-image' || e.target.closest('button')) return; closeLightbox(); });
         document.getElementById('modal-body').addEventListener('click', (e) => { if (e.target.tagName === 'IMG') openLightbox(e.target.src); });
+        document.getElementById('share-modal').addEventListener('click', (e) => { if (e.target.id === 'share-modal') closeShareMenu(); });
 
                 // ================= КНОПКА «НАВЕРХ» =================
         (function initBackToTop() {
