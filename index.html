@@ -733,9 +733,24 @@
         <div class="flex items-center gap-2 ml-auto">
             <button onclick="openGeneratorModal('create')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-brand-600 hover:bg-brand-500 text-white transition">+ Добавить статью</button>
             <button onclick="openGeneratorModal('manage')" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-slate-700 hover:bg-slate-600 text-white transition">Список / Удаление</button>
-            <button onclick="downloadNewsZip()" class="px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1 shadow">
-                <span>⬇ Скачать контент (.zip)</span>
-            </button>
+            <div class="relative inline-flex items-stretch text-left" id="float-dropdown-container">
+                <button onclick="downloadNewsZip('eco')" class="px-3 py-1.5 rounded-l-xl text-xs font-semibold bg-emerald-600 hover:bg-emerald-500 text-white transition flex items-center gap-1 shadow">
+                    <span>⬇ Скачать (.zip)</span>
+                </button>
+                <button onclick="toggleFloatDropdown(event)" class="px-2 rounded-r-xl text-xs font-semibold bg-emerald-700 hover:bg-emerald-800 text-white border-l border-emerald-500/50 transition shadow flex items-center justify-center">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                </button>
+
+                <!-- Выпадающее меню для нижней панели -->
+                <div id="float-dropdown-menu" class="hidden absolute right-0 bottom-full mb-2 w-64 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
+                    <button onclick="downloadNewsZip('eco')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-slate-100 dark:border-slate-700/50">
+                        <div class="text-xs font-bold text-emerald-600 dark:text-emerald-400">⚡ Экономный</div>
+                    </button>
+                    <button onclick="downloadNewsZip('full_no_img')" class="w-full text-left px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                        <div class="text-xs font-bold text-slate-800 dark:text-slate-200">📝 Полный (без картинок)</div>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1113,10 +1128,25 @@
                                 <span class="text-xs font-bold uppercase tracking-wider text-slate-500 block">Экспорт</span>
                                 <span class="text-[11px] text-slate-400">Скачивает .zip с папками news/ и файлами index.json</span>
                             </div>
-                            <div class="flex flex-wrap gap-2">
-                                <button onclick="downloadNewsZip()" class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20">
-                                    <span>⬇ Скачать контент (.zip)</span>
+                            <div class="relative inline-flex items-stretch text-left" id="download-dropdown-container">
+                                <button onclick="downloadNewsZip('eco')" class="px-4 py-2 rounded-l-xl text-xs sm:text-sm font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition flex items-center gap-1.5 shadow-md shadow-emerald-600/20">
+                                    <span>⬇ Скачать (.zip)</span>
                                 </button>
+                                <button onclick="toggleDownloadDropdown(event)" class="px-3 rounded-r-xl text-xs sm:text-sm font-bold bg-emerald-700 hover:bg-emerald-800 text-white border-l border-emerald-500/50 transition shadow-md shadow-emerald-600/20 flex items-center justify-center">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+
+                                <!-- Выпадающее меню -->
+                                <div id="download-dropdown-menu" class="hidden absolute right-0 bottom-full mb-2 w-72 rounded-xl bg-white dark:bg-slate-800 shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden z-50">
+                                    <button onclick="downloadNewsZip('eco')" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition border-b border-slate-100 dark:border-slate-700/50">
+                                        <div class="text-sm font-bold text-emerald-600 dark:text-emerald-400">⚡ Экономный (по умолчанию)</div>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Только новые и измененные новости</div>
+                                    </button>
+                                    <button onclick="downloadNewsZip('full_no_img')" class="w-full text-left px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition">
+                                        <div class="text-sm font-bold text-slate-800 dark:text-slate-200">📝 Полный (без картинок)</div>
+                                        <div class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">Пересоздаст JSON и HTML для всех новостей</div>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -2006,7 +2036,18 @@
         function shareCurrentArticle() {
             if (!currentOpenedArticleId) { showToast('Это предпросмотр'); return; }
 
-            const shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            // Ищем новость в базе, чтобы получить её путь (path)
+            const article = NEWS_DATA.find(item => item.id === currentOpenedArticleId);
+            let shareUrl;
+
+            // Если у новости есть путь, формируем красивую ссылку без решетки
+            if (article && article.path) {
+                shareUrl = `${window.location.origin}/${article.path}/`;
+            } else {
+                // Если пути нет (например, для старых новостей), используем старую ссылку
+                shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            }
+
             const shareTitle = document.getElementById('modal-title').textContent;
 
             // ВСЕГДА открываем наше кастомное меню (без системного окна)
@@ -2054,7 +2095,20 @@
         }
 
         function copyArticleLinkFromModal() {
-            const shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            // Ищем новость в базе, чтобы получить её путь (path)
+            const article = NEWS_DATA.find(item => item.id === currentOpenedArticleId);
+            let shareUrl;
+
+            // Если у новости есть путь, формируем красивую ссылку без решетки
+            if (article && article.path) {
+                // Убираем возможный слэш в конце пути, чтобы не было двойного //
+                const cleanPath = article.path.endsWith('/') ? article.path.slice(0, -1) : article.path;
+                shareUrl = `${window.location.origin}/${cleanPath}/`;
+            } else {
+                // Если пути нет (например, предпросмотр из админки), используем старую ссылку
+                shareUrl = `${window.location.origin}${window.location.pathname}#article=${currentOpenedArticleId}`;
+            }
+
             const btnContent = document.getElementById('copy-btn-content');
 
             // Сохраняем изначальный вид кнопки
@@ -2434,11 +2488,16 @@
             resetGeneratorForm(); renderPage(); renderAdminArticlesList(); switchAdminTab('manage');
         }
 
-        async function downloadNewsZip() {
+        async function downloadNewsZip(mode = 'eco') {
             const titleField = document.getElementById('gen-title').value.trim();
             if (titleField) saveArticleToFeed();
 
             const zip = new JSZip();
+            const menu = document.getElementById('download-dropdown-menu');
+            if (menu) menu.classList.add('hidden');
+
+            // Показываем пользователю, что идет процесс
+            showToast('⏳ Собираем архив... Пожалуйста, подождите.');
 
             const indexData = NEWS_DATA.map(item => {
                 let cleanPath = item.path.endsWith('/') ? item.path.slice(0, -1) : item.path;
@@ -2458,7 +2517,9 @@
 
             for (const item of NEWS_DATA) {
                 if (!item.path) continue;
-                if (!modifiedArticleIds.has(item.id)) continue;
+
+                // Если режим "Экономный" - пропускаем новости, которые не менялись
+                if (mode === 'eco' && !modifiedArticleIds.has(item.id)) continue;
 
                 let basePath = item.path.endsWith('/') ? item.path : item.path + '/';
 
@@ -2475,20 +2536,65 @@
 
                 zip.file(basePath + 'article.json', JSON.stringify(articleData, null, 2));
 
-                const allImages = [item.image, ...(item.gallery || []).map(g => g.url)];
-                for (const imgUrl of allImages) {
-                    const filename = imgUrl.split('/').pop();
+                // === Генерация index.html для ботов соцсетей и SEO ===
+                let ogImageUrl = `${window.location.origin}/${FALLBACK_IMG.startsWith('./') ? FALLBACK_IMG.slice(2) : FALLBACK_IMG}`;
+                if (item.cover && item.cover.trim() !== '' && item.cover !== '${FALLBACK_IMG}') {
+                    ogImageUrl = item.cover.startsWith('http')
+                        ? item.cover
+                        : `${window.location.origin}/${basePath}${item.cover}`;
+                }
 
-                    let fileObj = null;
-                    for (const key in TEMP_UPLOADED_FILES) {
-                        if (key.endsWith('/' + filename) || key === filename) {
-                            fileObj = TEMP_UPLOADED_FILES[key];
-                            break;
+                const htmlContent = `<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${escapeHtml(item.title)} — Хроника</title>
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="${escapeHtml(item.title)}">
+    <meta property="og:description" content="${escapeHtml(item.summary)}">
+    <meta property="og:image" content="${ogImageUrl}">
+    <meta property="og:url" content="${window.location.origin}/${basePath}">
+    <meta property="og:site_name" content="Хроника">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="${escapeHtml(item.title)}">
+    <meta name="twitter:description" content="${escapeHtml(item.summary)}">
+    <meta name="twitter:image" content="${ogImageUrl}">
+    <script>
+        window.location.replace('${window.location.origin}/#article=${item.id}');
+    <\/script>
+</head>
+<body>
+    <h1>${escapeHtml(item.title)}</h1>
+    <p>${escapeHtml(item.summary)}</p>
+    <a href="${window.location.origin}/#article=${item.id}">Перейти к новости</a>
+</body>
+</html>`;
+
+                zip.file(basePath + 'index.html', htmlContent);
+
+                // === КОПИРОВАНИЕ КАРТИНОК ===
+                // Если выбран режим "Без картинок" - пропускаем этот блок
+                if (mode !== 'full_no_img') {
+                    const allImages = [item.image, ...(item.gallery || []).map(g => g.url)];
+
+                    for (const imgUrl of allImages) {
+                        if (!imgUrl || imgUrl === FALLBACK_IMG || imgUrl === '${FALLBACK_IMG}') continue;
+
+                        const filename = imgUrl.split('/').pop();
+                        let fileObj = null;
+
+                        // Ищем в локальной памяти (если новость только что загружали)
+                        for (const key in TEMP_UPLOADED_FILES) {
+                            if (key.endsWith('/' + filename) || key === filename) {
+                                fileObj = TEMP_UPLOADED_FILES[key];
+                                break;
+                            }
                         }
-                    }
 
-                    if (fileObj) {
-                        zip.file(basePath + filename, fileObj);
+                        if (fileObj) {
+                            zip.file(basePath + filename, fileObj);
+                        }
                     }
                 }
             }
@@ -2499,7 +2605,9 @@
             a.href = url; a.download = 'news-content.zip';
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            showToast('✅ ZIP скачан! Распакуйте в корень репозитория.');
+
+            let modeName = mode === 'eco' ? 'Экономный' : 'Полный (без картинок)';
+            showToast(`✅ ZIP скачан! Режим: ${modeName}`);
         }
 
         function setupImageDropZone() {
@@ -3102,6 +3210,39 @@
                 btn.classList.add('bottom-5', 'sm:bottom-6');
             }
         }
+
+        // Логика выпадающего списка в админке (модалка)
+        function toggleDownloadDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('download-dropdown-menu');
+            const floatMenu = document.getElementById('float-dropdown-menu');
+            if (floatMenu) floatMenu.classList.add('hidden'); // Закрываем нижнее, если открыто
+            menu.classList.toggle('hidden');
+        }
+
+        // Логика выпадающего списка в нижней панели
+        function toggleFloatDropdown(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('float-dropdown-menu');
+            const mainMenu = document.getElementById('download-dropdown-menu');
+            if (mainMenu) mainMenu.classList.add('hidden'); // Закрываем верхнее, если открыто
+            menu.classList.toggle('hidden');
+        }
+
+        // Закрытие обоих меню при клике в любом другом месте
+        document.addEventListener('click', (e) => {
+            const mainMenu = document.getElementById('download-dropdown-menu');
+            const mainContainer = document.getElementById('download-dropdown-container');
+            if (mainMenu && !mainMenu.classList.contains('hidden') && mainContainer && !mainContainer.contains(e.target)) {
+                mainMenu.classList.add('hidden');
+            }
+
+            const floatMenu = document.getElementById('float-dropdown-menu');
+            const floatContainer = document.getElementById('float-dropdown-container');
+            if (floatMenu && !floatMenu.classList.contains('hidden') && floatContainer && !floatContainer.contains(e.target)) {
+                floatMenu.classList.add('hidden');
+            }
+        });
     </script>
 </body>
 </html>
