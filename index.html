@@ -168,8 +168,13 @@
             }
         }
 
-        /* Плавная анимация для иконок соцсетей */
+        /* Плавная анимация для иконок соцсетей + фикс размеров для мобильных */
         .social-icon {
+            width: 48px !important;
+            height: 48px !important;
+            min-width: 48px !important;
+            max-width: 48px !important;
+            object-fit: contain;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             will-change: transform;
         }
@@ -901,31 +906,31 @@
                 <!-- Сетка соцсетей -->
                 <div class="grid grid-cols-3 sm:grid-cols-5 gap-y-4 gap-x-2 mb-6">
                     <!-- ВКонтакте -->
-                    <a id="share-vk" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                    <a id="share-vk" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm min-w-0">
                         <img src="images/icons/vk.svg" alt="ВКонтакте" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">VK</span>
                     </a>
 
                     <!-- Telegram -->
-                    <a id="share-tg" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                    <a id="share-tg" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm min-w-0">
                         <img src="images/icons/telegram.svg" alt="Telegram" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">Telegram</span>
                     </a>
 
                     <!-- WhatsApp -->
-                    <a id="share-wa" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                    <a id="share-wa" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm min-w-0">
                         <img src="images/icons/whatsapp.svg" alt="WhatsApp" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">WhatsApp</span>
                     </a>
 
                     <!-- Одноклассники -->
-                    <a id="share-ok" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
+                    <a id="share-ok" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm min-w-0">
                         <img src="images/icons/odnoklassniki.svg" alt="Одноклассники" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">OK</span>
                     </a>
 
                     <!-- MAX -->
-                    <a id="share-max" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm" title="Откроется мессенджер MAX">
+                    <a id="share-max" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm min-w-0" title="Откроется мессенджер MAX">
                         <img src="images/icons/max.svg" alt="MAX" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">MAX</span>
                     </a>
