@@ -2521,12 +2521,33 @@
                 // Если режим "Экономный" - пропускаем новости, которые не менялись
                 if (mode === 'eco' && !modifiedArticleIds.has(item.id)) continue;
 
+                // === ГЛАВНОЕ ИСПРАВЛЕНИЕ: Подгружаем текст, если его нет в памяти ===
+                if (!item.content) {
+                    try {
+                        let basePathForFetch = item.path.endsWith('/') ? item.path.slice(0, -1) : item.path;
+                        const fullUrl = basePathForFetch.startsWith('http')
+                            ? (basePathForFetch + '/article.json')
+                            : (NEWS_REPO_BASE_URL + basePathForFetch + '/article.json');
+
+                        const res = await fetch(fullUrl);
+                        if (res.ok) {
+                            const data = await res.json();
+                            if (data.content) item.content = data.content;
+                            // На всякий случай подтягиваем галерею, если ее не было в index.json
+                            if (data.gallery && data.gallery.length > 0) item.gallery = data.gallery;
+                        }
+                    } catch (err) {
+                        console.warn('Не удалось скачать текст для:', item.id);
+                    }
+                }
+                // =================================================================
+
                 let basePath = item.path.endsWith('/') ? item.path : item.path + '/';
 
                 const articleData = {
                     id: item.id, title: item.title, category: item.category,
                     publishedAt: item.publishedAt, readTime: item.readTime,
-                    content: item.content,
+                    content: item.content || 'Текст статьи отсутствует.', // Теперь здесь точно будет текст
                     gallery: item.gallery || [],
                     cover: item.cover,
                     posX: item.posX ?? 50,
