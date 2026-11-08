@@ -423,6 +423,28 @@
         .dark .ql-snow .ql-fill { fill: #cbd5e1; }
         .dark .ql-snow .ql-picker { color: #cbd5e1; }
 
+        /* === НОВОЕ: ИСПРАВЛЕНИЕ ВЫПАДАЮЩИХ СПИСКОВ QUILL В ТЕМНОЙ ТЕМЕ === */
+        .dark .ql-snow .ql-picker-options {
+            background-color: #1e293b !important; /* Темный фон меню */
+            border-color: #334155 !important;      /* Темная рамка меню */
+        }
+        .dark .ql-snow .ql-picker-item {
+            color: #cbd5e1 !important;             /* Светлый текст пунктов */
+        }
+        .dark .ql-snow .ql-picker-item:hover,
+        .dark .ql-snow .ql-picker-item.ql-selected {
+            color: #ffffff !important;             /* Белый текст при наведении/выборе */
+            background-color: #334155 !important;  /* Подсветка при наведении/выборе */
+        }
+        .dark .ql-snow .ql-picker-label {
+            color: #cbd5e1 !important;             /* Цвет текста в закрытом состоянии */
+        }
+        .dark .ql-snow .ql-picker-label::before,
+        .dark .ql-snow .ql-picker-label svg {
+            color: #cbd5e1 !important;             /* Цвет стрелочки */
+            stroke: #cbd5e1 !important;
+        }
+
         /* Всплывающая подсказка (ссылки) */
         .dark .ql-snow .ql-tooltip {
             background-color: #1e293b;
@@ -862,34 +884,34 @@
 
             <div class="p-5">
                 <!-- Сетка соцсетей -->
-                <div class="grid grid-cols-5 gap-1 mb-6">
+                <div class="grid grid-cols-3 sm:grid-cols-5 gap-y-4 gap-x-2 mb-6">
                     <!-- ВКонтакте -->
                     <a id="share-vk" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
-                        <img src="images/icons/vk.svg" alt="ВКонтакте" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <img src="images/icons/vk.svg" alt="ВКонтакте" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">VK</span>
                     </a>
 
                     <!-- Telegram -->
                     <a id="share-tg" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
-                        <img src="images/icons/telegram.svg" alt="Telegram" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <img src="images/icons/telegram.svg" alt="Telegram" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">Telegram</span>
                     </a>
 
                     <!-- WhatsApp -->
                     <a id="share-wa" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
-                        <img src="images/icons/whatsapp.svg" alt="WhatsApp" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <img src="images/icons/whatsapp.svg" alt="WhatsApp" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">WhatsApp</span>
                     </a>
 
                     <!-- Одноклассники -->
                     <a id="share-ok" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm">
-                        <img src="images/icons/odnoklassniki.svg" alt="Одноклассники" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <img src="images/icons/odnoklassniki.svg" alt="Одноклассники" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">OK</span>
                     </a>
 
                     <!-- MAX -->
                     <a id="share-max" href="#" target="_blank" class="flex flex-col items-center gap-1.5 group drop-shadow-sm" title="Откроется мессенджер MAX">
-                        <img src="images/icons/max.svg" alt="MAX" class="social-icon w-12 h-12 rounded-xl group-hover:scale-110" />
+                        <img src="images/icons/max.svg" alt="MAX" class="social-icon w-12 h-12 max-w-full object-contain rounded-xl group-hover:scale-110" />
                         <span class="text-[10px] font-medium text-slate-600 dark:text-slate-300 whitespace-nowrap">MAX</span>
                     </a>
                 </div>
@@ -1116,7 +1138,7 @@
         const CATEGORIES = ['Все', 'Технологии', 'Наука', 'Кино и Медиа', 'Игры', 'Бизнес', 'Общество'];
 
         // SVG-заглушка
-        const FALLBACK_IMG = 'data:image/svg+xml;charset=UTF-8,%3Csvg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450"%3E%3Crect width="100%25" height="100%25" fill="%231e293b"/%3E%3Ctext x="50%25" y="50%25" fill="%23ffffff" font-family="sans-serif" font-size="24" text-anchor="middle" dominant-baseline="middle"%3EНет фото%3C/text%3E%3C/svg%3E';
+        const FALLBACK_IMG = 'images/placeholders/placeholder.svg';
 
         // ================= ПЕРЕМЕННЫЕ =================
         let NEWS_DATA = [];
@@ -1233,9 +1255,11 @@
                     let normalized = { ...item };
                     if (normalized.path && normalized.path.endsWith('/')) normalized.path = normalized.path.slice(0, -1);
 
-                    if (normalized.cover) {
-                        normalized.image = normalized.cover.startsWith('http') ? normalized.cover : normalized.path + '/' + normalized.cover;
-                    } else if (!normalized.image) {
+                    if (normalized.cover && normalized.cover.trim() !== '') {
+                        normalized.image = normalized.cover.startsWith('http') || normalized.cover.startsWith('data:')
+                            ? normalized.cover
+                            : normalized.path + '/' + normalized.cover;
+                    } else {
                         normalized.image = FALLBACK_IMG;
                     }
                     return normalized;
@@ -2002,7 +2026,7 @@
             // MAX
             const maxBtn = document.getElementById('share-max');
             if (maxBtn) {
-                maxBtn.href = `https://max.ru/share?text=${encodeURIComponent(title + ' ' + url)}`;
+                maxBtn.href = `https://max.ru/:share?text=${encodeURIComponent(title + ' ' + url)}`;
             }
 
             // Показываем модалку с анимацией
@@ -2357,8 +2381,10 @@
                 if (existing && existing.path) articlePath = existing.path;
             }
 
-            const isExternalMain = mainPhoto.url.startsWith('http') || mainPhoto.url.startsWith('data:');
-            const coverName = isExternalMain ? mainPhoto.url : mainPhoto.url.split('/').pop();
+            // Если картинки нет (там лежит наша заглушка), сохраняем пустоту
+            const isFallback = mainPhoto.url === FALLBACK_IMG;
+            const isExternalMain = !isFallback && (mainPhoto.url.startsWith('http') || mainPhoto.url.startsWith('data:'));
+            const coverName = isFallback ? '' : (isExternalMain ? mainPhoto.url : mainPhoto.url.split('/').pop());
 
             return {
                 id: editId || ('news-' + Date.now().toString().slice(-6)),
